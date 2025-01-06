@@ -26,7 +26,7 @@ The user runs make with one arg which is the file name. If that file exists the 
 - **Strings**: Buffer to read text from file, storing text for redo/undo, buffer to write to file, etc.
     
 # Intended pacing:
-- **1/6:** Finish proposal and start readme, create skeleton files
+- **1/6:** Finish proposal and readme, create skeleton files
 - **1/7-1/10:** Get basic functionality working, can create/open a file (checking permissions), read text from stdin, and write to the file and save it
 - **1/13-1/15:** Start adding basic qol features of nano, implement redo/undo
 - **1/16-1/17:** Implement cut/paste as well as display file info in the text editor
