@@ -2,18 +2,7 @@
 
 This document must be updated daily by EACH group member.
 
-## Player 1
+## Julien Zhang
 
-### 2024-01-02 - Brief description
-Expanded description including how much time was spent on task.
-
-### 2024-01-03 - Brief description
-Expanded description including how much time was spent on task.
-
-## Player 2
-
-### 2024-01-02 - Brief description
-Expanded description including how much time was spent on task.
-
-### 2024-01-03 - Brief description
-Expanded description including how much time was spent on task.
+### 2024-01-06 - Updating documentation, creating code files
+Updated proposal and readme with all necessary info. Done during class time (40 min). Created skeleton files for project including function headers. Done for HW (30 min).
