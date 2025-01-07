@@ -9,7 +9,7 @@ Creating a text editor that is similar to nano and can be run through the termin
     
 ## Intended usage:
 
-The user runs make with one arg which is the file name. If that file exists the text from that file is displayed, if not the program will create it. If no arg is given the file will be untitled for now until it is given a name later. In the text editor the user can type into stdin and use different terminal signals such as ctrl+c to perform special actions. The user can use ctrl+x to exit the text editor and a prompt is displayed asking if the user wants their changes to be saved. If yes, the text that was written is written to a file and the user is asked for the name of the file to save the text to. If not the text editor exits and no changes are made.
+The user runs make bano with one arg which is the file name. If that file exists the text from that file is displayed, if not the program will create it. If no arg is given the file will be untitled for now until it is given a name later. In the text editor the user can type into stdin and use different terminal signals such as ctrl+c to perform special actions. The user can use ctrl+x to exit the text editor and a prompt is displayed asking if the user wants their changes to be saved. If yes, the text that was written is written to a file and the user is asked for the name of the file to save the text to. If not the text editor exits and no changes are made.
   
 ## Technical Details:
 
