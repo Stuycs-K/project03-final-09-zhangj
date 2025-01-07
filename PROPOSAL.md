@@ -2,7 +2,7 @@
 
 ## Group Members:
 - Julien Zhang
-- 
+- David Schwartzberg
        
 ## Intentions:
 
@@ -21,7 +21,8 @@ The user runs make bano with one arg which is the file name. If that file exists
 - **Signals:** Intercepting signals to perform special actions, such as undo/redo and cut/paste
      
 ### How I am breaking down the project and who is responsible for which parts:
-- 
+- **Julien:** Look into ncurses, figure out save/quit
+- **David:** Open/create files, stat files
   
 ### Data structures/algorithms I will be using:
 - **Strings**: Buffer to read text from file, storing text for redo/undo, buffer to write to file, etc.
