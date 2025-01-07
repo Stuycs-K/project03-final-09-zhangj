@@ -1,7 +1,8 @@
 # Final Project Proposal
 
 ## Group Members:
-- Julien Zhang 
+- Julien Zhang
+- 
        
 ## Intentions:
 
@@ -14,21 +15,20 @@ The user runs make bano with one arg which is the file name. If that file exists
 ## Technical Details:
 
 ### Topics covered in class that I will be using:
-- **Allocating memory:** Using a block of memory to store data for redo/undo functionality and cut/paste functionality
+- **Allocating memory:** Using blocks of memory to store data that user inputs
 - **File operations:** Creating files, reading files, writing to files and saving them
 - **Finding information about files:** Checking file permission before allowing editing of a file, displaying file info in the text editor such as file size
 - **Signals:** Intercepting signals to perform special actions, such as undo/redo and cut/paste
      
 ### How I am breaking down the project and who is responsible for which parts:
-- I am working alone so I will be responsible for all parts of the project
+- 
   
 ### Data structures/algorithms I will be using:
 - **Strings**: Buffer to read text from file, storing text for redo/undo, buffer to write to file, etc.
     
 # Intended pacing:
 - **1/6:** Finish proposal and readme, create skeleton files
-- **1/7-1/10:** Get basic functionality working, can create/open a file (checking permissions), read text from stdin, and write to the file and save it
-- **1/13-1/15:** Start adding basic qol features of nano, implement redo/undo
-- **1/16-1/17:** Implement cut/paste as well as display file info in the text editor
+- **1/7-1/10:** Get basic functionality working, display file info in the text editor
+- **1/13-1/17:** Start adding basic qol features of nano, implement redo/undo and cut/paste
 - **1/18-1/21:** Test for bugs and add other features such as search, go to line, and replace if time permits
 
