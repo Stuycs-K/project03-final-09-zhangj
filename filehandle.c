@@ -9,6 +9,7 @@
 #include <time.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include <ncurses.h>
 #include "filehandle.h"
 
 void error(char *message) {
@@ -18,19 +19,23 @@ void error(char *message) {
   exit(1);
 }
 
-int myopen(char *filename) {
-	int flags = O_RDWR | O_CREAT;
-	int permissions = 0644;
-	int file_descriptor = open(filename, flags, permissions);
-	if (file_descriptor == -1) {
+FILE* myopen(char *filename) {
+	// r+ is read and write
+	FILE *file = fopen("test.txt", "w");
+	if (file == NULL) {
 		error("Open file");
 	}
-	
-	return file_descriptor;
+
+	return file;
 }
 
-void myclose(int file_descriptor) {
-	if (close(file_descriptor) == -1) {
+void myclose(FILE *file) {
+	if (fclose(file) == EOF) {
 		error("Close file");
 	}
+}
+
+void showall(int file_descriptor) {
+
+
 }
