@@ -24,11 +24,10 @@ int main() {
         if (c == 19) { // Ctrl+S
             endwin();
             printf("Would you like to save your modified changes? y/n ");
-            char buff[256];
+            char buff[1];
             buff[1] = '\0';
             fgets(buff, 255, stdin);
-            printf("Buff: %s\n", buff);
-            if (buff[0] == 'y' && buff[1] == '\0'){
+            if (buff[0] == 'y'){
                 printf("File name: ");
                 char buff1[256];
                 fgets(buff1, 255, stdin);
