@@ -16,5 +16,5 @@ Looked into ncurses documentation and figured out how to intercept keyboard inpu
 ### 2025-01-06 - (wasn't part of group yet)
 N/A
 
-### 2025-01-07 -
-Worked on file opening 
+### 2025-01-07 - Makefile and file handlings
+Reorganized to make a makefile with run, compile, test targets. Worked on abstracting out opening/closing files with wrapper functions.
