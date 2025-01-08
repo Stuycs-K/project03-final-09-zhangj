@@ -24,9 +24,9 @@ int main() {
         if (c == 19) { // Ctrl+S
             endwin();
             printf("Would you like to save your modified changes? y/n ");
-            char buff[2];
-            buff[2] = '\0';
-            fgets(buff, 1, stdin);
+            char buff[256];
+            buff[256] = '\0';
+            fgets(buff, 255, stdin);
             if (buff[0] == 'y'){
                 printf("File name: ");
                 char buff1[256];
