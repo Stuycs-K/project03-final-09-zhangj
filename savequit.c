@@ -13,7 +13,7 @@
 
 int main() {
     initscr();
-    cbreak();        
+    raw();        
     noecho();          
     keypad(stdscr, TRUE); 
     printw("Ctrl+Q - Exit\tCtrl+S - Save\n");
@@ -34,6 +34,7 @@ int main() {
                 fgets(buff1, 255, stdin);
                 printw("File name is: %s\n", buff1);
                 refresh();
+                break;
             }
             else{
                 printw("Exiting...\n");
