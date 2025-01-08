@@ -22,7 +22,7 @@ static void sighandler(int signo){
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char * argv[]){
 	char *filename = "test.txt";
-	int fd = myopen(filename, O_RDWR | O_CREAT);
+	int fd = myopen(filename);
 	
 	printf("hello from the main femto\n");
   return 0;
