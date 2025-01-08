@@ -16,7 +16,13 @@
 #include "filehandle.h"
 
 // main file for testing in case the current main is fragile
-int main(int argc, char * argv[]){
-	printf("test\n");
+int main(int argc, char *argv[]) {
+	if (argc != 2) {
+		printf("argv[1] must indicate the filename\n");
+		exit(1);
+	}
+	
+	int fd = myopen(argv[1]);
+	printf("fd: %d\n", fd);
   return 0;
 }
