@@ -9,5 +9,20 @@
 #include <time.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include "filehandle.h"
 
-// functions here
+void error(char *message) {
+	char error_string[256];
+  sprintf(error_string, "%s: errno %d", message, errno);
+  perror(error_string);
+  exit(1);
+}
+
+int myopen(char *filename, int permissions) {
+	int file_descriptor = open(filename, permissions, 0644);
+	if (file_descriptor == -1) {
+		error("Open file");
+	}
+	
+	return file_descriptor;
+}
