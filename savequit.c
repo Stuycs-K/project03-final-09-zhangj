@@ -16,12 +16,12 @@ int main() {
     raw();        
     noecho();          
     keypad(stdscr, TRUE); 
-    printw("Ctrl+Q - Exit\tCtrl+S - Save\n");
+    printw("Ctrl+Q - Exit\n");
     refresh();
     int c;
     while (1) {
         c = getch(); 
-        if (c == 19) { // Ctrl+S
+        if (c == 17) { // Ctrl+Q
             endwin();
             printf("Would you like to save your modified changes? y/n ");
             char buff[256];
@@ -34,13 +34,13 @@ int main() {
                 printf("File name is: %s\n", buff1);
                 break;
             }
-            else{
+            else if (buff[0] == 'n'){
+                printf("Quitting...\n");
                 break;
+            }
+            else{
+                printf("Invalid input. Quitting without saving...\n");
             } 
-        }
-        if (c == 17){ // Ctrl+Q
-            endwin();
-            break;
         }
     }
     
