@@ -20,10 +20,3 @@ undoredo.o: undoredo.h
 	@gcc -c undoredo.c
 writesave.o: writesave.h
 	@gcc -c writesave.c
-	
-test_main: test_main.o cutpaste.o filehandle.o savequit.o statdisplay.o undoredo.o writesave.o
-	@gcc -o test_main test_main.o cutpaste.o filehandle.o savequit.o statdisplay.o undoredo.o writesave.o
-test: test_main
-	@./test_main $(ARGS)
-test_main.o: test_main.c cutpaste.h filehandle.h savequit.h statdisplay.h undoredo.h writesave.h
-	@gcc -c test_main.c cutpaste.h filehandle.h savequit.h statdisplay.h undoredo.h writesave.h
