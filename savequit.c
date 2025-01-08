@@ -22,32 +22,27 @@ int main() {
     while (1) {
         c = getch(); 
         if (c == 19) { // Ctrl+S
-            printw("Would you like to save your modified changes? y/n");
-            refresh();
+            endwin();
+            printf("Would you like to save your modified changes? y/n");
             char buff[256];
             buff[1] = '\0';
             fgets(buff, 255, stdin);
             if (buff[0] == 'y' && buff[1] == '\0'){
-                printw("File name: ");
-                refresh();
+                printf("File name: ");
                 char buff1[256];
                 fgets(buff1, 255, stdin);
-                printw("File name is: %s\n", buff1);
-                refresh();
+                printf("File name is: %s\n", buff1);
                 break;
             }
             else{
-                printw("Exiting...\n");
-                refresh();
                 break;
             } 
         }
         if (c == 17){ // Ctrl+Q
-            printw("Exiting...\n");
-            refresh();
+            endwin();
             break;
         }
     }
-    endwin();
+    
     return 0;
 }
