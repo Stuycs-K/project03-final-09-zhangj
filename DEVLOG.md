@@ -11,6 +11,9 @@ Updated proposal and readme with all necessary info. Done during class time (40 
 ### 2025-01-07 - Save and quit from the text editor
 Looked into ncurses documentation and figured out how to intercept keyboard input. Set up basic function to ask the user if they want to save their changes (quit if not), then ask the user for the file name before quitting if Ctrl+Q is pressed. (40 min)
 
+### 2025-01-08 - Cursor movement
+Looked more into ncurses documenation and figured out how to move the cursor using arrow keys. Also started working on actually being able to type into the text editor. Planning to move these functions into a separate file tomorrow.
+
 ## David Schwartzberg
 
 ### 2025-01-06 - (wasn't part of group yet)
