@@ -79,7 +79,7 @@ int main(int argc, char * argv[]){
 		}
 		else if (c == 13){
 			wprintw(win,"\n");
-			y--;
+			y++;
 			x = 0;
 			wrefresh(win);
 		}
