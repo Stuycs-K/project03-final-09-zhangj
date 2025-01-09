@@ -4,10 +4,15 @@
 
 #define LINE_SIZE 1000
 
+struct something {
+	int array_length;
+	int rows;
+};
+
 FILE* myopen(char *filename);
 void myclose(FILE *file);
 
-int read_into_buffer(FILE *file, char **buffer, int array_length);
+struct something read_into_buffer(FILE *file, char **buffer, int array_length);
 void showall(char **buffer, int rows);
 
 char** init_2D_buffer(int rows, int cols);

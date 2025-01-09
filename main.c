@@ -36,11 +36,13 @@ int main(int argc, char *argv[]) {
 	char **buffer = init_2D_buffer(array_length, LINE_SIZE);
 	buffer[4] = malloc(LINE_SIZE * sizeof(char));
 	printf("here 1\n");
-	array_length = read_into_buffer(file, buffer, array_length);
+	struct something smth = read_into_buffer(file, buffer, array_length);
+	array_length = smth.array_length;
+	int rows = smth.rows;
 	printf("here 2\n");
 
 	printf("buffer:\n");
-	showall(buffer, array_length);
+	showall(buffer, rows);
 
 	printf("end of buffer\n");
 
