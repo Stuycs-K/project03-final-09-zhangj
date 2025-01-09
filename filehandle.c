@@ -21,7 +21,7 @@ void error(char *message) {
 
 FILE* myopen(char *filename) {
 	// r+ is read and write
-	FILE *file = fopen(filename, "w");
+	FILE *file = fopen(filename, "r+");
 	if (file == NULL) {
 		error("Open file");
 	}

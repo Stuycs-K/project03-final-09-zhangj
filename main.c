@@ -21,9 +21,26 @@ static void sighandler(int signo){
 }
 
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
-int main(int argc, char * argv[]){
-	// char *filename = "test.txt";
-	// int fd = myopen(filename);
+int main(int argc, char *argv[]) {
+	// add later: if argc == 1: create the file later and ask when save/quit
+	
+	if (argc != 2) {
+		printf("argv[1] must indicate file name");
+		exit(1);
+	}
+	char *filename = argv[1];
+	FILE *file = myopen(filename);
+	
+	// 5 rows, 100 characters per row to start
+	char **buffer = init_2D_buffer(5, 100);
+	read_into_buffer(file, buffer);
+	
+	printf("buffer:\n");
+	showall(buffer, 5);
+	
+	printf("end of buffer\n");
+	
+	return 0;
 
 	printf("hello from the main femto\n");
 	initscr();
