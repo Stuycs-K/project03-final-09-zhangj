@@ -51,7 +51,8 @@ void read_into_buffer(FILE *file, char **buffer) {
 		if (line[length-1] == '\n') {
 			line[length-1] = '\0';
 		}
-		strcpy(buffer[r], line);
+		strncpy(buffer[r], line, LINE_SIZE-1);
+		buffer[r][LINE_SIZE-1] = '\0'; // safety null
 	}
 	
 	printf("end of read_into_buffer\n");
