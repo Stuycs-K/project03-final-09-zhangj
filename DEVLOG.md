@@ -21,3 +21,6 @@ N/A
 
 ### 2025-01-07 - Makefile and file handlings
 Reorganized to make a makefile with run, compile, test targets. Worked on abstracting out opening/closing files with wrapper functions.
+
+### 2025-01-08 - Reading files into a buffer
+Created new functions that can read the current file into a buffer and display it
