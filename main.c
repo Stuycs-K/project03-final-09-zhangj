@@ -56,8 +56,8 @@ int main(int argc, char * argv[]){
 	getmaxyx(stdscr, height, width);
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
-	wprintw(win, "Ctrl+Q - Exit\n");
-	wrefresh(win);
+	// wprintw(win, "Ctrl+Q - Exit\n");
+	// wrefresh(win);
 	while (1) {
 			c = getch();
 			// printw("%c", c);
