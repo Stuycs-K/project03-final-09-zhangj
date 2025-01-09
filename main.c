@@ -78,11 +78,14 @@ int main(int argc, char * argv[]){
 			y++;
 		}
 		else if (c == 13){
-			printw("\n");
+			wprintw(win,"\n");
+			y++;
+			x = 0;
 			wrefresh(win);
 		}
 		else{
 			wprintw(win,"%c", c);
+			x++;
 			wrefresh(win);
 		}
 		wmove(win, y, x);
