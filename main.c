@@ -87,7 +87,7 @@ int main(int argc, char * argv[]){
 			  wmove(win, y, x);
 			  wrefresh(win);
 			  printw("Ctrl+Q - Exit\n");
-			  refresh();
+			  wrefresh(win);
 	 		}
 	}
   return 0;
