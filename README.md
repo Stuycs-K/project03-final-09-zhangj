@@ -4,7 +4,7 @@
 ### Femto
 
 - Julien Zhang
-- David 
+- David Schwartzberg
        
 ### Project Description:
 
