@@ -50,7 +50,7 @@ int main(int argc, char * argv[]){
 	noecho();
 	int c;
 	int x = 1;
-  	int y = 1;
+  	int y = 2;
 	int height;
   	int width;
 	getmaxyx(stdscr, height, width);
@@ -58,6 +58,7 @@ int main(int argc, char * argv[]){
 	keypad(win, TRUE);
 	// wprintw(win, "Ctrl+Q - Exit\n");
 	// wrefresh(win);
+	wmove(win, y, x);
 	while (1) {
 		c = wgetch(win);
 		// printw("%c", c);
