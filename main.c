@@ -48,9 +48,6 @@ int main(int argc, char * argv[]){
 	initscr();
 	raw();
 	noecho();
-	keypad(stdscr, TRUE);
-	printw("Ctrl+Q - Exit\n");
-	refresh();
 	int c;
 	int x = 1;
   	int y = 1;
@@ -59,6 +56,8 @@ int main(int argc, char * argv[]){
 	getmaxyx(stdscr, height, width);
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
+	printw("Ctrl+Q - Exit\n");
+	wrefresh(win);
 	while (1) {
 			c = getch();
 			// printw("%c", c);
