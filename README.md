@@ -4,12 +4,11 @@
 ### Femto
 
 - Julien Zhang
-- 
+- David 
        
 ### Project Description:
 
 Creating a text editor that is similar to nano and can be run through the terminal. Will include basic features of nano such as creating and saving files, editing files, and simple qol features such as redo/undo, cut/paste. May also include other features such as search, go to line, replace, etc.
-Intended usage:
   
 ### Instructions:
 
