@@ -59,33 +59,31 @@ int main(int argc, char * argv[]){
 	// wprintw(win, "Ctrl+Q - Exit\n");
 	// wrefresh(win);
 	while (1) {
-			c = getch();
-			// printw("%c", c);
-			// wrefresh(win);
-			// if (c == 13){
-			// 	printw("\n");
-			// 	wrefresh(win);
-			// }
-			if (c == 17){
-				quit();
-				break;
-			}
-			else{
-				if (x > 0 && c == KEY_LEFT){
-						x--;
-					}
-				if (x < width-1 && c == KEY_RIGHT){
-						x++;
-					}
-				if (y > 0 && c == KEY_UP){
-					y--;
-				}
-				if (y < height-1 && c == KEY_DOWN){
-					y++;
-				}
-			  wmove(win, y, x);
-			  wrefresh(win);
-	 		}
+		c = wgetch(win);
+		// printw("%c", c);
+		// wrefresh(win);
+		// if (c == 13){
+		// 	printw("\n");
+		// 	wrefresh(win);
+		// }
+		if (c == 17){
+			quit();
+			break;
+		}
+		if (x > 0 && c == KEY_LEFT){
+			x--;
+		}
+		if (x < width-1 && c == KEY_RIGHT){
+			x++;
+		}
+		if (y > 0 && c == KEY_UP){
+			y--;
+		}
+		if (y < height-1 && c == KEY_DOWN){
+			y++;
+		}
+		wmove(win, y, x);
+		wrefresh(win);
 	}
   return 0;
 }
