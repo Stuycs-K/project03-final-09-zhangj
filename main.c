@@ -42,41 +42,48 @@ int main(int argc, char *argv[]) {
 	initscr();
 	raw();
 	noecho();
-	keypad(stdscr, TRUE);
-	printw("Ctrl+Q - Exit\n");
-	refresh();
 	int c;
-	int x = 50;
-  int y = 5;
-	int height = 10;
-  int width = 100;
-  int starty = (LINES - height) / 2;
-  int startx = (COLS - width) / 2;
-	WINDOW *my_win;
-	my_win = newwin(25, 50, y, x);
-  wmove(my_win, y, x);
+	int x = 0;
+  	int y = 1;
+	int height;
+  	int width;
+	getmaxyx(stdscr, height, width);
+	WINDOW *win = newwin(height, width, 0, 0);
+	keypad(win, TRUE);
+	wprintw(win, "Ctrl+Q - Exit\n");
+	wmove(win, y, x);
+	wrefresh(win);
 	while (1) {
-			c = getch();
-			if (c == 17){
-				quit();
-				break;
-			}
-			else{
-				if (c == KEY_LEFT){
-					 x--;
-				 }
-				if (c == KEY_RIGHT){
-					 x++;
-				 }
-			  if (c == KEY_UP){
-				  y--;
-			  }
-			  if (c == KEY_DOWN){
-				  y++;
-			  }
-			  wmove(my_win, y, x);
-			  wrefresh(my_win);
-	 	}
+		c = wgetch(win);
+		if (c == 17){
+			quit();
+			break;
+		}
+		else if (x > 0 && c == KEY_LEFT){
+			x--;
+		}
+		else if (x < width-1 && c == KEY_RIGHT){
+			x++;
+		}
+		else if (y > 1 && c == KEY_UP){
+			y--;
+		}
+		else if (y < height-1 && c == KEY_DOWN){
+			y++;
+		}
+		else if (c == 13){
+			wprintw(win,"\n");
+			y++;
+			x = 0;
+			wrefresh(win);
+		}
+		else{
+			wprintw(win,"%c", c);
+			x++;
+			wrefresh(win);
+		}
+		wmove(win, y, x);
+		wrefresh(win);
 	}
   return 0;
 }
