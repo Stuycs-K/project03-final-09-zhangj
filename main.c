@@ -28,23 +28,13 @@ int main(int argc, char *argv[]) {
 		printf("argv[1] must indicate file name");
 		exit(1);
 	}
+	
 	char *filename = argv[1];
 	FILE *file = myopen(filename);
-
-	// 5 rows, 100 characters per row to start
-	int array_length = 10; // need to keep track of this manually for heap-allocated memory
-	char **buffer = init_2D_buffer(array_length, LINE_SIZE);
-	buffer[4] = malloc(LINE_SIZE * sizeof(char));
-	printf("here 1\n");
-	struct something smth = read_into_buffer(file, buffer, array_length);
-	array_length = smth.array_length;
-	int rows = smth.rows;
-	printf("here 2\n");
-
-	printf("buffer:\n");
-	showall(buffer, rows);
-
-	printf("end of buffer\n");
+	
+	struct file_buffer file_buff = create_file_buffer(10);
+	read_into_buffer(file, &file_buff);
+	showall(file_buff);
 
 	return 0;
 

@@ -4,19 +4,19 @@
 
 #define LINE_SIZE 1000
 
-struct something {
+FILE* myopen(char *filename);
+void myclose(FILE *file);
+
+// array_length is the length of the array;
+// rows is how many non-empty lines are in the buffer
+struct file_buffer {
+	char **buffer;
 	int array_length;
 	int rows;
 };
 
-FILE* myopen(char *filename);
-void myclose(FILE *file);
-
-struct something read_into_buffer(FILE *file, char **buffer, int array_length);
-void showall(char **buffer, int rows);
-
-char** init_2D_buffer(int rows, int cols);
-char** resize_2D_buffer(char **buffer, int rows);
-char* resize_1D_buffer(char *buffer, int cols);
+struct file_buffer create_file_buffer(int init_array_length);
+void read_into_buffer(FILE *file, struct file_buffer *file_buff);
+void showall(struct file_buffer file_buff);
 
 #endif
