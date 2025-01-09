@@ -35,13 +35,10 @@ int main(int argc, char * argv[]){
 	int c;
 	int x = 50;
   int y = 5;
-	int height = 10;
-  int width = 100;
-  int starty = (LINES - height) / 2;
-  int startx = (COLS - width) / 2;
+	int height = 1000;
+  int width = 1000;
 	WINDOW *my_win;
 	my_win = newwin(25, 50, y, x);
-  wmove(my_win, y, x);
 	while (1) {
 			c = getch();
 			if (c == 17){
@@ -49,21 +46,21 @@ int main(int argc, char * argv[]){
 				break;
 			}
 			else{
-				if (c == KEY_LEFT){
+				if (x > 0 && c == KEY_LEFT){
 					 x--;
 				 }
-				if (c == KEY_RIGHT){
+				if (x < width && c == KEY_RIGHT){
 					 x++;
 				 }
-			  if (c == KEY_UP){
+			  if (y < height && c == KEY_UP){
 				  y--;
 			  }
-			  if (c == KEY_DOWN){
+			  if (y > 0 && c == KEY_DOWN){
 				  y++;
 			  }
 			  wmove(my_win, y, x);
 			  wrefresh(my_win);
-	 	}
+	 		}
 	}
   return 0;
 }
