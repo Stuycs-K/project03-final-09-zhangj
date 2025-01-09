@@ -20,6 +20,25 @@
 static void sighandler(int signo){
 }
 
+void quit() {
+  endwin();
+  printf("Would you like to save your modified changes? y/n ");
+  char buff[256];
+  buff[256] = '\0';
+  fgets(buff, 255, stdin);
+  if (buff[0] == 'y'){
+      printf("File name: ");
+      char buff1[256];
+      fgets(buff1, 255, stdin);
+  }
+  else if (buff[0] == 'n'){
+      printf("Quitting...\n");
+  }
+  else{
+      printf("Invalid input. Quitting without saving...\n");
+  }
+}
+
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char * argv[]){
 	// char *filename = "test.txt";
