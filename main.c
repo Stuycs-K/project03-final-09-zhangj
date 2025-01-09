@@ -49,16 +49,16 @@ int main(int argc, char * argv[]){
 	raw();
 	noecho();
 	int c;
-	int x = 1;
-  	int y = 2;
+	int x = 0;
+  	int y = 1;
 	int height;
   	int width;
 	getmaxyx(stdscr, height, width);
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
-	// wprintw(win, "Ctrl+Q - Exit\n");
-	// wrefresh(win);
+	wprintw(win, "Ctrl+Q - Exit\n");
 	wmove(win, y, x);
+	wrefresh(win);
 	while (1) {
 		c = wgetch(win);
 		// printw("%c", c);
