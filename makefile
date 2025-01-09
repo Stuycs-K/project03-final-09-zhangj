@@ -20,8 +20,8 @@ writesave.o: writesave.h writesave.c
 	@gcc -c writesave.c -lncurses
 
 test_main: test_main.o cutpaste.o filehandle.o  statdisplay.o undoredo.o writesave.o
-	@gcc -o test_main test_main.o cutpaste.o filehandle.o  statdisplay.o undoredo.o writesave.o
+	@gcc -o test_main test_main.o cutpaste.o filehandle.o  statdisplay.o undoredo.o writesave.o -lncurses
 test: test_main
 	@./test_main $(ARGS)
 test_main.o: test_main.c cutpaste.h filehandle.h  statdisplay.h undoredo.h writesave.h
-	@gcc -c test_main.c cutpaste.h filehandle.h  statdisplay.h undoredo.h writesave.h
+	@gcc -c test_main.c cutpaste.h filehandle.h  statdisplay.h undoredo.h writesave.h -lncurses
