@@ -61,12 +61,6 @@ int main(int argc, char * argv[]){
 	wrefresh(win);
 	while (1) {
 		c = wgetch(win);
-		// printw("%c", c);
-		// wrefresh(win);
-		// if (c == 13){
-		// 	printw("\n");
-		// 	wrefresh(win);
-		// }
 		if (c == 17){
 			quit();
 			break;
@@ -77,11 +71,19 @@ int main(int argc, char * argv[]){
 		if (x < width-1 && c == KEY_RIGHT){
 			x++;
 		}
-		if (y > 0 && c == KEY_UP){
+		if (y > 1 && c == KEY_UP){
 			y--;
 		}
 		if (y < height-1 && c == KEY_DOWN){
 			y++;
+		}
+		if (c == 13){
+			printw("\n");
+			wrefresh(win);
+		}
+		else{
+			wprintw(win,"%c", c);
+			wrefresh(win);
 		}
 		wmove(win, y, x);
 		wrefresh(win);
