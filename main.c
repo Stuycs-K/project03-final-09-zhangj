@@ -23,24 +23,27 @@ static void sighandler(int signo){
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
 	// add later: if argc == 1: create the file later and ask when save/quit
-	
+
 	if (argc != 2) {
 		printf("argv[1] must indicate file name");
 		exit(1);
 	}
 	char *filename = argv[1];
 	FILE *file = myopen(filename);
-	
+
 	// 5 rows, 100 characters per row to start
-	int array_length = 5; // need to keep track of this manually for heap-allocated memory
+	int array_length = 10; // need to keep track of this manually for heap-allocated memory
 	char **buffer = init_2D_buffer(array_length, LINE_SIZE);
+	buffer[4] = malloc(LINE_SIZE * sizeof(char));
+	printf("here 1\n");
 	array_length = read_into_buffer(file, buffer, array_length);
-	
+	printf("here 2\n");
+
 	printf("buffer:\n");
 	showall(buffer, array_length);
-	
+
 	printf("end of buffer\n");
-	
+
 	return 0;
 
 	printf("hello from the main femto\n");
