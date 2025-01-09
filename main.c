@@ -33,12 +33,13 @@ int main(int argc, char * argv[]){
 	printw("Ctrl+Q - Exit\n");
 	refresh();
 	int c;
-	int x = 50;
-  int y = 5;
-	int height = 1000;
-  int width = 1000;
-	WINDOW *my_win;
-	my_win = newwin(25, 50, y, x);
+	int x = 1;
+  	int y = 1;
+	int height;
+  	int width;
+	getmaxyx(stdscr, height, width);
+	WINDOW *my_win = newwin(height, width, 0, 0);
+	keypad(my_win, TRUE);
 	while (1) {
 			c = getch();
 			if (c == 17){
@@ -47,17 +48,17 @@ int main(int argc, char * argv[]){
 			}
 			else{
 				if (x > 0 && c == KEY_LEFT){
-					 x--;
-				 }
-				if (x < width && c == KEY_RIGHT){
-					 x++;
-				 }
-			  if (y < height && c == KEY_UP){
-				  y--;
-			  }
-			  if (y > 0 && c == KEY_DOWN){
-				  y++;
-			  }
+						x--;
+					}
+				if (x < width-1 && c == KEY_RIGHT){
+						x++;
+					}
+				if (y < height-1 && c == KEY_UP){
+					y++;
+				}
+				if (y > 0 && c == KEY_DOWN){
+					y--;
+				}
 			  wmove(my_win, y, x);
 			  wrefresh(my_win);
 	 		}
