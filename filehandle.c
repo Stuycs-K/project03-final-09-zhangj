@@ -21,7 +21,7 @@ void error(char *message) {
 
 FILE* myopen(char *filename) {
 	// r+ is read and write
-	FILE *file = fopen("test.txt", "w");
+	FILE *file = fopen(filename, "w");
 	if (file == NULL) {
 		error("Open file");
 	}
@@ -35,7 +35,44 @@ void myclose(FILE *file) {
 	}
 }
 
-void showall(int file_descriptor) {
+// buffer will be a dynamically sized array of char[]s that each represent a line
+void read_into_buffer(FILE *file, char **buffer) {
+	// seek to start(SEEK_SET)
+	if (fseek(file, 0, SEEK_SET) != 0) { error("read_into_buffer: fseek"); }
+	// if not enough space, realloc
+	
+	// read line by line
+	// fgets reads up until first newline, eof, or n bytes
+	char *line = calloc(LINE_SIZE, sizeof(char));
+	
+	for (int r = 0; fgets(line, LINE_SIZE, file) != NULL; r++) {
+		printf("line: %s\n", line);
+		strcpy(buffer[r], line);
+	}
+	
+	printf("end of read_into_buffer\n");
+}
 
+void showall(char **buffer, int rows) {
+	for (int r = 0; r < rows; r++) {
+		printf("'%s'\n", buffer[r]);
+	}
 
+}
+
+char** init_2D_buffer(int rows, int cols) {
+	char **buffer = (char**) calloc(rows, sizeof(char));
+	for (int r = 0; r < rows; r++) {
+		buffer[r] = (char*) calloc(cols, sizeof(char));
+	}
+	
+	return buffer;
+}
+
+char** resize_2D_buffer(char **buffer, int rows) {
+	return buffer;
+}
+
+char* resize_1D_buffer(char *buffer, int cols) {
+	return buffer;
 }
