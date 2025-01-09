@@ -46,7 +46,11 @@ void read_into_buffer(FILE *file, char **buffer) {
 	char *line = calloc(LINE_SIZE, sizeof(char));
 	
 	for (int r = 0; fgets(line, LINE_SIZE, file) != NULL; r++) {
-		printf("line: %s\n", line);
+		// if the last character is a '\n' (usually is), strip it, it will be included in the showall function
+		int length = strlen(line);
+		if (line[length-1] == '\n') {
+			line[length-1] = '\0';
+		}
 		strcpy(buffer[r], line);
 	}
 	
