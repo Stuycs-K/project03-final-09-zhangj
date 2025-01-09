@@ -32,11 +32,12 @@ int main(int argc, char *argv[]) {
 	FILE *file = myopen(filename);
 	
 	// 5 rows, 100 characters per row to start
-	char **buffer = init_2D_buffer(5, 100);
-	read_into_buffer(file, buffer);
+	int array_length = 5; // need to keep track of this manually for heap-allocated memory
+	char **buffer = init_2D_buffer(array_length, LINE_SIZE);
+	array_length = read_into_buffer(file, buffer, array_length);
 	
 	printf("buffer:\n");
-	showall(buffer, 5);
+	showall(buffer, array_length);
 	
 	printf("end of buffer\n");
 	

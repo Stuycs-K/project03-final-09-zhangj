@@ -36,7 +36,7 @@ void myclose(FILE *file) {
 }
 
 // buffer will be a dynamically sized array of char[]s that each represent a line
-void read_into_buffer(FILE *file, char **buffer) {
+int read_into_buffer(FILE *file, char **buffer, int array_length) {
 	// seek to start(SEEK_SET)
 	if (fseek(file, 0, SEEK_SET) != 0) { error("read_into_buffer: fseek"); }
 	// if not enough space, realloc
@@ -46,18 +46,28 @@ void read_into_buffer(FILE *file, char **buffer) {
 	char *line = calloc(LINE_SIZE, sizeof(char));
 	
 	for (int r = 0; fgets(line, LINE_SIZE, file) != NULL; r++) {
-		// if the last character is a '\n' (usually is), strip it, it will be included in the showall function
+		// if the last character is a '\n' (usually is), strip it
 		int length = strlen(line);
 		if (line[length-1] == '\n') {
 			line[length-1] = '\0';
 		}
+		
+		// sizeof on allocated memory is weird
+		if (r >= array_length) {
+			array_length = array_length * 2 + 1; // arbitrary growth factor
+			resize_2D_buffer(buffer, array_length);
+		}
+		
 		strncpy(buffer[r], line, LINE_SIZE-1);
 		buffer[r][LINE_SIZE-1] = '\0'; // safety null
 	}
 	
 	printf("end of read_into_buffer\n");
+	
+	return array_length;
 }
 
+// rows may not be the size of buffer; there can be empty lines at the end 
 void showall(char **buffer, int rows) {
 	for (int r = 0; r < rows; r++) {
 		printf("'%s'\n", buffer[r]);
@@ -75,7 +85,7 @@ char** init_2D_buffer(int rows, int cols) {
 }
 
 char** resize_2D_buffer(char **buffer, int rows) {
-	return buffer;
+	return (char**) realloc(buffer, rows);
 }
 
 char* resize_1D_buffer(char *buffer, int cols) {
