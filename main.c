@@ -65,19 +65,19 @@ int main(int argc, char * argv[]){
 			quit();
 			break;
 		}
-		if (x > 0 && c == KEY_LEFT){
+		else if (x > 0 && c == KEY_LEFT){
 			x--;
 		}
-		if (x < width-1 && c == KEY_RIGHT){
+		else if (x < width-1 && c == KEY_RIGHT){
 			x++;
 		}
-		if (y > 1 && c == KEY_UP){
+		else if (y > 1 && c == KEY_UP){
 			y--;
 		}
-		if (y < height-1 && c == KEY_DOWN){
+		else if (y < height-1 && c == KEY_DOWN){
 			y++;
 		}
-		if (c == 13){
+		else if (c == 13){
 			printw("\n");
 			wrefresh(win);
 		}
