@@ -61,12 +61,12 @@ int main(int argc, char * argv[]){
 	keypad(win, TRUE);
 	while (1) {
 			c = getch();
-			printw("%c", c);
-			wrefresh(win);
-			if (c == 13){
-				printw("\n");
-				wrefresh(win);
-			}
+			// printw("%c", c);
+			// wrefresh(win);
+			// if (c == 13){
+			// 	printw("\n");
+			// 	wrefresh(win);
+			// }
 			if (c == 17){
 				quit();
 				break;
@@ -85,8 +85,9 @@ int main(int argc, char * argv[]){
 					y++;
 				}
 			  wmove(win, y, x);
-			  printw("Ctrl+Q - Exit\n");
 			  wrefresh(win);
+			  printw("Ctrl+Q - Exit\n");
+			  refresh();
 	 		}
 	}
   return 0;
