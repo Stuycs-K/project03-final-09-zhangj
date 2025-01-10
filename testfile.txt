@@ -1,5 +1,5 @@
-text here 1
-text here 2
-text here 3
-text here 4
-text here 5
+this is line number 1
+and this line has varying size
+so i can test for different lengths
+and lengths greater than 4
+line 5.
