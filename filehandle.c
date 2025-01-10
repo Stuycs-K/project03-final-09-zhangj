@@ -129,7 +129,6 @@ void insert_row(struct file_buffer *file_buff, int r) {
 	file_buff->buffer[file_buff->rows] = line;
 }
 
-// todo
 void delete_char(struct file_buffer *file_buff, int r, int c) {
 	if (! (0 <= r && r < file_buff->rows)) {
 		printf("r shouldn't be greater than file_buff->rows, r=%d, file_buff->rows=%d\n", r, file_buff->rows);
@@ -149,7 +148,22 @@ void delete_char(struct file_buffer *file_buff, int r, int c) {
 	file_buff->buffer[r][length-1] = '\0';
 }
 
-// todo
-void delete_row(struct file_buffer *file_buff, int r) {
+void empty(char *line) {
+	for (int i = 0; line[i] != NULL && i < LINE_SIZE; i++) {
+		line[i] = NULL;
+	}
+}
 
+void delete_row(struct file_buffer *file_buff, int r) {
+	if (! (0 <= r && r < file_buff->rows)) {
+		printf("r shouldn't be greater than file_buff->rows, r=%d, file_buff->rows=%d\n", r, file_buff->rows);
+		exit(1);
+	}
+	
+	file_buff->rows--;
+	for (int i = r; i < file_buff->rows; i++) {
+		file_buff->buffer[i] = file_buff->buffer[i+1];
+	}
+	
+	empty(file_buff->buffer[file_buff->rows+1]);
 }

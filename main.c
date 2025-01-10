@@ -43,6 +43,10 @@ int main(int argc, char *argv[]) {
 	delete_char(file_buff, 0, 0);
 	printf("\nafter delete at 0,0:\n");
 	showall(file_buff);
+	
+	delete_row(file_buff, 0);
+	printf("\nafter delete row 0\n");
+	showall(file_buff);
 
 	return 0;
 
