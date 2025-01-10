@@ -15,9 +15,9 @@ struct file_buffer {
 	int rows;
 };
 
-struct file_buffer create_file_buffer(int init_array_length);
+struct file_buffer* create_file_buffer(int init_array_length);
 void read_into_buffer(FILE *file, struct file_buffer *file_buff);
-void showall(struct file_buffer file_buff);
+void showall(struct file_buffer *file_buff);
 
 void insert_char(struct file_buffer *file_buff, int r, int c, char ch);
 void insert_row(struct file_buffer *file_buff, int r);

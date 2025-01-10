@@ -35,14 +35,14 @@ void myclose(FILE *file) {
 	}
 }
 
-struct file_buffer create_file_buffer(int init_array_length) {
-	struct file_buffer file_buff;
-	file_buff.buffer = (char**) calloc(init_array_length, sizeof(char*));
-	file_buff.array_length = init_array_length;
-	file_buff.rows = 0;
+struct file_buffer* create_file_buffer(int init_array_length) {
+	struct file_buffer *file_buff = (struct file_buffer*) calloc(1, sizeof(struct file_buff*));
+	file_buff->buffer = (char**) calloc(init_array_length, sizeof(char*));
+	file_buff->array_length = init_array_length;
+	file_buff->rows = 0;
 	
 	for (int r = 0; r < init_array_length; r++) {
-		file_buff.buffer[r] = (char*) calloc(LINE_SIZE, sizeof(char));
+		file_buff->buffer[r] = (char*) calloc(LINE_SIZE, sizeof(char));
 	}
 	
 	return file_buff;
@@ -68,9 +68,9 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff) {
 	}
 }
 
-void showall(struct file_buffer file_buff) {
-	for (int r = 0; r < file_buff.rows; r++) {
-		printf("'%s'\n", file_buff.buffer[r]);
+void showall(struct file_buffer *file_buff) {
+	for (int r = 0; r < file_buff->rows; r++) {
+		printf("'%s'\n", file_buff->buffer[r]);
 	}
 }
 
