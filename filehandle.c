@@ -74,13 +74,13 @@ void showall(struct file_buffer file_buff) {
 	}
 }
 
-void insert_char(struct file_buffer file_buff, int r, int c, char ch) {
-	if (r >= file_buff.rows) {
-		printf("r shouldn't be greater than file_buff.rows, r=%d, file_buff.rows=%d\n", r, file_buff.rows);
+void insert_char(struct file_buffer *file_buff, int r, int c, char ch) {
+	if (r >= file_buff->rows) {
+		printf("r shouldn't be greater than file_buff->rows, r=%d, file_buff->rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
 	
-	int length = strlen(file_buff.buffer[r]);
+	int length = strlen(file_buff->buffer[r]);
 	printf("length: %d\n", length);
 	if (c > length) {
 		printf("c shouldn't be greater than the line length at r=%d, c=%d, length=%d\n", r, c, length);
@@ -95,18 +95,18 @@ void insert_char(struct file_buffer file_buff, int r, int c, char ch) {
 	
 	char temp;
 	for (int i = c; i < length; i++) {
-		temp = file_buff.buffer[r][i];
-		file_buff.buffer[r][i] = ch;
+		temp = file_buff->buffer[r][i];
+		file_buff->buffer[r][i] = ch;
 		ch = temp;
 	}
 	// manual concatenation
-	file_buff.buffer[r][length] = ch;
-	file_buff.buffer[r][length+1] = '\0';
+	file_buff->buffer[r][length] = ch;
+	file_buff->buffer[r][length+1] = '\0';
 }
 
 void insert_row(struct file_buffer *file_buff, int r) {
 	if (r > file_buff->rows) {
-		printf("r shouldn't be greater than file_buff.rows, r=%d, file_buff.rows=%d\n", r, file_buff->rows);
+		printf("r shouldn't be greater than file_buff->rows, r=%d, file_buff->rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
 	
