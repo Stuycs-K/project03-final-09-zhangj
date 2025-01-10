@@ -41,21 +41,19 @@ int main(int argc, char *argv[]) {
 	//
 	// printf("end of buffer\n");
 
-	if (argc != 2) {
-		printf("argv[1] must indicate file name");
-		exit(1);
-	}
+	// if (argc != 2) {
+	// 	printf("argv[1] must indicate file name");
+	// 	exit(1);
+	// }
 	
-	char *filename = argv[1];
-	FILE *file = myopen(filename);
+	// char *filename = argv[1];
+	// FILE *file = myopen(filename);
 	
-	struct file_buffer file_buff = create_file_buffer(10);
-	read_into_buffer(file, &file_buff);
-	showall(file_buff);
+	// struct file_buffer file_buff = create_file_buffer(10);
+	// read_into_buffer(file, &file_buff);
+	// showall(file_buff);
 
-	return 0;
-
-	printf("hello from the main femto\n");
+	// printf("hello from the main femto\n");
 	initscr();
 	raw();
 	noecho();
@@ -70,7 +68,12 @@ int main(int argc, char *argv[]) {
 	wprintw(win, "Ctrl+Q - Exit\n");
 	wmove(win, y, x);
 	wrefresh(win);
+	char test[256];
 	while (1) {
+		for (int i = 0; i<256; i++){
+			wprintw(win,"%c", test[i]);
+		}
+		wrefresh(win);
 		c = wgetch(win);
 		if (c == 17){
 			quit();
@@ -96,16 +99,19 @@ int main(int argc, char *argv[]) {
 				y++;
 			}
 		}
+		else if (c == 127){
+			test[x] == NULL;
+			x--;
+		}
 		else if (c == '\n'){
 			wprintw(win,"\n");
 			y++;
 			x = 0;
 			wrefresh(win);
 		}
-		else{
-			wprintw(win,"%c", c);
-			x++;
-			wrefresh(win);
+		else if (c>=32 && c<=126){
+			test[x] = c;
+			x++;	
 		}
 		wmove(win, y, x);
 		wrefresh(win);
