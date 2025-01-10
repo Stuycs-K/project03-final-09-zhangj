@@ -22,118 +22,71 @@ static void sighandler(int signo){
 
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
-	// // add later: if argc == 1: create the file later and ask when save/quit
-	//
-	// if (argc != 2) {
-	// 	printf("argv[1] must indicate file name");
-	// 	exit(1);
-	// }
-	// char *filename = argv[1];
-	// FILE *file = myopen(filename);
-	//
-	// // 5 rows, 100 characters per row to start
-	// int array_length = 5; // need to keep track of this manually for heap-allocated memory
-	// char **buffer = init_2D_buffer(array_length, LINE_SIZE);
-	// array_length = read_into_buffer(file, buffer, array_length);
-	//
-	// printf("buffer:\n");
-	// showall(buffer, array_length);
-	//
-	// printf("end of buffer\n");
-
-	// if (argc != 2) {
-	// 	printf("argv[1] must indicate file name");
-	// 	exit(1);
-	// }
-
-	// char *filename = argv[1];
-	// FILE *file = myopen(filename);
-
-	struct file_buffer *file_buff = create_file_buffer(10);
-	read_into_buffer(file, file_buff);
-	showall(file_buff);
-
-	insert_char(file_buff, 0, 5, 'z');
-	printf("\nafter insert 'z' at 0, 5:\n");
-	showall(file_buff);
-
-	insert_char(file_buff, 4, 7, 'z');
-	printf("\nafter insert 'z' at 4, 7:\n");
-	showall(file_buff);
-
-	insert_row(file_buff, 0);
-	printf("\nafter insert_row at r=0:\n");
-	showall(file_buff);
-
-	printf("\n\narray_length: %d, rows: %d\n", file_buff->array_length, file_buff->rows);
-
-	// printf("hello from the main femto\n");
 	initscr();
 	raw();
 	noecho();
 	int c;
 	int x = 0;
-  	int y = 1;
+  int y = 1;
 	int height;
-  	int width;
+  int width;
 	getmaxyx(stdscr, height, width);
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
 	wmove(win, y, x);
 	wrefresh(win);
-	char test[256];
-	test[0] = '\0';
+	struct file_buffer *file_buff = create_file_buffer(10);
+	insert_row(file_buff,0);
+	mvwprintw(win,0,0, "Ctrl+Q - Exit\n");
+	wrefresh(win);
 	while (1) {
-		mvwprintw(win,0,0, "Ctrl+Q - Exit\n");
-		for (int i = 0; i<256; i++){
-			if (test[i] == '\0'){
-				break;
-			}
-			wprintw(win,"%c", test[i]);
-		}
+		wclear(win);
 		wrefresh(win);
+		mvwprintw(win,0,0, "Ctrl+Q - Exit\n");
+		for (int r = 0; r < file_buff->rows; r++) {
+			wprintw(win,"%s",file_buff->buffer[r]);
+		}
 		c = wgetch(win);
+		wrefresh(win);
 		if (c == 17){
 			quit();
 			break;
 		}
-		else if (c == KEY_LEFT){
+		if (c == KEY_LEFT){
 			if (x > 0){
 				x--;
 			}
 		}
-		else if (c == KEY_RIGHT){
+		if (c == KEY_RIGHT){
 			if (x < width-1){
 				x++;
 			}
 		}
-		else if (c == KEY_UP){
+		if (c == KEY_UP){
 			if (y > 1){
 				y--;
 			}
 		}
-		else if (c == KEY_DOWN){
+		if (c == KEY_DOWN){
 			if (y < height-1){
 				y++;
 			}
 		}
-		else if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
-			test[x-1] = '\0';
-			x--;
-		}
-		else if (c == '\n'){
-			wprintw(win,"\n");
+		// else if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
+		// 	test[x-1] = '\0';
+		// 	x--;
+		// }
+		if (c == '\n'){
+			insert_char(file_buff,y-1,x,'\n');
+			insert_row(file_buff,y);
 			y++;
 			x = 0;
-			wrefresh(win);
 		}
-		else if (c>=32 && c<=126){
-			test[x] = c;
-			test[x+1] = '\0';
+		if (c>=32 && c<=126){
+			insert_char(file_buff,y-1,x,c);
 			x++;
 		}
 		wmove(win, y, x);
-		wclear(win);
 		wrefresh(win);
 	}
   return 0;
