@@ -100,7 +100,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		else if (c == 127){
-			test[x] == NULL;
+			test[x] = NULL;
 			x--;
 		}
 		else if (c == '\n'){
