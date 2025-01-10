@@ -77,7 +77,7 @@ void showall(struct file_buffer *file_buff) {
 // note: all these insert / delete functions use a O(n) shift for EVERY character which is really bad even for relatively short strings, but maybe it's fine
 
 void insert_char(struct file_buffer *file_buff, int r, int c, char ch) {
-	if (r >= file_buff->rows) {
+	if (! (0 <= r && r < file_buff->rows)) {
 		printf("r shouldn't be greater than file_buff->rows, r=%d, file_buff->rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
@@ -107,8 +107,8 @@ void insert_char(struct file_buffer *file_buff, int r, int c, char ch) {
 }
 
 void insert_row(struct file_buffer *file_buff, int r) {
-	if (r > file_buff->rows) {
-		printf("r shouldn't be greater than file_buff->rows, r=%d, file_buff->rows=%d\n", r, file_buff->rows);
+	if (! (0 <= r && r <= file_buff->rows)) {
+		printf("r is not between 0 and file_buff->rows, r=%d, file_buff->rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
 
