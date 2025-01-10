@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 	char test[256];
 	test[0] = '\0';
 	while (1) {
-		mvwprintw(0,0,win, "Ctrl+Q - Exit\n");
+		mvwprintw(win,0,0, "Ctrl+Q - Exit\n");
 		for (int i = 0; i<256; i++){
 			if (test[i] == '\0'){
 				break;
