@@ -46,9 +46,9 @@ int main(int argc, char *argv[]) {
 	noecho();
 	int c;
 	int x = 0;
-  int y = 1;
+  	int y = 1;
 	int height;
-  int width;
+  	int width;
 	getmaxyx(stdscr, height, width);
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
