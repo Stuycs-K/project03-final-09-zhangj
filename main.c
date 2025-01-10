@@ -115,6 +115,7 @@ int main(int argc, char *argv[]) {
 		}
 		else if (c>=32 && c<=126){
 			test[x] = c;
+			test[x+1] = '\0';
 			x++;	
 		}
 		wmove(win, y, x);
