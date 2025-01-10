@@ -69,6 +69,7 @@ int main(int argc, char *argv[]) {
 	wmove(win, y, x);
 	wrefresh(win);
 	char test[256];
+	test[0] = '\0';
 	while (1) {
 		for (int i = 0; i<256; i++){
 			if (test[i] == '\0'){
