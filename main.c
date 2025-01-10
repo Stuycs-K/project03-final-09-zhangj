@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		else if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
-			test[x] = '\0';
+			test[x-1] = '\0';
 			x--;
 		}
 		else if (c == '\n'){
