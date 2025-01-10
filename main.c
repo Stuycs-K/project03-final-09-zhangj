@@ -41,6 +41,21 @@ int main(int argc, char *argv[]) {
 	//
 	// printf("end of buffer\n");
 
+	if (argc != 2) {
+		printf("argv[1] must indicate file name");
+		exit(1);
+	}
+	
+	char *filename = argv[1];
+	FILE *file = myopen(filename);
+	
+	struct file_buffer file_buff = create_file_buffer(10);
+	read_into_buffer(file, &file_buff);
+	showall(file_buff);
+
+	return 0;
+
+	printf("hello from the main femto\n");
 	initscr();
 	raw();
 	noecho();
