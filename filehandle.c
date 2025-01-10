@@ -130,11 +130,26 @@ void insert_row(struct file_buffer *file_buff, int r) {
 }
 
 // todo
-void delete_char(struct file_buffer file_buff, int r, int c) {
+void delete_char(struct file_buffer *file_buff, int r, int c) {
+	if (! (0 <= r && r < file_buff->rows)) {
+		printf("r shouldn't be greater than file_buff->rows, r=%d, file_buff->rows=%d\n", r, file_buff->rows);
+		exit(1);
+	}
 
+	int length = strlen(file_buff->buffer[r]);
+	printf("length: %d\n", length);
+	if (c >= length) {
+		printf("c shouldn't be greater than the line length at r=%d, c=%d, length=%d\n", r, c, length);
+		exit(1);
+	}
+	
+	for (int i = c; i < length-1; i++) {
+		file_buff->buffer[r][i] = file_buff->buffer[r][i+1];
+	}
+	file_buff->buffer[r][length-1] = '\0';
 }
 
 // todo
-void delete_row(struct file_buffer file_buff, int r) {
+void delete_row(struct file_buffer *file_buff, int r) {
 
 }

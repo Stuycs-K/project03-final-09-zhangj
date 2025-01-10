@@ -36,13 +36,13 @@ int main(int argc, char *argv[]) {
 	read_into_buffer(file, file_buff);
 	showall(file_buff);
 
-	// insert_char(file_buff, 0, 5, 'z');
-	// printf("\nafter insert 'z' at 0, 5:\n");
-	// showall(file_buff);
-
-	printf("\n\narray_length: %d, rows: %d\n", file_buff->array_length, file_buff->rows);
-
-	save(argv[1], file_buff);
+	insert_char(file_buff, 0, 0, 'z');
+	printf("\nafter insert 'z' at 0, 0:\n");
+	showall(file_buff);
+	
+	delete_char(file_buff, 0, 0);
+	printf("\nafter delete at 0,0:\n");
+	showall(file_buff);
 
 	return 0;
 
