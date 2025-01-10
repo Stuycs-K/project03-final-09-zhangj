@@ -71,9 +71,10 @@ int main(int argc, char *argv[]) {
 	char test[256];
 	while (1) {
 		for (int i = 0; i<256; i++){
-			if (test[i] != 0){
-				wprintw(win,"%c", test[i]);
+			if (test[i] == '\0'){
+				break;
 			}
+			wprintw(win,"%c", test[i]);
 		}
 		wrefresh(win);
 		c = wgetch(win);
@@ -102,7 +103,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		else if (c == 127){
-			test[x] = 0;
+			test[x] = '\0';
 			x--;
 		}
 		else if (c == '\n'){
