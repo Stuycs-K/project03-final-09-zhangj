@@ -71,6 +71,7 @@ int main(int argc, char *argv[]) {
 	char test[256];
 	test[0] = '\0';
 	while (1) {
+		wprintw(win, "Ctrl+Q - Exit\n");
 		for (int i = 0; i<256; i++){
 			if (test[i] == '\0'){
 				break;
@@ -119,6 +120,7 @@ int main(int argc, char *argv[]) {
 			x++;	
 		}
 		wmove(win, y, x);
+		wclear(win);
 		wrefresh(win);
 	}
   return 0;
