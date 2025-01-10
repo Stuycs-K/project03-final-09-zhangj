@@ -20,7 +20,7 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff);
 void showall(struct file_buffer file_buff);
 
 void insert_char(struct file_buffer file_buff, int r, int c, char ch);
-void insert_row(struct file_buffer file_buff, int r);
+void insert_row(struct file_buffer *file_buff, int r);
 void delete_char(struct file_buffer file_buff, int r, int c);
 void delete_row(struct file_buffer file_buff, int r);
 

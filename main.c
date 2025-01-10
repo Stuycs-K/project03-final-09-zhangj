@@ -36,8 +36,12 @@ int main(int argc, char *argv[]) {
 	read_into_buffer(file, &file_buff);
 	showall(file_buff);
 	
-	insert_char(file_buff, 0, 22, 'z');
-	printf("after insert 'z' at 0, 22:\n");
+	// insert_char(file_buff, 0, 22, 'z');
+	// printf("after insert 'z' at 0, 22:\n");
+	// showall(file_buff);
+	
+	insert_row(&file_buff, 0);
+	printf("after insert_row at r=0:\n");
 	showall(file_buff);
 
 	return 0;

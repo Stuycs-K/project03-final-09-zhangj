@@ -104,8 +104,27 @@ void insert_char(struct file_buffer file_buff, int r, int c, char ch) {
 	file_buff.buffer[r][length+1] = '\0';
 }
 
-void insert_row(struct file_buffer file_buff, int r) {
+void insert_row(struct file_buffer *file_buff, int r) {
+	if (r > file_buff->rows) {
+		printf("r shouldn't be greater than file_buff.rows, r=%d, file_buff.rows=%d\n", r, file_buff->rows);
+		exit(1);
+	}
 	
+	file_buff->rows++;
+	if (file_buff->rows == file_buff->array_length) {
+		file_buff->array_length = 2*file_buff->array_length + 1;
+		file_buff->buffer = (char**) realloc(file_buff->buffer, file_buff->array_length);
+	}
+	
+	char *temp;
+	char *line = (char*) calloc(LINE_SIZE, sizeof(char));
+	for (int i = r; i < file_buff->rows; i++) {
+		temp = file_buff->buffer[i];
+		file_buff->buffer[i] = line;
+		line = temp;
+	}
+	
+	file_buff->buffer[file_buff->rows] = line;
 }
 
 void delete_char(struct file_buffer file_buff, int r, int c) {
