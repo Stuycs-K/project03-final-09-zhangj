@@ -65,7 +65,6 @@ int main(int argc, char *argv[]) {
 	getmaxyx(stdscr, height, width);
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
-	wprintw(win, "Ctrl+Q - Exit\n");
 	wmove(win, y, x);
 	wrefresh(win);
 	char test[256];
@@ -104,7 +103,7 @@ int main(int argc, char *argv[]) {
 				y++;
 			}
 		}
-		else if (c == 127){
+		else if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
 			test[x] = '\0';
 			x--;
 		}
