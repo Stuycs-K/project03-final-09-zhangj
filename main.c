@@ -92,10 +92,8 @@ int main(int argc, char *argv[]) {
 		if (c == KEY_UP){
 			if (y > 1){
 				y--;
-				if (x > strlen(file_buff->buffer[y-1]-1)){
+				if (x > strlen(file_buff->buffer[y-1])-1){
 					x = strlen(file_buff->buffer[y-1])-1;
-					wmove(win, y, x);
-					wrefresh(win);
 				}
 			}
 		}
@@ -105,17 +103,11 @@ int main(int argc, char *argv[]) {
 				if (y == file_buff->rows){
 					if (x > strlen(file_buff->buffer[y-1])){
 						x = strlen(file_buff->buffer[y-1]);
-						xLineEnd = x;
-						wmove(win, y, x);
-						wrefresh(win);
 					}
 				}
 				else{
-					if (x > strlen(file_buff->buffer[y-1]-1)){
+					if (x > strlen(file_buff->buffer[y-1])-1){
 						x = strlen(file_buff->buffer[y-1])-1;
-						xLineEnd = x;
-						wmove(win, y, x);
-						wrefresh(win);
 					}
 				}
 			}
