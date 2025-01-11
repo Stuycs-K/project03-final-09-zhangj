@@ -75,22 +75,21 @@ void showall(struct file_buffer *file_buff) {
 // note: all these insert / delete functions use a O(n) shift for EVERY character which is really bad even for relatively short strings, but maybe it's fine
 
 void insert_char(struct file_buffer *file_buff, int r, int c, char ch) {
-	if (! (0 <= r && r < file_buff->rows)) {
-		printf("r shouldn't be greater than file_buff->rows, r=%d, file_buff->rows=%d\n", r, file_buff->rows);
+	if (!(0 <= r && r < file_buff->rows)) {
+		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
 
 	int length = strlen(file_buff->buffer[r]);
-	printf("length: %d\n", length);
-	if (c > length) {
-		printf("c shouldn't be greater than the line length at r=%d, c=%d, length=%d\n", r, c, length);
+	if (!(c <= length)) {
+		fprintf(stderr, "c=%d is out of bounds, expected value between 0 and length=%d\n", c, length);
 		exit(1);
 	}
 
 	if (!(length+1 < LINE_SIZE)) {
 		// maybe figure out how to realloc lines later
 		printf("out of room");
-		exit(1);
+		return;
 	}
 
 	char temp;
@@ -105,8 +104,8 @@ void insert_char(struct file_buffer *file_buff, int r, int c, char ch) {
 }
 
 void insert_row(struct file_buffer *file_buff, int r) {
-	if (! (0 <= r && r <= file_buff->rows)) {
-		printf("r is not between 0 and file_buff->rows, r=%d, file_buff->rows=%d\n", r, file_buff->rows);
+	if (!(0 <= r && r <= file_buff->rows)) {
+		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
 
@@ -128,15 +127,14 @@ void insert_row(struct file_buffer *file_buff, int r) {
 }
 
 void delete_char(struct file_buffer *file_buff, int r, int c) {
-	if (! (0 <= r && r < file_buff->rows)) {
-		printf("r shouldn't be greater than file_buff->rows, r=%d, file_buff->rows=%d\n", r, file_buff->rows);
+	if (!(0 <= r && r < file_buff->rows)) {
+		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
 
 	int length = strlen(file_buff->buffer[r]);
-	printf("length: %d\n", length);
-	if (c >= length) {
-		printf("c shouldn't be greater than the line length at r=%d, c=%d, length=%d\n", r, c, length);
+	if (!(c < length)) {
+		fprintf(stderr, "c=%d is out of bounds, expected value between 0 and length=%d\n", c, length);
 		exit(1);
 	}
 	
@@ -146,15 +144,9 @@ void delete_char(struct file_buffer *file_buff, int r, int c) {
 	file_buff->buffer[r][length-1] = '\0';
 }
 
-void empty(char *line) {
-	for (int i = 0; line[i] != NULL && i < LINE_SIZE; i++) {
-		line[i] = NULL;
-	}
-}
-
 void delete_row(struct file_buffer *file_buff, int r) {
-	if (! (0 <= r && r < file_buff->rows)) {
-		printf("r shouldn't be greater than file_buff->rows, r=%d, file_buff->rows=%d\n", r, file_buff->rows);
+	if (!(0 <= r && r < file_buff->rows)) {
+		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
 	
@@ -163,5 +155,7 @@ void delete_row(struct file_buffer *file_buff, int r) {
 		file_buff->buffer[i] = file_buff->buffer[i+1];
 	}
 	
-	empty(file_buff->buffer[file_buff->rows+1]);
+	for (int i = 0; file_buff->buffer[file_buff->rows+1][i] != NULL && i < LINE_SIZE; i++) {
+		file_buff->buffer[file_buff->rows+1][i] = NULL;
+	}
 }
