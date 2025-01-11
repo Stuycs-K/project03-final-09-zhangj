@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == KEY_STAB || c == 9 || c=='\t'){
 			insert_char(file_buff,y-1,x,'\t');
-			x++;
+			x+=4;
 		}
 		if (c>=32 && c<=126){
 			insert_char(file_buff,y-1,x,c);
