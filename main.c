@@ -69,7 +69,12 @@ int main(int argc, char *argv[]) {
 		wmove(win, y, x);
 		wrefresh(win);
 		c = wgetch(win);
-		wrefresh(win);
+		if (y-1 == file_buff->rows){
+			xLineEnd = strlen(file_buff->buffer[y-1]);
+		}
+		else{
+			xLineEnd = strlen(file_buff->buffer[y-1]-1);
+		}
 		if (c == 17){
 			quit(file_buff);
 			break;
@@ -90,15 +95,13 @@ int main(int argc, char *argv[]) {
 				if (y-1 == file_buff->rows){
 					if (x > strlen(file_buff->buffer[y-1])){
 						x = strlen(file_buff->buffer[y-1]);
-						xLineEnd = x;
 						wmove(win, y, x);
 						wrefresh(win);
 					}
 				}
 				else{
 					if (x > strlen(file_buff->buffer[y-1]-1)){
-						x = strlen(file_buff->buffer[y-1]);
-						xLineEnd = x;
+						x = strlen(file_buff->buffer[y-1]-1);
 						wmove(win, y, x);
 						wrefresh(win);
 					}
@@ -118,7 +121,7 @@ int main(int argc, char *argv[]) {
 				}
 				else{
 					if (x > strlen(file_buff->buffer[y-1]-1)){
-						x = strlen(file_buff->buffer[y-1]);
+						x = strlen(file_buff->buffer[y-1]-1);
 						xLineEnd = x;
 						wmove(win, y, x);
 						wrefresh(win);
@@ -141,12 +144,6 @@ int main(int argc, char *argv[]) {
 		if (c>=32 && c<=126){
 			insert_char(file_buff,y-1,x,c);
 			x++;
-		}
-		if (y-1 == file_buff->rows){
-			xLineEnd = strlen(file_buff->buffer[y-1]);
-		}
-		else{
-			xLineEnd = strlen(file_buff->buffer[y-1]-1);
 		}
 	}
   return 0;
