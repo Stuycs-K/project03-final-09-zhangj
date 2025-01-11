@@ -30,3 +30,6 @@ Created new functions that can read the current file into a buffer and display i
 
 ### 2025-01-09 - Bug-fixing and insertion functions
 Spent too long on finding a bug and created insertion functions for the file buffer
+
+### 2025-01-10 - Saving and deletion
+Made functions that can save the buffer to a file and directly characters/lines from the buffer
