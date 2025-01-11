@@ -26,31 +26,37 @@ int main(int argc, char *argv[]) {
 		printf("argv[1] must indicate file name");
 		exit(1);
 	}
-
+	
+	int c;
+	int x = 0
+  	int y = 1;
+	int height;
+  	int width;
 	char *filename = argv[1];
 	FILE *file = myopen(filename);
 
 	struct file_buffer *file_buff = create_file_buffer(10);
 	read_into_buffer(file, file_buff);
-	showall(file_buff);
 
 	initscr();
 	raw();
 	noecho();
-	int c;
-	int x = 0;
-  int y = 1;
-	int height;
-  int width;
+
 	getmaxyx(stdscr, height, width);
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
+
+	mvwprintw(win,0,0, "Ctrl+Q - Exit\n");
+	for (int r = 0; r < file_buff->rows; r++) {
+		wprintw(win,"%s",file_buff->buffer[r]);
+	}
+	wrefresh(win);
+	x = getcurx(win);
+	y = getcury(win); 
 	wmove(win, y, x);
 	wrefresh(win);
-	struct file_buffer *file_buff = create_file_buffer(10);
-	insert_row(file_buff,0);
-	mvwprintw(win,0,0, "Ctrl+Q - Exit\n");
-	wrefresh(win);
+	insert_row(file_buff,y-1);
+
 	while (1) {
 		wclear(win);
 		wrefresh(win);
