@@ -23,7 +23,7 @@ void quit(struct file_buffer *file_buff) {
       printf("File name: ");
       char buff1[256];
       fgets(buff1, 255, stdin);
-      save(buff1, file_buff);
+      save(buff1, *file_buff);
   }
   else if (buff[0] == 'n'){
       printf("Quitting...\n");
