@@ -79,17 +79,17 @@ int main(int argc, char *argv[]) {
 			quit(file_buff);
 			break;
 		}
-		if (c == KEY_LEFT){
+		else if (c == KEY_LEFT){
 			if (x > 0){
 				x--;
 			}
 		}
-		if (c == KEY_RIGHT){
+		else if (c == KEY_RIGHT){
 			if (x < xLineEnd){
 				x++;
 			}
 		}
-		if (c == KEY_UP){
+		else if (c == KEY_UP){
 			if (y > 1){
 				y--;
 				if (x > strlen(file_buff->buffer[y-1])-1){
@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
 				}
 			}
 		}
-		if (c == KEY_DOWN){
+		else if (c == KEY_DOWN){
 			if (y < yLineEnd){
 				y++;
 				if (y == file_buff->rows){
@@ -116,7 +116,7 @@ int main(int argc, char *argv[]) {
 		// 	test[x-1] = '\0';
 		// 	x--;
 		// }
-		if (c == '\n'){
+		else if (c == '\n'){
 			insert_char(file_buff,y-1,x,'\n');
 			insert_row(file_buff,y);
 			y++;
@@ -124,11 +124,11 @@ int main(int argc, char *argv[]) {
 			x = 0;
 			xLineEnd = 0;
 		}
-		if (c == KEY_STAB || c == 9){
+		else if (c == KEY_STAB || c == 9){
 			insert_char(file_buff,y-1,x,'\t');
 			x++;
 		}
-		if (c>=32 && c<=126){
+		else if (c>=32 && c<=126){
 			insert_char(file_buff,y-1,x,c);
 			x++;
 		}
