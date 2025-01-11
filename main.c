@@ -87,11 +87,43 @@ int main(int argc, char *argv[]) {
 		if (c == KEY_UP){
 			if (y > 1){
 				y--;
+				if (y-1 == file_buff->rows){
+					if (x > strlen(file_buff->buffer[y-1])){
+						x = strlen(file_buff->buffer[y-1]);
+						xLineEnd = x;
+						wmove(win, y, x);
+						wrefresh(win);
+					}
+				}
+				else{
+					if (x > strlen(file_buff->buffer[y-1]-1)){
+						x = strlen(file_buff->buffer[y-1]);
+						xLineEnd = x;
+						wmove(win, y, x);
+						wrefresh(win);
+					}
+				}
 			}
 		}
 		if (c == KEY_DOWN){
 			if (y < yLineEnd){
 				y++;
+				if (y-1 == file_buff->rows){
+					if (x > strlen(file_buff->buffer[y-1])){
+						x = strlen(file_buff->buffer[y-1]);
+						xLineEnd = x;
+						wmove(win, y, x);
+						wrefresh(win);
+					}
+				}
+				else{
+					if (x > strlen(file_buff->buffer[y-1]-1)){
+						x = strlen(file_buff->buffer[y-1]);
+						xLineEnd = x;
+						wmove(win, y, x);
+						wrefresh(win);
+					}
+				}
 			}
 		}
 		// else if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
@@ -110,12 +142,12 @@ int main(int argc, char *argv[]) {
 			insert_char(file_buff,y-1,x,c);
 			x++;
 		}
-		//if (y-1 == file_buff->rows){
-		//	xLineEnd = strlen(file_buff->buffer[y-1]);
-		//}
-		//else{
+		if (y-1 == file_buff->rows){
+			xLineEnd = strlen(file_buff->buffer[y-1]);
+		}
+		else{
 			xLineEnd = strlen(file_buff->buffer[y-1]-1);
-		//}
+		}
 	}
   return 0;
 }
