@@ -46,6 +46,8 @@ int main(int argc, char *argv[]) {
 		for (int r = 0; r < file_buff->rows; r++) {
 			wprintw(win,"%s",file_buff->buffer[r]);
 		}
+		wmove(win, y, x);
+		wrefresh(win);
 		c = wgetch(win);
 		wrefresh(win);
 		if (c == 17){
@@ -86,8 +88,6 @@ int main(int argc, char *argv[]) {
 			insert_char(file_buff,y-1,x,c);
 			x++;
 		}
-		wmove(win, y, x);
-		wrefresh(win);
 	}
   return 0;
 }
