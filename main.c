@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		if (c == KEY_DOWN){
-			if (y < yLineEnd){
+			if (y < yLineEnd-1){
 				y++;
 			}
 		}
