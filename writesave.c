@@ -56,5 +56,5 @@ void save(char *filename, struct file_buffer *file_buff) {
     }
   }
 
-  myclose(file);
+  close_file(file);
 }

@@ -28,12 +28,27 @@ int main(int argc, char *argv[]) {
 	}
 
 	char *filename = argv[1];
-	FILE *file = myopen(filename);
+	FILE *file = open_read(filename);
 
 	struct file_buffer *file_buff = create_file_buffer(10);
 	read_into_buffer(file, file_buff);
 	showall(file_buff);
 
+	insert_char(file_buff, 0, 0, 'z');
+	printf("\nafter insert 'z' at 0, 0:\n");
+	showall(file_buff);
+	
+	delete_char(file_buff, 0, 0);
+	printf("\nafter delete at 0,0:\n");
+	showall(file_buff);
+	
+	delete_row(file_buff, 0);
+	printf("\nafter delete row 0\n");
+	showall(file_buff);
+
+	return 0;
+
+	printf("hello from the main femto\n");
 	initscr();
 	raw();
 	noecho();
