@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
 	}
 	
 	int c;
-	int x = 0
+	int x = 0;
   	int y = 1;
 	int height;
   	int width;
