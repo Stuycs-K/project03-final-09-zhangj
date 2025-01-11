@@ -4,8 +4,8 @@
 
 #define LINE_SIZE 1000
 
-FILE* myopen(char *filename);
-void myclose(FILE *file);
+FILE* open_read(char *filename);
+void close_file(FILE *file);
 
 // array_length is the length of the array;
 // rows is how many non-empty lines are in the buffer

@@ -12,26 +12,21 @@
 #include <ncurses.h>
 #include "filehandle.h"
 
-void error(char *message) {
-	char error_string[256];
-  sprintf(error_string, "%s: errno %d", message, errno);
-  perror(error_string);
-  exit(1);
-}
-
-FILE* myopen(char *filename) {
-	// r+ is read and write
+// opens a file only in read mode
+FILE* open_read(char *filename) {
 	FILE *file = fopen(filename, "r");
 	if (file == NULL) {
-		error("Open file");
+		fprintf(stderr, "open_read: failed to open file\\nerrno %d: %s\n", errno, strerror(errno));
+		exit(1);
 	}
 
 	return file;
 }
 
-void myclose(FILE *file) {
+void close_file(FILE *file) {
 	if (fclose(file) == EOF) {
-		error("Close file");
+		fprintf(stderr, "close_file: failed to close file\nerrno %d: %s\n", errno, strerror(errno));
+		exit(1);
 	}
 }
 
@@ -49,7 +44,10 @@ struct file_buffer* create_file_buffer(int init_array_length) {
 }
 
 void read_into_buffer(FILE *file, struct file_buffer *file_buff) {
-	if (fseek(file, 0, SEEK_SET) != 0) { error("read_into_buffer: fseek"); }
+	if (fseek(file, 0, SEEK_SET) != 0) {
+		fprintf(stderr, "read_into_buffer: failed to fseek to 0, SEEK_SET\nerrno %d: %s\n", errno, strerror(errno));
+		exit(1);
+	}
 
 	char line[LINE_SIZE];
 	for (file_buff->rows = 0; fgets(line, LINE_SIZE, file) != NULL; file_buff->rows++) {
