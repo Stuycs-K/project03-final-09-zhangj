@@ -83,7 +83,6 @@ void insert_char(struct file_buffer *file_buff, int r, int c, char ch) {
 	}
 
 	int length = strlen(file_buff->buffer[r]);
-	printf("length: %d\n", length);
 	if (c > length) {
 		printf("c shouldn't be greater than the line length at r=%d, c=%d, length=%d\n", r, c, length);
 		exit(1);

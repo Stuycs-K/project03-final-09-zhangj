@@ -39,68 +39,67 @@ int main(int argc, char *argv[]) {
 	noecho();
 	int c;
 	int x = 0;
-  	int y = 1;
+  int y = 1;
 	int height;
-  	int width;
+  int width;
 	getmaxyx(stdscr, height, width);
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
 	wmove(win, y, x);
 	wrefresh(win);
-	char test[256];
-	test[0] = '\0';
+	struct file_buffer *file_buff = create_file_buffer(10);
+	insert_row(file_buff,0);
+	mvwprintw(win,0,0, "Ctrl+Q - Exit\n");
+	wrefresh(win);
 	while (1) {
+		wclear(win);
+		wrefresh(win);
 		mvwprintw(win,0,0, "Ctrl+Q - Exit\n");
-		for (int i = 0; i<256; i++){
-			if (test[i] == '\0'){
-				break;
-			}
-			wprintw(win,"%c", test[i]);
+		for (int r = 0; r < file_buff->rows; r++) {
+			wprintw(win,"%s",file_buff->buffer[r]);
 		}
+		wmove(win, y, x);
 		wrefresh(win);
 		c = wgetch(win);
+		wrefresh(win);
 		if (c == 17){
 			quit();
 			break;
 		}
-		else if (c == KEY_LEFT){
+		if (c == KEY_LEFT){
 			if (x > 0){
 				x--;
 			}
 		}
-		else if (c == KEY_RIGHT){
+		if (c == KEY_RIGHT){
 			if (x < width-1){
 				x++;
 			}
 		}
-		else if (c == KEY_UP){
+		if (c == KEY_UP){
 			if (y > 1){
 				y--;
 			}
 		}
-		else if (c == KEY_DOWN){
+		if (c == KEY_DOWN){
 			if (y < height-1){
 				y++;
 			}
 		}
-		else if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
-			test[x-1] = '\0';
-			x--;
-		}
-		else if (c == '\n'){
-			wprintw(win,"\n");
+		// else if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
+		// 	test[x-1] = '\0';
+		// 	x--;
+		// }
+		if (c == '\n'){
+			insert_char(file_buff,y-1,x,'\n');
+			insert_row(file_buff,y);
 			y++;
 			x = 0;
-			wrefresh(win);
 		}
-		else if (c>=32 && c<=126){
-			test[x] = c;
-			test[x+1] = '\0';
+		if (c>=32 && c<=126){
+			insert_char(file_buff,y-1,x,c);
 			x++;
 		}
-		wmove(win, y, x);
-		wclear(win);
-		wrefresh(win);
 	}
   return 0;
 }
