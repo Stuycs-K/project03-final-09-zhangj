@@ -56,6 +56,8 @@ int main(int argc, char *argv[]) {
 	wmove(win, y, x);
 	wrefresh(win);
 	insert_row(file_buff,y-1);
+	int xLineEnd = x;
+	int yLineEnd = y;
 
 	while (1) {
 		wclear(win);
@@ -78,7 +80,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		if (c == KEY_RIGHT){
-			if (x < width-1){
+			if (x < xLineEnd){
 				x++;
 			}
 		}
@@ -88,7 +90,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		if (c == KEY_DOWN){
-			if (y < height-1){
+			if (y < yLineEnd){
 				y++;
 			}
 		}
@@ -100,7 +102,9 @@ int main(int argc, char *argv[]) {
 			insert_char(file_buff,y-1,x,'\n');
 			insert_row(file_buff,y);
 			y++;
+			yLineEnd++;
 			x = 0;
+			xLineEnd = 0;
 		}
 		if (c>=32 && c<=126){
 			insert_char(file_buff,y-1,x,c);

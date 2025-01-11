@@ -55,7 +55,6 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff) {
 	for (file_buff->rows = 0; fgets(line, LINE_SIZE, file) != NULL; file_buff->rows++) {
 		// if the last character is a '\n', strip it
 		int length = strlen(line);
-		//if (line[length-1] == '\n') { line[length-1] = '\0'; }
 
 		// grow the array if needed
 		if (file_buff->rows >= file_buff->array_length) {
