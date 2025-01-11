@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
 		wmove(win, y, x);
 		wrefresh(win);
 		c = wgetch(win);
-		if (y-1 == file_buff->rows){
+		if (y == file_buff->rows){
 			xLineEnd = strlen(file_buff->buffer[y-1]);
 		}
 		else{
@@ -92,26 +92,17 @@ int main(int argc, char *argv[]) {
 		if (c == KEY_UP){
 			if (y > 1){
 				y--;
-				if (y-1 == file_buff->rows){
-					if (x > strlen(file_buff->buffer[y-1])){
-						x = strlen(file_buff->buffer[y-1]);
-						wmove(win, y, x);
-						wrefresh(win);
-					}
-				}
-				else{
-					if (x > strlen(file_buff->buffer[y-1]-1)){
-						x = strlen(file_buff->buffer[y-1])-1;
-						wmove(win, y, x);
-						wrefresh(win);
-					}
+				if (x > strlen(file_buff->buffer[y-1]-1)){
+					x = strlen(file_buff->buffer[y-1])-1;
+					wmove(win, y, x);
+					wrefresh(win);
 				}
 			}
 		}
 		if (c == KEY_DOWN){
 			if (y < yLineEnd){
 				y++;
-				if (y-1 == file_buff->rows){
+				if (y == file_buff->rows){
 					if (x > strlen(file_buff->buffer[y-1])){
 						x = strlen(file_buff->buffer[y-1]);
 						xLineEnd = x;
