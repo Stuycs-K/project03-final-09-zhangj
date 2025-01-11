@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
 			xLineEnd = strlen(file_buff->buffer[y-1]);
 		}
 		else{
-			xLineEnd = strlen(file_buff->buffer[y-1]-1);
+			xLineEnd = strlen(file_buff->buffer[y-1])-1;
 		}
 		if (c == 17){
 			quit(file_buff);
@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
 				}
 				else{
 					if (x > strlen(file_buff->buffer[y-1]-1)){
-						x = strlen(file_buff->buffer[y-1]-1);
+						x = strlen(file_buff->buffer[y-1])-1;
 						wmove(win, y, x);
 						wrefresh(win);
 					}
@@ -121,7 +121,7 @@ int main(int argc, char *argv[]) {
 				}
 				else{
 					if (x > strlen(file_buff->buffer[y-1]-1)){
-						x = strlen(file_buff->buffer[y-1]-1);
+						x = strlen(file_buff->buffer[y-1])-1;
 						xLineEnd = x;
 						wmove(win, y, x);
 						wrefresh(win);
