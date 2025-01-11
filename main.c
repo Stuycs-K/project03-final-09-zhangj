@@ -110,7 +110,12 @@ int main(int argc, char *argv[]) {
 			insert_char(file_buff,y-1,x,c);
 			x++;
 		}
-		xLineEnd = strlen(file_buff->buffer[y-1]);
+		if (y-1 == file_buff->rows){
+			xLineEnd = strlen(file_buff->buffer[y-1]-1);
+		}
+		else{
+			xLineEnd = strlen(file_buff->buffer[y-1]);
+		}
 	}
   return 0;
 }
