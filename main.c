@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
 		c = wgetch(win);
 		wrefresh(win);
 		if (c == 17){
-			quit();
+			quit(file_buff);
 			break;
 		}
 		if (c == KEY_LEFT){
@@ -111,10 +111,10 @@ int main(int argc, char *argv[]) {
 			x++;
 		}
 		if (y-1 == file_buff->rows){
-			xLineEnd = strlen(file_buff->buffer[y-1]-1);
+			xLineEnd = strlen(file_buff->buffer[y-1]);
 		}
 		else{
-			xLineEnd = strlen(file_buff->buffer[y-1]);
+			xLineEnd = strlen(file_buff->buffer[y-1]-1);
 		}
 	}
   return 0;

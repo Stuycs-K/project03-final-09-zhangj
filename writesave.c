@@ -13,7 +13,7 @@
 #include "filehandle.h"
 
 // Quits out of raw mode and prompts user if they want to save the changes and asks them if they want to rename the file before quitting
-void quit() {
+void quit(struct file_buffer *file_buff) {
   endwin();
   printf("Would you like to save your modified changes? y/n ");
   char buff[256];
@@ -23,6 +23,7 @@ void quit() {
       printf("File name: ");
       char buff1[256];
       fgets(buff1, 255, stdin);
+      save(buff1, file_buff);
   }
   else if (buff[0] == 'n'){
       printf("Quitting...\n");
