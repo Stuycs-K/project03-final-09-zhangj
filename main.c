@@ -124,7 +124,7 @@ int main(int argc, char *argv[]) {
 			x = 0;
 			xLineEnd = 0;
 		}
-		if (c == KEY_STAB || c == 9 || c='\t'){
+		if (c == KEY_STAB || c == 9 || c=='\t'){
 			insert_char(file_buff,y-1,x,'\t');
 			x++;
 		}
