@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
 			insert_char(file_buff,y-1,x,c);
 			x++;
 		}
-		xLineEnd = sizeof(file_buff->buffer[r]);
+		xLineEnd = sizeof(file_buff->buffer[y]);
 	}
   return 0;
 }
