@@ -26,46 +26,40 @@ int main(int argc, char *argv[]) {
 		printf("argv[1] must indicate file name");
 		exit(1);
 	}
-
+	
+	int c;
+	int x = 0;
+  	int y = 1;
+	int height;
+  	int width;
+	int numtabs = 0;
 	char *filename = argv[1];
 	FILE *file = open_read(filename);
 
 	struct file_buffer *file_buff = create_file_buffer(10);
 	read_into_buffer(file, file_buff);
-	showall(file_buff);
 
-	insert_char(file_buff, 0, 0, 'z');
-	printf("\nafter insert 'z' at 0, 0:\n");
-	showall(file_buff);
-	
-	delete_char(file_buff, 0, 0);
-	printf("\nafter delete at 0,0:\n");
-	showall(file_buff);
-	
-	delete_row(file_buff, 0);
-	printf("\nafter delete row 0\n");
-	showall(file_buff);
-
-	return 0;
-
-	printf("hello from the main femto\n");
 	initscr();
 	raw();
 	noecho();
-	int c;
-	int x = 0;
-  int y = 1;
-	int height;
-  int width;
+
 	getmaxyx(stdscr, height, width);
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
+
+	mvwprintw(win,0,0, "Ctrl+Q - Exit\n");
+	for (int r = 0; r < file_buff->rows; r++) {
+		wprintw(win,"%s",file_buff->buffer[r]);
+	}
+	wrefresh(win);
+	x = getcurx(win);
+	y = getcury(win); 
 	wmove(win, y, x);
 	wrefresh(win);
-	struct file_buffer *file_buff = create_file_buffer(10);
-	insert_row(file_buff,0);
-	mvwprintw(win,0,0, "Ctrl+Q - Exit\n");
-	wrefresh(win);
+	insert_row(file_buff,y-1);
+	int xLineEnd = x;
+	int yLineEnd = y;
+
 	while (1) {
 		wclear(win);
 		wrefresh(win);
@@ -76,9 +70,14 @@ int main(int argc, char *argv[]) {
 		wmove(win, y, x);
 		wrefresh(win);
 		c = wgetch(win);
-		wrefresh(win);
+		if (y == file_buff->rows){
+			xLineEnd = strlen(file_buff->buffer[y-1]);
+		}
+		else{
+			xLineEnd = strlen(file_buff->buffer[y-1])-1;
+		}
 		if (c == 17){
-			quit();
+			quit(file_buff);
 			break;
 		}
 		if (c == KEY_LEFT){
@@ -87,18 +86,31 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		if (c == KEY_RIGHT){
-			if (x < width-1){
+			if (x < xLineEnd){
 				x++;
 			}
 		}
 		if (c == KEY_UP){
 			if (y > 1){
 				y--;
+				if (x > strlen(file_buff->buffer[y-1])-1){
+					x = strlen(file_buff->buffer[y-1])-1;
+				}
 			}
 		}
 		if (c == KEY_DOWN){
-			if (y < height-1){
+			if (y < yLineEnd){
 				y++;
+				if (y == file_buff->rows){
+					if (x > strlen(file_buff->buffer[y-1])){
+						x = strlen(file_buff->buffer[y-1]);
+					}
+				}
+				else{
+					if (x > strlen(file_buff->buffer[y-1])-1){
+						x = strlen(file_buff->buffer[y-1])-1;
+					}
+				}
 			}
 		}
 		// else if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
@@ -109,8 +121,15 @@ int main(int argc, char *argv[]) {
 			insert_char(file_buff,y-1,x,'\n');
 			insert_row(file_buff,y);
 			y++;
+			yLineEnd++;
 			x = 0;
+			xLineEnd = 0;
 		}
+		// if (c == KEY_STAB || c == 9 || c=='\t'){
+		// 	insert_char(file_buff,y-1,x,'\t');
+		// 	x++;
+		// 	numtabs++;
+		// }
 		if (c>=32 && c<=126){
 			insert_char(file_buff,y-1,x,c);
 			x++;
