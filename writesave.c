@@ -46,12 +46,12 @@ void quit(struct file_buffer *file_buff) {
   char response[256];
   response[256] = '\0';
   fgets(response, 255, stdin);
-  if (buff[0] == 'y'){
+  if (response[0] == 'y'){
       printf("File name: ");
       char fname[256];
       fgets(fname, 255, stdin);
-      char* fname1 = strsep(fname,"");
-      save(fname1, *file_buff);
+      char* fname1 = strdup(fname);
+      save(fname1, file_buff);
   }
   else if (buff[0] == 'n'){
       printf("Quitting...\n");
