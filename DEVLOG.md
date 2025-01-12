@@ -19,7 +19,7 @@ Implemented deleting from the text editor. Rewrote the way characters are printe
 ### 2025-01-10 - Integrating the file buffer with display, fixing bugs with cursor movement
 Integrated adding chars (including newline) into the file buffer with displaying them in the ncurses window, fixed bugs with cursor movement that resulted from this change (40 min class time).
 
-### 2025-01-11 - Integrating delete with display, added cursor checksm, integrated saving with quitting
+### 2025-01-11 - Integrating delete with display, added cursor checks, integrated saving with quitting
 Integrated deleting chars (including newline) into the file buffer with displaying them in the ncurses window, added checks so that you can't move the cursor outside of the text that has been typed and so that it auto moves the cursor to the end of a line if the previous line is larger than it, integrated saving with quitting after pressing Ctrl+Q (1.5 hr HW time).
 
 
