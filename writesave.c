@@ -31,10 +31,6 @@ void save(char *filename, struct file_buffer *file_buff) {
     if (r == file_buff->rows-1){
       elements = fwrite(newline, sizeof(char), 1, file);
     }
-    if (elements != 1) {
-      printf("fwrite wrote incorrect number of elements=%d, expected %d\n", elements, 1);
-      exit(1);
-    }
   }
 
   close_file(file);
