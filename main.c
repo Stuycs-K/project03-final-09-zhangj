@@ -115,7 +115,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
 			if (x == 0){
-				delete_row(y-1);
+				delete_row(file_buff, y-1);
 				y--;
 				x = strlen(file_buff->buffer[y-1]);
 				delete_char(file_buff,y-1,x);
