@@ -53,7 +53,7 @@ void quit(struct file_buffer *file_buff) {
       char* fname1 = strdup(fname);
       save(fname1, file_buff);
   }
-  else if (buff[0] == 'n'){
+  else if (response[0] == 'n'){
       printf("Quitting...\n");
   }
   else{
