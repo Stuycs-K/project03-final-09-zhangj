@@ -32,6 +32,7 @@ int main(int argc, char *argv[]) {
   	int y = 1;
 	int height;
   	int width;
+	int numtabs = 0;
 	char *filename = argv[1];
 	FILE *file = myopen(filename);
 
@@ -124,10 +125,11 @@ int main(int argc, char *argv[]) {
 			x = 0;
 			xLineEnd = 0;
 		}
-		if (c == KEY_STAB || c == 9 || c=='\t'){
-			insert_char(file_buff,y-1,x,'\t');
-			x++;
-		}
+		// if (c == KEY_STAB || c == 9 || c=='\t'){
+		// 	insert_char(file_buff,y-1,x,'\t');
+		// 	x++;
+		// 	numtabs++;
+		// }
 		if (c>=32 && c<=126){
 			insert_char(file_buff,y-1,x,c);
 			x++;
