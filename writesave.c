@@ -51,8 +51,10 @@ void quit(struct file_buffer *file_buff) {
       printf("File name: ");
       char fname[256];
       fgets(fname, 255, stdin);
-      char* fname1 = &fname;
+      char* fname1 = (char *) malloc(256);
+      sscanf(fname, "%[^\n]", fname1);
       save(fname1, file_buff);
+      free(fname1);
   }
   else if (response[0] == 'n'){
       printf("Quitting...\n");
