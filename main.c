@@ -118,11 +118,11 @@ int main(int argc, char *argv[]) {
 				delete_row(file_buff, y-1);
 				y--;
 				x = strlen(file_buff->buffer[y-1]);
-				delete_char(file_buff,y-1,x);
+				delete_char(file_buff,y-1,x-1);
 				x--;
 			}
 			else{
-				delete_char(file_buff,y-1,x);
+				delete_char(file_buff,y-1,x-1);
 				x--;
 			}
 		}
