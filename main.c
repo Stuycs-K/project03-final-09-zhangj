@@ -113,10 +113,19 @@ int main(int argc, char *argv[]) {
 				}
 			}
 		}
-		// else if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
-		// 	test[x-1] = '\0';
-		// 	x--;
-		// }
+		if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
+			if (x == 0){
+				delete_row(y-1);
+				y--;
+				x = strlen(file_buff->buffer[y-1]);
+				delete_char(file_buff,y-1,x);
+				x--;
+			}
+			else{
+				delete_char(file_buff,y-1,x);
+				x--;
+			}
+		}
 		if (c == '\n'){
 			insert_char(file_buff,y-1,x,'\n');
 			insert_row(file_buff,y);
