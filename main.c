@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
   	int width;
 	int numtabs = 0;
 	char *filename = argv[1];
-	FILE *file = myopen(filename);
+	FILE *file = open_read(filename);
 
 	struct file_buffer *file_buff = create_file_buffer(10);
 	read_into_buffer(file, file_buff);

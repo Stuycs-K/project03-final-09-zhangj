@@ -12,26 +12,21 @@
 #include <ncurses.h>
 #include "filehandle.h"
 
-void error(char *message) {
-	char error_string[256];
-  sprintf(error_string, "%s: errno %d", message, errno);
-  perror(error_string);
-  exit(1);
-}
-
-FILE* myopen(char *filename) {
-	// r+ is read and write
+// opens a file only in read mode
+FILE* open_read(char *filename) {
 	FILE *file = fopen(filename, "r");
 	if (file == NULL) {
-		error("Open file");
+		fprintf(stderr, "open_read: failed to open file\\nerrno %d: %s\n", errno, strerror(errno));
+		exit(1);
 	}
 
 	return file;
 }
 
-void myclose(FILE *file) {
+void close_file(FILE *file) {
 	if (fclose(file) == EOF) {
-		error("Close file");
+		fprintf(stderr, "close_file: failed to close file\nerrno %d: %s\n", errno, strerror(errno));
+		exit(1);
 	}
 }
 
@@ -49,11 +44,13 @@ struct file_buffer* create_file_buffer(int init_array_length) {
 }
 
 void read_into_buffer(FILE *file, struct file_buffer *file_buff) {
-	if (fseek(file, 0, SEEK_SET) != 0) { error("read_into_buffer: fseek"); }
+	if (fseek(file, 0, SEEK_SET) != 0) {
+		fprintf(stderr, "read_into_buffer: failed to fseek to 0, SEEK_SET\nerrno %d: %s\n", errno, strerror(errno));
+		exit(1);
+	}
 
 	char line[LINE_SIZE];
 	for (file_buff->rows = 0; fgets(line, LINE_SIZE, file) != NULL; file_buff->rows++) {
-		// if the last character is a '\n', strip it
 		int length = strlen(line);
 
 		// grow the array if needed
@@ -76,21 +73,21 @@ void showall(struct file_buffer *file_buff) {
 // note: all these insert / delete functions use a O(n) shift for EVERY character which is really bad even for relatively short strings, but maybe it's fine
 
 void insert_char(struct file_buffer *file_buff, int r, int c, char ch) {
-	if (r >= file_buff->rows) {
-		printf("r shouldn't be greater than file_buff->rows, r=%d, file_buff->rows=%d\n", r, file_buff->rows);
+	if (!(0 <= r && r < file_buff->rows)) {
+		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
 
 	int length = strlen(file_buff->buffer[r]);
-	if (c > length) {
-		printf("c shouldn't be greater than the line length at r=%d, c=%d, length=%d\n", r, c, length);
+	if (!(c <= length)) {
+		fprintf(stderr, "c=%d is out of bounds, expected value between 0 and length=%d\n", c, length);
 		exit(1);
 	}
 
 	if (!(length+1 < LINE_SIZE)) {
 		// maybe figure out how to realloc lines later
 		printf("out of room");
-		exit(1);
+		return;
 	}
 
 	char temp;
@@ -105,8 +102,8 @@ void insert_char(struct file_buffer *file_buff, int r, int c, char ch) {
 }
 
 void insert_row(struct file_buffer *file_buff, int r) {
-	if (r > file_buff->rows) {
-		printf("r shouldn't be greater than file_buff->rows, r=%d, file_buff->rows=%d\n", r, file_buff->rows);
+	if (!(0 <= r && r <= file_buff->rows)) {
+		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
 
@@ -127,12 +124,36 @@ void insert_row(struct file_buffer *file_buff, int r) {
 	file_buff->buffer[file_buff->rows] = line;
 }
 
-// todo
-void delete_char(struct file_buffer file_buff, int r, int c) {
+void delete_char(struct file_buffer *file_buff, int r, int c) {
+	if (!(0 <= r && r < file_buff->rows)) {
+		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
+		exit(1);
+	}
 
+	int length = strlen(file_buff->buffer[r]);
+	if (!(c < length)) {
+		fprintf(stderr, "c=%d is out of bounds, expected value between 0 and length=%d\n", c, length);
+		exit(1);
+	}
+	
+	for (int i = c; i < length-1; i++) {
+		file_buff->buffer[r][i] = file_buff->buffer[r][i+1];
+	}
+	file_buff->buffer[r][length-1] = '\0';
 }
 
-// todo
-void delete_row(struct file_buffer file_buff, int r) {
-
+void delete_row(struct file_buffer *file_buff, int r) {
+	if (!(0 <= r && r < file_buff->rows)) {
+		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
+		exit(1);
+	}
+	
+	file_buff->rows--;
+	for (int i = r; i < file_buff->rows; i++) {
+		file_buff->buffer[i] = file_buff->buffer[i+1];
+	}
+	
+	for (int i = 0; file_buff->buffer[file_buff->rows+1][i] != NULL && i < LINE_SIZE; i++) {
+		file_buff->buffer[file_buff->rows+1][i] = NULL;
+	}
 }
