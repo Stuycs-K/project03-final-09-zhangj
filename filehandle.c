@@ -12,7 +12,7 @@
 #include <ncurses.h>
 #include "filehandle.h"
 
-// opens a file only in read mode
+// returns a file pointer to the file, opened only in read mode
 FILE* open_read(char *filename) {
 	FILE *file = fopen(filename, "r");
 	if (file == NULL) {
@@ -23,6 +23,7 @@ FILE* open_read(char *filename) {
 	return file;
 }
 
+// closes a file pointer
 void close_file(FILE *file) {
 	if (fclose(file) == EOF) {
 		fprintf(stderr, "close_file: failed to close file\nerrno %d: %s\n", errno, strerror(errno));
@@ -30,6 +31,10 @@ void close_file(FILE *file) {
 	}
 }
 
+// creates a struct file_buffer, initializing its contents:
+// buffer: init_array_length amount of LINE_SIZE length rows
+// array_length: init_array_length
+// rows: 0
 struct file_buffer* create_file_buffer(int init_array_length) {
 	struct file_buffer *file_buff = (struct file_buffer*) calloc(1, sizeof(struct file_buff*));
 	file_buff->buffer = (char**) calloc(init_array_length, sizeof(char*));
@@ -43,6 +48,8 @@ struct file_buffer* create_file_buffer(int init_array_length) {
 	return file_buff;
 }
 
+// takes a file pointer and a struct file_buffer, and reads in the full contents of the file into the file_buffer's char** buffer
+// note: the buffer's lines are not separated by newlines, so those are included manually whenever the buffer is printed
 void read_into_buffer(FILE *file, struct file_buffer *file_buff) {
 	if (fseek(file, 0, SEEK_SET) != 0) {
 		fprintf(stderr, "read_into_buffer: failed to fseek to 0, SEEK_SET\nerrno %d: %s\n", errno, strerror(errno));
@@ -64,6 +71,7 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff) {
 	}
 }
 
+// shows the buffer, line by line
 void showall(struct file_buffer *file_buff) {
 	for (int r = 0; r < file_buff->rows; r++) {
 		printf("'%s'\n", file_buff->buffer[r]);
@@ -72,6 +80,7 @@ void showall(struct file_buffer *file_buff) {
 
 // note: all these insert / delete functions use a O(n) shift for EVERY character which is really bad even for relatively short strings, but maybe it's fine
 
+// inserts a character ch such that it is at buffer[r][c] after insertion 
 void insert_char(struct file_buffer *file_buff, int r, int c, char ch) {
 	if (!(0 <= r && r < file_buff->rows)) {
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
@@ -101,6 +110,7 @@ void insert_char(struct file_buffer *file_buff, int r, int c, char ch) {
 	file_buff->buffer[r][length+1] = '\0';
 }
 
+// inserts an empty row such that it is at buffer[r] after insertion
 void insert_row(struct file_buffer *file_buff, int r) {
 	if (!(0 <= r && r <= file_buff->rows)) {
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
@@ -124,6 +134,7 @@ void insert_row(struct file_buffer *file_buff, int r) {
 	file_buff->buffer[file_buff->rows] = line;
 }
 
+// removes the character at buffer[r][c], left-shifting over all the characters to its right 
 void delete_char(struct file_buffer *file_buff, int r, int c) {
 	if (!(0 <= r && r < file_buff->rows)) {
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
@@ -142,6 +153,7 @@ void delete_char(struct file_buffer *file_buff, int r, int c) {
 	file_buff->buffer[r][length-1] = '\0';
 }
 
+// removes the row at buffer[r], shifting all the rows after it
 void delete_row(struct file_buffer *file_buff, int r) {
 	if (!(0 <= r && r < file_buff->rows)) {
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
@@ -156,4 +168,28 @@ void delete_row(struct file_buffer *file_buff, int r) {
 	for (int i = 0; file_buff->buffer[file_buff->rows+1][i] != NULL && i < LINE_SIZE; i++) {
 		file_buff->buffer[file_buff->rows+1][i] = NULL;
 	}
+}
+
+// saves the buffer in file_buff to filename, overwriting / creating as neccesary 
+void save(char *filename, struct file_buffer *file_buff) {
+  // w+ truncatres
+  FILE *file = fopen(filename, "w+");
+
+  char newline[] = "\n";
+
+  //size_t written = fwrite(arr, sizeof(int), n, fp);
+  for (int r = 0; r < file_buff->rows; r++) {
+    int length = strlen(file_buff->buffer[r]);
+    int elements = fwrite(file_buff->buffer[r], sizeof(char), length, file);
+    if (elements != length) {
+      printf("fwrite wrote incorrect number of elements=%d, expected %d\n", elements, length);
+      exit(1);
+    }
+
+    if (r == file_buff->rows-1){
+      elements = fwrite(newline, sizeof(char), 1, file);
+    }
+  }
+
+  close_file(file);
 }
