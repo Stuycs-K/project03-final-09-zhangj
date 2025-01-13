@@ -22,21 +22,27 @@ static void sighandler(int signo){
 
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
-	if (argc != 2) {
-		printf("argv[1] must indicate file name");
-		exit(1);
-	}
-	
-	char *fileinfo = stat_info(argv[1]); // later: update this whenever user saves
-	
 	int c;
 	int x = 0;
 	int y = 1;
 	int height;
 	int width;
 	int numtabs = 0;
-	char *filename = argv[1];
-	FILE *file = open_read(filename);
+
+	if (argc == 1){
+		char *filename = "Untitled.txt";
+		FILE *file = open_read(filename);
+		char *fileinfo = stat_info(filename);
+	}
+	if (argc == 2){
+		char *filename = argv[1];
+		FILE *file = open_read(filename);
+		char *fileinfo = stat_info(argv[1]); // later: update this whenever user saves
+	}
+	else {
+		printf("argv[1] must indicate file name");
+		exit(1);
+	}
 
 	struct file_buffer *file_buff = create_file_buffer(10);
 	read_into_buffer(file, file_buff);
@@ -44,7 +50,7 @@ int main(int argc, char *argv[]) {
 	initscr();
 	raw();
 	noecho();
-	
+
 	getmaxyx(stdscr, height, width);
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
@@ -55,7 +61,7 @@ int main(int argc, char *argv[]) {
 	}
 	wrefresh(win);
 	x = getcurx(win);
-	y = getcury(win); 
+	y = getcury(win);
 	wmove(win, y, x);
 	wrefresh(win);
 	insert_row(file_buff,y-1);
@@ -82,7 +88,7 @@ int main(int argc, char *argv[]) {
 			xLineEnd = strlen(file_buff->buffer[y-1])-1;
 		}
 		if (c == 17){
-			quit(file_buff);
+			quit(file_buff, filename);
 			break;
 		}
 		if (c == KEY_LEFT){
