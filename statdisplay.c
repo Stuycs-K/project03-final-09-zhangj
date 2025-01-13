@@ -69,11 +69,11 @@ char* size_to_suffix_string(unsigned long n) {
 char* stat_info(char *path) {
 	struct stat *stat_buffer = malloc(sizeof(struct stat));
 	stat(path, stat_buffer);
-	
+
 	char *something = (char*) calloc(LINE_SIZE, sizeof(char));
 	snprintf(something, LINE_SIZE-1, "%s bytes; last modified %s", size_to_suffix_string(stat_buffer->st_size), ctime(&(stat_buffer->st_mtime)));
 	something[LINE_SIZE-1] = '\0';
-	
+
 	free(stat_buffer);
 	return something;
 }

@@ -80,7 +80,7 @@ void showall(struct file_buffer *file_buff) {
 
 // note: all these insert / delete functions use a O(n) shift for EVERY character which is really bad even for relatively short strings, but maybe it's fine
 
-// inserts a character ch such that it is at buffer[r][c] after insertion 
+// inserts a character ch such that it is at buffer[r][c] after insertion
 void insert_char(struct file_buffer *file_buff, int r, int c, char ch) {
 	if (!(0 <= r && r < file_buff->rows)) {
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
@@ -134,7 +134,7 @@ void insert_row(struct file_buffer *file_buff, int r) {
 	file_buff->buffer[file_buff->rows] = line;
 }
 
-// removes the character at buffer[r][c], left-shifting over all the characters to its right 
+// removes the character at buffer[r][c], left-shifting over all the characters to its right
 void delete_char(struct file_buffer *file_buff, int r, int c) {
 	if (!(0 <= r && r < file_buff->rows)) {
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
@@ -146,7 +146,7 @@ void delete_char(struct file_buffer *file_buff, int r, int c) {
 		fprintf(stderr, "c=%d is out of bounds, expected value between 0 and length=%d\n", c, length);
 		exit(1);
 	}
-	
+
 	for (int i = c; i < length-1; i++) {
 		file_buff->buffer[r][i] = file_buff->buffer[r][i+1];
 	}
@@ -159,37 +159,13 @@ void delete_row(struct file_buffer *file_buff, int r) {
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
-	
+
 	file_buff->rows--;
 	for (int i = r; i < file_buff->rows; i++) {
 		file_buff->buffer[i] = file_buff->buffer[i+1];
 	}
-	
+
 	for (int i = 0; file_buff->buffer[file_buff->rows+1][i] != NULL && i < LINE_SIZE; i++) {
 		file_buff->buffer[file_buff->rows+1][i] = NULL;
 	}
-}
-
-// saves the buffer in file_buff to filename, overwriting / creating as neccesary 
-void save(char *filename, struct file_buffer *file_buff) {
-  // w+ truncatres
-  FILE *file = fopen(filename, "w+");
-
-  char newline[] = "\n";
-
-  //size_t written = fwrite(arr, sizeof(int), n, fp);
-  for (int r = 0; r < file_buff->rows; r++) {
-    int length = strlen(file_buff->buffer[r]);
-    int elements = fwrite(file_buff->buffer[r], sizeof(char), length, file);
-    if (elements != length) {
-      printf("fwrite wrote incorrect number of elements=%d, expected %d\n", elements, length);
-      exit(1);
-    }
-
-    if (r == file_buff->rows-1){
-      elements = fwrite(newline, sizeof(char), 1, file);
-    }
-  }
-
-  close_file(file);
 }

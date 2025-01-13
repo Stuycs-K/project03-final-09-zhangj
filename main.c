@@ -28,24 +28,30 @@ int main(int argc, char *argv[]) {
 	int height;
 	int width;
 	int numtabs = 0;
+	char *filename;
+	FILE *file ;
+	char *fileinfo;
 
 	if (argc == 1){
-		char *filename = "Untitled.txt";
-		FILE *file = open_read(filename);
-		char *fileinfo = stat_info(filename);
+		filename = "Untitled.txt";
+		file = fopen(filename, "w+");
+		close_file(file);
+		fileinfo = stat_info(filename);
 	}
-	if (argc == 2){
-		char *filename = argv[1];
-		FILE *file = open_read(filename);
-		char *fileinfo = stat_info(argv[1]); // later: update this whenever user saves
+	else if (argc == 2){
+		filename = argv[1];
+		file = open_read(filename);
+		fileinfo = stat_info(argv[1]); // later: update this whenever user saves
 	}
 	else {
-		printf("argv[1] must indicate file name");
+		printf("Incorrect number of arguments");
 		exit(1);
 	}
 
 	struct file_buffer *file_buff = create_file_buffer(10);
-	read_into_buffer(file, file_buff);
+	if (argc == 2){
+		read_into_buffer(file, file_buff);
+	}
 
 	initscr();
 	raw();

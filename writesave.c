@@ -50,14 +50,23 @@ void quit(struct file_buffer *file_buff, char* fname) {
       fgets(newfname, 255, stdin);
       char* newfname1 = (char *) malloc(256);
       sscanf(newfname, "%[^\n]", newfname1);
+      if (strlen(newfname1) <= 0){
+        remove("Untitled.txt");
+        printf("Filename must be greater than length 0");
+        exit(1);
+      }
       save(newfname1, file_buff);
       free(newfname1);
+      remove("Untitled.txt");
     }
     else{
       save(fname, file_buff);
     }
   }
   else if (response[0] == 'n'){
+      if (strcmp(fname,"Untitled.txt") == 0){
+        remove("Untitled.txt");
+      }
       printf("Quitting...\n");
   }
   else{
