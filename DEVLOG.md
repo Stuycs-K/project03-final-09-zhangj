@@ -40,3 +40,6 @@ Spent too long on finding a bug and created insertion functions for the file buf
 
 ### 2025-01-10 - Saving and deletion
 Made functions that can save the buffer to a file and directly characters/lines from the buffer
+
+### 2025-01-11, 01-12 - Stat and 
+Integrated stat() info to be shown during display of the program, added extra comments to filehandle functions, moved around some other things for organization
