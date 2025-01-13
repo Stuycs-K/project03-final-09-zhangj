@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
 	char *filename = argv[1];
 	FILE *file = open_read(filename);
 
-	struct file_buffer *file_buff = create_file_buffer(10);
+	struct file_buffer *file_buff = create_file_buffer(3);
 	read_into_buffer(file, file_buff);
 
 	initscr();
