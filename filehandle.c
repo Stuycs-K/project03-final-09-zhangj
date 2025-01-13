@@ -58,8 +58,6 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff) {
 
 	char line[LINE_SIZE];
 	for (file_buff->rows = 0; fgets(line, LINE_SIZE, file) != NULL; file_buff->rows++) {
-		int length = strlen(line);
-
 		// grow the array if needed
 		if (file_buff->rows >= file_buff->array_length) {
 			file_buff->array_length = 2*file_buff->array_length + 1;
@@ -165,8 +163,8 @@ void delete_row(struct file_buffer *file_buff, int r) {
 		file_buff->buffer[i] = file_buff->buffer[i+1];
 	}
 	
-	for (int i = 0; file_buff->buffer[file_buff->rows+1][i] != NULL && i < LINE_SIZE; i++) {
-		file_buff->buffer[file_buff->rows+1][i] = NULL;
+	for (int i = 0; i < LINE_SIZE; i++) {
+		file_buff->buffer[file_buff->rows+1][i] = '\0';
 	}
 }
 
