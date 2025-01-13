@@ -1,6 +1,6 @@
 #ifndef STATDISPLAY_H
 #define STATDISPLAY_H
 
-void statdisplay(char* path);
+char* stat_info(char *path);
 
 #endif

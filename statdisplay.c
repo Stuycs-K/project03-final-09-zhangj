@@ -9,8 +9,71 @@
 #include <time.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include <math.h>
+#include "filehandle.h"
 
-// Prints out stats regarding the file before the file content is displayed
-void statdisplay(char* path){
+// system-specific things
+#define LINUX 0
+#define MACOS 1
+#define UNKNOWN 2
+#ifdef __linux__
+    #define PLATFORM LINUX
+#elif defined(__APPLE__) && defined(__MACH__)
+    #define PLATFORM MACOS
+#else
+    #define PLATFORM UNKNOWN
+#endif
 
+// returns a string ending one of the below prefixes
+// e.g. 0B, 999B, 1.0K, 35K, 100M
+char suffixes[] = {'B', 'K', 'M', 'G', 'T', 'E', 'Z'};
+char* size_to_suffix_string(unsigned long n) {
+  double dn = (double) n;
+
+  int suffix_i = 0;
+  while (dn >= ((PLATFORM == MACOS) ? 1000 : 1024)) {
+    dn /= 1024;
+    suffix_i++;
+  }
+
+  char* prefix_string = (char*) malloc(5 * sizeof(char));
+  if (suffix_i == 0) {
+    if (PLATFORM == MACOS) {
+      sprintf(prefix_string, "%3lu%c", n, suffixes[suffix_i]);
+    } else {
+      sprintf(prefix_string, "%4lu", n);
+    }
+  } else {
+    if (dn < 1) {
+      sprintf(prefix_string, "1.0%c", suffixes[suffix_i]);
+    } else if (dn < 10) {
+      dn = (PLATFORM == MACOS) ? (round(dn * 10) / 10.0) : (ceil(dn * 10) / 10.0);
+      if (dn < 10) {
+        sprintf(prefix_string, "%1.1f%c", dn, suffixes[suffix_i]);
+      } else {
+        sprintf(prefix_string, " %2.0f%c", dn, suffixes[suffix_i]);
+      }
+    } else if (dn < 100) {
+      dn = (PLATFORM == MACOS) ? (round(dn)) : (ceil(dn));
+      sprintf(prefix_string, " %2.0f%c", dn, suffixes[suffix_i]);
+    } else {
+      dn = (PLATFORM == MACOS) ? (round(dn * 1000) / 1000.0) : (ceil(dn));
+      sprintf(prefix_string, "%3.0f%c", dn, suffixes[suffix_i]);
+    }
+  }
+
+  return prefix_string;
+}
+
+// returns a char* string with newlines to be displayed in the window
+char* stat_info(char *path) {
+	struct stat *stat_buffer = malloc(sizeof(struct stat*));
+	stat(path, stat_buffer);
+	
+	char *something = (char*) calloc(LINE_SIZE, sizeof(char));
+	snprintf(something, LINE_SIZE-1, "%s bytes; last modified %s", size_to_suffix_string(stat_buffer->st_size), ctime(&(stat_buffer->st_mtime)));
+	something[LINE_SIZE-1] = '\0';
+	
+	free(stat_buffer);
+	return something;
 }

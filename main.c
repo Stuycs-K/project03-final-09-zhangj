@@ -27,11 +27,16 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 	
+	printf("argv[1]: %s\n", argv[1]);
+	printf("file info:\n%s\n", stat_info(argv[1]));
+	
+	return 0;
+	
 	int c;
 	int x = 0;
-  	int y = 1;
+	int y = 1;
 	int height;
-  	int width;
+	int width;
 	int numtabs = 0;
 	char *filename = argv[1];
 	FILE *file = open_read(filename);
