@@ -27,10 +27,7 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 	
-	printf("argv[1]: %s\n", argv[1]);
-	printf("file info:\n%s\n", stat_info(argv[1]));
-	
-	return 0;
+	char *fileinfo = stat_info(argv[1]); // later: update this whenever user saves
 	
 	int c;
 	int x = 0;
@@ -47,7 +44,7 @@ int main(int argc, char *argv[]) {
 	initscr();
 	raw();
 	noecho();
-
+	
 	getmaxyx(stdscr, height, width);
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
@@ -69,6 +66,9 @@ int main(int argc, char *argv[]) {
 		wclear(win);
 		wrefresh(win);
 		mvwprintw(win,0,0, "Ctrl+Q - Exit\n");
+		wmove(win, height-1, 0);
+		wprintw(win, "%s", fileinfo);
+		wmove(win, 1, 0);
 		for (int r = 0; r < file_buff->rows; r++) {
 			wprintw(win,"%s",file_buff->buffer[r]);
 		}
