@@ -12,30 +12,6 @@
 #include <ncurses.h>
 #include "filehandle.h"
 
-// Takes in the buffer and writes it into a file,
-void save(char *filename, struct file_buffer *file_buff) {
-  // w+ truncatres
-  FILE *file = fopen(filename, "w+");
-
-  char newline[] = "\n";
-
-  //size_t written = fwrite(arr, sizeof(int), n, fp);
-  for (int r = 0; r < file_buff->rows; r++) {
-    int length = strlen(file_buff->buffer[r]);
-    int elements = fwrite(file_buff->buffer[r], sizeof(char), length, file);
-    if (elements != length) {
-      printf("fwrite wrote incorrect number of elements=%d, expected %d\n", elements, length);
-      exit(1);
-    }
-
-    if (r == file_buff->rows-1){
-      elements = fwrite(newline, sizeof(char), 1, file);
-    }
-  }
-
-  close_file(file);
-}
-
 // Quits out of raw mode and prompts user if they want to save the changes and asks them if they want to rename the file before quitting
 void quit(struct file_buffer *file_buff) {
   endwin();
