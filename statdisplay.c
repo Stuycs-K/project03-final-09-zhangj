@@ -67,7 +67,7 @@ char* size_to_suffix_string(unsigned long n) {
 
 // returns a char* string with newlines to be displayed in the window
 char* stat_info(char *path) {
-	struct stat *stat_buffer = malloc(sizeof(struct stat*));
+	struct stat *stat_buffer = malloc(sizeof(struct stat));
 	stat(path, stat_buffer);
 	
 	char *something = (char*) calloc(LINE_SIZE, sizeof(char));
