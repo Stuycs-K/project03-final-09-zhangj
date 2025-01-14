@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
 		taboffset = 0;
 		for (int i = 0; i<strlen(file_buff->buffer[y-1]); i++){
 			if ((file_buff->buffer[y-1])[i] == '\t'){
-				taboffset += getcurx(win)+9-(getcurx(win)%8);
+				taboffset += 9-(getcurx(win)%8);
 			}
 		}
 		wmove(win, y, x+taboffset);
