@@ -167,7 +167,7 @@ int main(int argc, char *argv[]) {
 			x++;
 		}
 		if (c>=32 && c<=126){
-			if (x+taboffset>=width-1){
+			if (x+taboffset+8-(taboffset%8)>=width-1){
 				insert_char(file_buff,y-1,x,'\n');
 				insert_row(file_buff,y);
 				y++;
