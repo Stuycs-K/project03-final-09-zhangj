@@ -38,11 +38,7 @@ char* size_to_suffix_string(unsigned long n) {
 
   char* prefix_string = (char*) malloc(5 * sizeof(char));
   if (suffix_i == 0) {
-    if (PLATFORM == MACOS) {
-      sprintf(prefix_string, "%3lu%c", n, suffixes[suffix_i]);
-    } else {
-      sprintf(prefix_string, "%4lu", n);
-    }
+		sprintf(prefix_string, "%lu", n);
   } else {
     if (dn < 1) {
       sprintf(prefix_string, "1.0%c", suffixes[suffix_i]);
@@ -51,11 +47,11 @@ char* size_to_suffix_string(unsigned long n) {
       if (dn < 10) {
         sprintf(prefix_string, "%1.1f%c", dn, suffixes[suffix_i]);
       } else {
-        sprintf(prefix_string, " %2.0f%c", dn, suffixes[suffix_i]);
+        sprintf(prefix_string, "%2.0f%c", dn, suffixes[suffix_i]);
       }
     } else if (dn < 100) {
       dn = (PLATFORM == MACOS) ? (round(dn)) : (ceil(dn));
-      sprintf(prefix_string, " %2.0f%c", dn, suffixes[suffix_i]);
+      sprintf(prefix_string, "%2.0f%c", dn, suffixes[suffix_i]);
     } else {
       dn = (PLATFORM == MACOS) ? (round(dn * 1000) / 1000.0) : (ceil(dn));
       sprintf(prefix_string, "%3.0f%c", dn, suffixes[suffix_i]);
