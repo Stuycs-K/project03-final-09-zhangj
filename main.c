@@ -95,7 +95,7 @@ int main(int argc, char *argv[]) {
 		}
 		wmove(win, y, curoffset);
 		wrefresh(win);
-		xLineEnd = curroffset;
+		xLineEnd = curoffset;
 		c = wgetch(win);
 		if (c == 17){
 			quit(file_buff, filename);
