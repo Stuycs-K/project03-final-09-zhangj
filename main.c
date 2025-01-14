@@ -85,11 +85,11 @@ int main(int argc, char *argv[]) {
 			wprintw(win,"%s",file_buff->buffer[r]);
 		}
 		numtabs = 0;
-		for (int i = 0; i<strlen(file_buff->buffer[y-1]); i++){
-			if ((file_buff->buffer[y-1])[i] == '    '){
-				numtabs++;
-			}
-		}
+		// for (int i = 0; i<strlen(file_buff->buffer[y-1]); i++){
+		// 	if ((file_buff->buffer[y-1])[i] == '    '){
+		// 		numtabs++;
+		// 	}
+		// }
 		wmove(win, y, x+numtabs*4);
 		wrefresh(win);
 		c = wgetch(win);
@@ -159,7 +159,7 @@ int main(int argc, char *argv[]) {
 			xLineEnd = 0;
 		}
 		if (c == KEY_STAB || c == 9 || c=='\t'){
-			insert_char(file_buff,y-1,x,'    ');
+			insert_char(file_buff,y-1,x,'\t');
 			x++;
 		}
 		if (c>=32 && c<=126){
