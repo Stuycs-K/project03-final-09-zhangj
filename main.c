@@ -27,7 +27,6 @@ int main(int argc, char *argv[]) {
 	int y = 1;
 	int height;
 	int width;
-	int numtabs = 0;
 	char *filename;
 	FILE *file ;
 	char *fileinfo;
@@ -86,10 +85,9 @@ int main(int argc, char *argv[]) {
 		}
 		wmove(win, y, x+numtabs*4);
 		wrefresh(win);
-		numtabs = 0;
 		for (int i = 0; i<strlen(file_buff->buffer[y-1]); i++){
 			if ((file_buff->buffer[y-1])[i] == '\t'){
-				wmove(win, y, getcurx(win)+8-(i%8));
+				wmove(win, y, getcurx(win)+8-((i+1)%8));
 				wrefresh(win);
 			}
 		}
