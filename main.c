@@ -27,6 +27,7 @@ int main(int argc, char *argv[]) {
 	int y = 1;
 	int height;
 	int width;
+	int numtabs = 0;
 	char *filename;
 	FILE *file ;
 	char *fileinfo;
@@ -83,14 +84,14 @@ int main(int argc, char *argv[]) {
 		for (int r = 0; r < file_buff->rows; r++) {
 			wprintw(win,"%s",file_buff->buffer[r]);
 		}
-		wmove(win, y, x);
+		numtabs = 0;
+		// for (int i = 0; i<strlen(file_buff->buffer[y-1]); i++){
+		// 	if ((file_buff->buffer[y-1])[i] == '    '){
+		// 		numtabs++;
+		// 	}
+		// }
+		wmove(win, y, x+numtabs*4);
 		wrefresh(win);
-		for (int i = 0; i<strlen(file_buff->buffer[y-1]); i++){
-			if ((file_buff->buffer[y-1])[i] == '\t'){
-				wmove(win, y, getcurx(win)+(8-(i%8)));
-				wrefresh(win);
-			}
-		}
 		c = wgetch(win);
 		if (y == file_buff->rows){
 			xLineEnd = strlen(file_buff->buffer[y-1]);
