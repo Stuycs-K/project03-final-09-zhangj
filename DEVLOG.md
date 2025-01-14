@@ -41,5 +41,8 @@ Spent too long on finding a bug and created insertion functions for the file buf
 ### 2025-01-10 - Saving and deletion
 Made functions that can save the buffer to a file and directly characters/lines from the buffer
 
-### 2025-01-11, 01-12 - Stat and 
+### 2025-01-11, 01-12 - Stat and organization
 Integrated stat() info to be shown during display of the program, added extra comments to filehandle functions, moved around some other things for organization
+
+### 2025-01-13 - 
+Fix bugs relating to reallocating memory, changed the way stat is displayed and add extra information to the string. Added new function headers for cutpaste.h file 
