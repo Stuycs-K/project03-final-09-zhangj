@@ -27,6 +27,7 @@ int main(int argc, char *argv[]) {
 	int y = 1;
 	int height;
 	int width;
+	int taboffset = 0;
 	char *filename;
 	FILE *file ;
 	char *fileinfo;
@@ -83,14 +84,14 @@ int main(int argc, char *argv[]) {
 		for (int r = 0; r < file_buff->rows; r++) {
 			wprintw(win,"%s",file_buff->buffer[r]);
 		}
-		wmove(win, y, x);
-		wrefresh(win);
+		taboffset = 0;
 		for (int i = 0; i<strlen(file_buff->buffer[y-1]); i++){
 			if ((file_buff->buffer[y-1])[i] == '\t'){
-				wmove(win, y, getcurx(win)+9-(getcurx(win)%8));
-				wrefresh(win);
+				taboffset += getcurx(win)+9-(getcurx(win)%8);
 			}
 		}
+		wmove(win, y, x+taboffset);
+		wrefresh(win);
 		c = wgetch(win);
 		if (y == file_buff->rows){
 			xLineEnd = strlen(file_buff->buffer[y-1]);
