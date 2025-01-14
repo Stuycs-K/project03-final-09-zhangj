@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
 			wprintw(win,"%s",file_buff->buffer[r]);
 		}
 		if (currtaboffset == 0){
-			taboffset = 0
+			taboffset = 0;
 			for (int i = 0; i<x; i++){
 				if ((file_buff->buffer[y-1])[i] == '\t'){
 					taboffset += 8-(taboffset%8);
