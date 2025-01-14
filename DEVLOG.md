@@ -22,6 +22,9 @@ Integrated adding chars (including newline) into the file buffer with displaying
 ### 2025-01-11 - Integrating delete with display, added cursor checks, integrated saving with quitting
 Integrated deleting chars (including newline) into the file buffer with displaying them in the ncurses window, added checks so that you can't move the cursor outside of the text that has been typed and so that it auto moves the cursor to the end of a line if the previous line is larger than it, integrated saving with quitting after pressing Ctrl+Q (1.5 hr HW time).
 
+### 2025-01-13 - Fixed bugs and adding tab support
+Worked on implementing make run without args to create a temp Untitled.txt file to write in (40 min CW time). Fixed bugs involving seg faults with files that did not end in a new line, running make run without any args, and text wrapping if you typed past the terminal window width. Also added tab support (1.5 hr HW time).
+
 
 
 ## David Schwartzberg
