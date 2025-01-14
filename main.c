@@ -84,14 +84,15 @@ int main(int argc, char *argv[]) {
 		for (int r = 0; r < file_buff->rows; r++) {
 			wprintw(win,"%s",file_buff->buffer[r]);
 		}
+		wmove(win, y, x+numtabs*4);
+		wrefresh(win);
 		numtabs = 0;
 		for (int i = 0; i<strlen(file_buff->buffer[y-1]); i++){
 			if ((file_buff->buffer[y-1])[i] == '\t'){
-				numtabs++;
+				wmove(win, y, getcurx(win)+8-(i%8));
+				wrefresh(win);
 			}
 		}
-		wmove(win, y, x+numtabs*4);
-		wrefresh(win);
 		c = wgetch(win);
 		if (y == file_buff->rows){
 			xLineEnd = strlen(file_buff->buffer[y-1]);
