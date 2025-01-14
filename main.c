@@ -39,11 +39,8 @@ int main(int argc, char *argv[]) {
 	FILE *file = open_read(filename);
 
 	struct file_buffer *file_buff = create_file_buffer(3);
-	printf("file_buff created\n");
 	
 	read_into_buffer(file, file_buff);
-	
-	exit(0);
 
 	initscr();
 	raw();

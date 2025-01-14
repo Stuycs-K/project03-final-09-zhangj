@@ -79,16 +79,7 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff) {
 		}
 		
 		line[LINE_SIZE-1] = '\0'; // safety null
-		printf("here 3 r=%d\n", file_buff->rows);
 		strncpy(file_buff->buffer[file_buff->rows], line, LINE_SIZE);
-		printf("whoops ! \n");
-	}
-}
-
-// shows the buffer, line by line
-void showall(struct file_buffer *file_buff) {
-	for (int r = 0; r < file_buff->rows; r++) {
-		printf("'%s'\n", file_buff->buffer[r]);
 	}
 }
 
