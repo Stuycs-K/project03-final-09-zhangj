@@ -9,13 +9,15 @@
 #include <time.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include "filehandle.h"
 
-// Takes in the current buffer, where the desired cut should be made, how much should be cut, edits the buffer accordingly
-char* cut(char* buffer, int location, int length){
-
+// copies (and maybe removes) the string ranging from (r1, c1) to (r2, c2) into the copy-buffer
+// "remove_string" is a boolean that will also modify the buffer to remove the string if it is non-zero
+void cut_string(char *copy_buffer, struct file_buffer *file_buff, int r1, int c1, int r2, int c2, int remove_string) {
+	
 }
 
-// Takes in the whatever was previously cut from the text editor and edits the buffer by pasting it in the desired location
-char* paste(char* buffer, int location){
-
+// pastes the copy-buffer at (r, c), making newlines if neccesary
+void paste_string(char *copy_buffer, struct file_buffer *file_buff, int r, int c, ) {
+	
 }
