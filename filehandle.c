@@ -52,7 +52,7 @@ void resize(struct file_buffer *file_buff) {
 	file_buff->array_length = 2*file_buff->array_length + 1;
 	char **new_buffer = (char**) realloc(file_buff->buffer, file_buff->array_length * sizeof(char*));
 	if (new_buffer == NULL) {
-		fprintf(stderr, "resize: realloc failed\nerrno %d: %s\n");
+		fprintf(stderr, "resize: realloc failed\nerrno %d: %s\n", errno, strerror(errno));
 		exit(1);
 	} else {
 		file_buff->buffer = new_buffer;
