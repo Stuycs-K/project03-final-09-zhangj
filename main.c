@@ -75,6 +75,7 @@ int main(int argc, char *argv[]) {
 	int yLineEnd = y;
 
 	while (1) {
+		getmaxyx(win, height, width);
 		wclear(win);
 		wrefresh(win);
 		mvwprintw(win,0,0, "Ctrl+Q - Exit\n");
