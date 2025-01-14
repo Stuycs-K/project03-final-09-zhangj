@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
 		wrefresh(win);
 		for (int i = 0; i<strlen(file_buff->buffer[y-1]); i++){
 			if ((file_buff->buffer[y-1])[i] == '\t'){
-				wmove(win, y, getcurx(win)+8-((i+1)%8));
+				wmove(win, y, getcurx(win)+(8-(i%8)));
 				wrefresh(win);
 			}
 		}
