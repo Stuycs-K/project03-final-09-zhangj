@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
 	int y = 1;
 	int height;
 	int width;
-	int curoffset = 0;
+	int taboffset = 0;
 	char *filename;
 	FILE *file ;
 	char *fileinfo;
@@ -84,18 +84,25 @@ int main(int argc, char *argv[]) {
 		for (int r = 0; r < file_buff->rows; r++) {
 			wprintw(win,"%s",file_buff->buffer[r]);
 		}
-		for (int i = 0; i<strlen(file_buff->buffer[y-1]); i++){
+		taboffset = 0;
+		for (int i = 0; i<x; i++){
 			if ((file_buff->buffer[y-1])[i] == '\t'){
-				curoffset += 8-(curoffset%8);
+				taboffset += 8-(taboffset%8);
 			}
 			else{
-				curoffset++;
+				taboffset++;
 			}
 		}
-		wmove(win, y, curoffset);
+		taboffset-=x;
+		wmove(win, y, x+taboffset);
 		wrefresh(win);
-		xLineEnd = curoffset;
 		c = wgetch(win);
+		if (y == file_buff->rows){
+			xLineEnd = strlen(file_buff->buffer[y-1]);
+		}
+		else{
+			xLineEnd = strlen(file_buff->buffer[y-1])-1;
+		}
 		if (c == 17){
 			quit(file_buff, filename);
 			break;
@@ -103,13 +110,11 @@ int main(int argc, char *argv[]) {
 		if (c == KEY_LEFT){
 			if (x > 0){
 				x--;
-				curoffset--;
 			}
 		}
 		if (c == KEY_RIGHT){
 			if (x < xLineEnd){
 				x++;
-				curoffset++;
 			}
 		}
 		if (c == KEY_UP){
@@ -155,6 +160,7 @@ int main(int argc, char *argv[]) {
 			y++;
 			yLineEnd++;
 			x = 0;
+			xLineEnd = 0;
 		}
 		if (c == KEY_STAB || c == 9 || c=='\t'){
 			insert_char(file_buff,y-1,x,'\t');
