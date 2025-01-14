@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
 		for (int r = 0; r < file_buff->rows; r++) {
 			wprintw(win,"%s",file_buff->buffer[r]);
 		}
-		wmove(win, y, x+numtabs*8);
+		wmove(win, y, x);
 		wrefresh(win);
 		for (int i = 0; i<strlen(file_buff->buffer[y-1]); i++){
 			if ((file_buff->buffer[y-1])[i] == '\t'){
