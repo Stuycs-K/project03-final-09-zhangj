@@ -28,7 +28,6 @@ int main(int argc, char *argv[]) {
 	int height;
 	int width;
 	int taboffset = 0;
-	int currtaboffset = 0;
 	char *filename;
 	FILE *file ;
 	char *fileinfo;
@@ -85,25 +84,18 @@ int main(int argc, char *argv[]) {
 		for (int r = 0; r < file_buff->rows; r++) {
 			wprintw(win,"%s",file_buff->buffer[r]);
 		}
-		if (currtaboffset == 0){
-			taboffset = 0;
-			for (int i = 0; i<x; i++){
-				if ((file_buff->buffer[y-1])[i] == '\t'){
-					taboffset += 8-(taboffset%8);
-				}
-				else{
-					taboffset++;
-				}
+		taboffset = 0;
+		for (int i = 0; i<x; i++){
+			if ((file_buff->buffer[y-1])[i] == '\t'){
+				taboffset += 8-(taboffset%8);
 			}
-			taboffset-=x;
-			wmove(win, y, x+taboffset);
-			wrefresh(win);
+			else{
+				taboffset++;
+			}
 		}
-		else{
-			wmove(win, y, x+currtaboffset);
-			wrefresh(win);
-			currtaboffset = 0;
-		}
+		taboffset-=x;
+		wmove(win, y, x+taboffset);
+		wrefresh(win);
 		c = wgetch(win);
 		if (y == file_buff->rows){
 			xLineEnd = strlen(file_buff->buffer[y-1]);
@@ -131,7 +123,6 @@ int main(int argc, char *argv[]) {
 				if (x > strlen(file_buff->buffer[y-1])-1){
 					x = strlen(file_buff->buffer[y-1])-1;
 				}
-				currtaboffset = taboffset;
 			}
 		}
 		if (c == KEY_DOWN){
@@ -147,7 +138,6 @@ int main(int argc, char *argv[]) {
 						x = strlen(file_buff->buffer[y-1])-1;
 					}
 				}
-				currtaboffset = taboffset;
 			}
 		}
 		if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
