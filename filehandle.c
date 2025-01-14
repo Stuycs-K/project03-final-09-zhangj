@@ -57,7 +57,7 @@ void resize(struct file_buffer *file_buff) {
 	} else {
 		file_buff->buffer = new_buffer;
 	}
-	
+
 	for (int r = file_buff->rows; r < file_buff->array_length; r++) {
 		file_buff->buffer[r] = (char*) malloc(LINE_SIZE * sizeof(char));
 	}
@@ -77,7 +77,7 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff) {
 		if (file_buff->rows >= file_buff->array_length) {
 			resize(file_buff);
 		}
-		
+
 		line[LINE_SIZE-1] = '\0'; // safety null
 		strncpy(file_buff->buffer[file_buff->rows], line, LINE_SIZE);
 	}
@@ -85,7 +85,7 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff) {
 
 // note: all these insert / delete functions use a O(n) shift for EVERY character which is really bad even for relatively short strings, but maybe it's fine
 
-// inserts a character ch such that it is at buffer[r][c] after insertion 
+// inserts a character ch such that it is at buffer[r][c] after insertion
 void insert_char(struct file_buffer *file_buff, int r, int c, char ch) {
 	if (!(0 <= r && r < file_buff->rows)) {
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
@@ -138,7 +138,7 @@ void insert_row(struct file_buffer *file_buff, int r) {
 	file_buff->buffer[file_buff->rows] = line;
 }
 
-// removes the character at buffer[r][c], left-shifting over all the characters to its right 
+// removes the character at buffer[r][c], left-shifting over all the characters to its right
 void delete_char(struct file_buffer *file_buff, int r, int c) {
 	if (!(0 <= r && r < file_buff->rows)) {
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
@@ -150,7 +150,7 @@ void delete_char(struct file_buffer *file_buff, int r, int c) {
 		fprintf(stderr, "c=%d is out of bounds, expected value between 0 and length=%d\n", c, length);
 		exit(1);
 	}
-	
+
 	for (int i = c; i < length-1; i++) {
 		file_buff->buffer[r][i] = file_buff->buffer[r][i+1];
 	}
@@ -163,14 +163,13 @@ void delete_row(struct file_buffer *file_buff, int r) {
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
-	
+
 	file_buff->rows--;
 	for (int i = r; i < file_buff->rows; i++) {
 		file_buff->buffer[i] = file_buff->buffer[i+1];
 	}
-	
+
 	for (int i = 0; i < LINE_SIZE; i++) {
 		file_buff->buffer[file_buff->rows+1][i] = '\0';
 	}
 }
-

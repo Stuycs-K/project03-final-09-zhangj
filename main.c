@@ -22,29 +22,41 @@ static void sighandler(int signo){
 
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
-	if (argc != 2) {
-		printf("argv[1] must indicate file name");
-		exit(1);
-	}
-	
-	char *fileinfo = stat_info(argv[1]); // later: update this whenever user saves
-	
 	int c;
 	int x = 0;
 	int y = 1;
 	int height;
 	int width;
-	int numtabs = 0;
-	char *filename = argv[1];
-	FILE *file = open_read(filename);
+	int taboffset = 0;
+	char *filename;
+	FILE *file ;
+	char *fileinfo;
 
-	struct file_buffer *file_buff = create_file_buffer(3);
-	read_into_buffer(file, file_buff);
+	if (argc == 1){
+		filename = "Untitled.txt";
+		file = fopen(filename, "w+");
+		close_file(file);
+		fileinfo = stat_info(filename);
+	}
+	else if (argc == 2){
+		filename = argv[1];
+		file = open_read(filename);
+		fileinfo = stat_info(argv[1]); // later: update this whenever user saves
+	}
+	else {
+		printf("Incorrect number of arguments");
+		exit(1);
+	}
+
+	struct file_buffer *file_buff = create_file_buffer(10);
+	if (argc == 2){
+		read_into_buffer(file, file_buff);
+	}
 
 	initscr();
 	raw();
 	noecho();
-	
+
 	getmaxyx(stdscr, height, width);
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
@@ -55,7 +67,7 @@ int main(int argc, char *argv[]) {
 	}
 	wrefresh(win);
 	x = getcurx(win);
-	y = getcury(win); 
+	y = getcury(win);
 	wmove(win, y, x);
 	wrefresh(win);
 	insert_row(file_buff,y-1);
@@ -63,6 +75,7 @@ int main(int argc, char *argv[]) {
 	int yLineEnd = y;
 
 	while (1) {
+		getmaxyx(win, height, width);
 		wclear(win);
 		wrefresh(win);
 		mvwprintw(win,0,0, "Ctrl+Q - Exit\n");
@@ -72,7 +85,17 @@ int main(int argc, char *argv[]) {
 		for (int r = 0; r < file_buff->rows; r++) {
 			wprintw(win,"%s",file_buff->buffer[r]);
 		}
-		wmove(win, y, x);
+		taboffset = 0;
+		for (int i = 0; i<x; i++){
+			if ((file_buff->buffer[y-1])[i] == '\t'){
+				taboffset += 8-(taboffset%8);
+			}
+			else{
+				taboffset++;
+			}
+		}
+		taboffset-=x;
+		wmove(win, y, x+taboffset);
 		wrefresh(win);
 		c = wgetch(win);
 		if (y == file_buff->rows){
@@ -82,7 +105,7 @@ int main(int argc, char *argv[]) {
 			xLineEnd = strlen(file_buff->buffer[y-1])-1;
 		}
 		if (c == 17){
-			quit(file_buff);
+			quit(file_buff, filename);
 			break;
 		}
 		if (c == KEY_LEFT){
@@ -140,12 +163,20 @@ int main(int argc, char *argv[]) {
 			x = 0;
 			xLineEnd = 0;
 		}
-		// if (c == KEY_STAB || c == 9 || c=='\t'){
-		// 	insert_char(file_buff,y-1,x,'\t');
-		// 	x++;
-		// 	numtabs++;
-		// }
+		if (c == KEY_STAB || c == 9 || c=='\t'){
+			if (x+taboffset+8-(taboffset%8)<width-1){
+				insert_char(file_buff,y-1,x,'\t');
+				x++;
+			}
+		}
 		if (c>=32 && c<=126){
+			if (x+taboffset>=width-1){
+				insert_row(file_buff,y);
+				y++;
+				yLineEnd++;
+				x = 0;
+				xLineEnd = 0;
+			}
 			insert_char(file_buff,y-1,x,c);
 			x++;
 		}
