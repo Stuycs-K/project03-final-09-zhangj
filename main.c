@@ -159,7 +159,7 @@ int main(int argc, char *argv[]) {
 			xLineEnd = 0;
 		}
 		if (c == KEY_STAB || c == 9 || c=='\t'){
-			insert_char(file_buff,y-1,x,'\t');
+			insert_char(file_buff,y-1,x,'    ');
 			x++;
 		}
 		if (c>=32 && c<=126){
