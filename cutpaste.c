@@ -18,6 +18,6 @@ void cut_string(char *copy_buffer, struct file_buffer *file_buff, int r1, int c1
 }
 
 // pastes the copy-buffer at (r, c), making newlines if neccesary
-void paste_string(char *copy_buffer, struct file_buffer *file_buff, int r, int c, ) {
+void paste_string(char *copy_buffer, struct file_buffer *file_buff, int r, int c) {
 	
 }
