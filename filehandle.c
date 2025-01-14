@@ -60,8 +60,10 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff) {
 	for (file_buff->rows = 0; fgets(line, LINE_SIZE, file) != NULL; file_buff->rows++) {
 		// grow the array if needed
 		if (file_buff->rows >= file_buff->array_length) {
+			printf("resizing\n");
 			file_buff->array_length = 2*file_buff->array_length + 1;
 			file_buff->buffer = (char**) realloc(file_buff->buffer, file_buff->array_length);
+			printf("finish resize\n");
 		}
 
 		line[LINE_SIZE-1] = '\0'; // safety null
