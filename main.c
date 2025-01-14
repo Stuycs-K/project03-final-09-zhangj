@@ -167,6 +167,14 @@ int main(int argc, char *argv[]) {
 			x++;
 		}
 		if (c>=32 && c<=126){
+			if (x+taboffset>=width){
+				insert_char(file_buff,y-1,x,'\n');
+				insert_row(file_buff,y);
+				y++;
+				yLineEnd++;
+				x = 0;
+				xLineEnd = 0;
+			}
 			insert_char(file_buff,y-1,x,c);
 			x++;
 		}
