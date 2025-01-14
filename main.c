@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
 				numtabs++;
 			}
 		}
-		wmove(win, y, x+numtabs*6);
+		wmove(win, y, x+numtabs*4);
 		wrefresh(win);
 		c = wgetch(win);
 		if (y == file_buff->rows){
