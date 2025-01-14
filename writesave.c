@@ -30,7 +30,6 @@ void save(char *filename, struct file_buffer *file_buff) {
 
     if (r == file_buff->rows-1){
       elements = fwrite(newline, sizeof(char), 1, file);
-      printf("hi");
     }
   }
 
