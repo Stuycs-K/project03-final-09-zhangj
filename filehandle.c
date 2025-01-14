@@ -36,16 +36,31 @@ void close_file(FILE *file) {
 // array_length: init_array_length
 // rows: 0
 struct file_buffer* create_file_buffer(int init_array_length) {
-	struct file_buffer *file_buff = (struct file_buffer*) calloc(1, sizeof(struct file_buff*));
-	file_buff->buffer = (char**) calloc(init_array_length, sizeof(char*));
+	struct file_buffer *file_buff = (struct file_buffer*) malloc(1 * sizeof(struct file_buff*));
+	file_buff->buffer = (char**) malloc(init_array_length * sizeof(char*));
 	file_buff->array_length = init_array_length;
 	file_buff->rows = 0;
 
 	for (int r = 0; r < init_array_length; r++) {
-		file_buff->buffer[r] = (char*) calloc(LINE_SIZE, sizeof(char));
+		file_buff->buffer[r] = (char*) malloc(LINE_SIZE * sizeof(char));
 	}
 
 	return file_buff;
+}
+
+void resize(struct file_buffer *file_buff) {
+	file_buff->array_length = 2*file_buff->array_length + 1;
+	char **new_buffer = (char**) realloc(file_buff->buffer, file_buff->array_length * sizeof(char*));
+	if (new_buffer == NULL) {
+		fprintf(stderr, "resize: realloc failed\nerrno %d: %s\n");
+		exit(1);
+	} else {
+		file_buff->buffer = new_buffer;
+	}
+	
+	for (int r = file_buff->rows; r < file_buff->array_length; r++) {
+		file_buff->buffer[r] = (char*) malloc(LINE_SIZE * sizeof(char));
+	}
 }
 
 // takes a file pointer and a struct file_buffer, and reads in the full contents of the file into the file_buffer's char** buffer
@@ -60,14 +75,13 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff) {
 	for (file_buff->rows = 0; fgets(line, LINE_SIZE, file) != NULL; file_buff->rows++) {
 		// grow the array if needed
 		if (file_buff->rows >= file_buff->array_length) {
-			printf("resizing\n");
-			file_buff->array_length = 2*file_buff->array_length + 1;
-			file_buff->buffer = (char**) realloc(file_buff->buffer, file_buff->array_length);
-			printf("finish resize\n");
+			resize(file_buff);
 		}
-
+		
 		line[LINE_SIZE-1] = '\0'; // safety null
+		printf("here 3 r=%d\n", file_buff->rows);
 		strncpy(file_buff->buffer[file_buff->rows], line, LINE_SIZE);
+		printf("whoops ! \n");
 	}
 }
 
@@ -119,12 +133,11 @@ void insert_row(struct file_buffer *file_buff, int r) {
 
 	file_buff->rows++;
 	if (file_buff->rows == file_buff->array_length) {
-		file_buff->array_length = 2*file_buff->array_length + 1;
-		file_buff->buffer = (char**) realloc(file_buff->buffer, file_buff->array_length);
+		resize(file_buff);
 	}
 
 	char *temp;
-	char *line = (char*) calloc(LINE_SIZE, sizeof(char));
+	char *line = (char*) malloc(LINE_SIZE * sizeof(char));
 	for (int i = r; i < file_buff->rows; i++) {
 		temp = file_buff->buffer[i];
 		file_buff->buffer[i] = line;
