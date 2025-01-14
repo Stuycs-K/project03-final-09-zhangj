@@ -84,7 +84,6 @@ int main(int argc, char *argv[]) {
 		for (int r = 0; r < file_buff->rows; r++) {
 			wprintw(win,"%s",file_buff->buffer[r]);
 		}
-		curoffset = 0;
 		for (int i = 0; i<strlen(file_buff->buffer[y-1]); i++){
 			if ((file_buff->buffer[y-1])[i] == '\t'){
 				curoffset += 8-(curoffset%8);
@@ -104,11 +103,13 @@ int main(int argc, char *argv[]) {
 		if (c == KEY_LEFT){
 			if (x > 0){
 				x--;
+				curoffset--;
 			}
 		}
 		if (c == KEY_RIGHT){
 			if (x < xLineEnd){
 				x++;
+				curoffset++;
 			}
 		}
 		if (c == KEY_UP){
