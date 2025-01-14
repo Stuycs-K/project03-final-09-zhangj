@@ -163,11 +163,19 @@ int main(int argc, char *argv[]) {
 			xLineEnd = 0;
 		}
 		if (c == KEY_STAB || c == 9 || c=='\t'){
+			if (x+taboffset+8-(taboffset%8)>=width-1){
+				insert_char(file_buff,y-1,x,'\n');
+				insert_row(file_buff,y);
+				y++;
+				yLineEnd++;
+				x = 0;
+				xLineEnd = 0;
+			}
 			insert_char(file_buff,y-1,x,'\t');
 			x++;
 		}
 		if (c>=32 && c<=126){
-			if (x+taboffset+8-(taboffset%8)>=width-1){
+			if (x+taboffset>=width-1){
 				insert_char(file_buff,y-1,x,'\n');
 				insert_row(file_buff,y);
 				y++;
