@@ -55,6 +55,11 @@ void quit(struct file_buffer *file_buff, char* fname) {
         printf("Filename must be greater than length 0");
         exit(1);
       }
+      if (strcmp(newfname1,"Untitled.txt")==0){
+        remove("Untitled.txt");
+        printf("Filename cannot be Untitled.txt");
+        exit(1);
+      } 
       save(newfname1, file_buff);
       free(newfname1);
       remove("Untitled.txt");
@@ -67,7 +72,7 @@ void quit(struct file_buffer *file_buff, char* fname) {
       if (strcmp(fname,"Untitled.txt") == 0){
         remove("Untitled.txt");
       }
-      printf("Quitting...\n");
+      printf("Quitting without saving...\n");
   }
   else{
       printf("Invalid input. Quitting without saving...\n");
