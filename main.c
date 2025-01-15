@@ -111,8 +111,8 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == to_ctrl_char('s')) {
 			save(file_buff, filename);
-			// struct file_buffer *file_buff = create_file_buffer(10); // why is this here?
 			saved = 1;
+			changed = 0;
 		}
 		if (c == KEY_LEFT){
 			x = keyleft(x);
