@@ -126,19 +126,7 @@ int main(int argc, char *argv[]) {
 			y = keyup(&x, y, strlen(file_buff->buffer[y-2])-1);
 		}
 		if (c == KEY_DOWN){
-			if (y < yLineEnd){
-				y++;
-				if (y == file_buff->rows){
-					if (x > strlen(file_buff->buffer[y-1])){
-						x = strlen(file_buff->buffer[y-1]);
-					}
-				}
-				else{
-					if (x > strlen(file_buff->buffer[y-1])-1){
-						x = strlen(file_buff->buffer[y-1])-1;
-					}
-				}
-			}
+			y = keydown(&x, y, yLineEnd, file_buff->rows, strlen(file_buff->buffer[y]));
 		}
 		if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
 			changed = 1;

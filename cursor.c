@@ -35,4 +35,20 @@ int keyup(int* x, int y, int lineLen){
     return y;
 }
 
-// void keydown();
+int keydown(int* x, int y, int yLineEnd, int numrows, int linelen){
+    if (y < yLineEnd){
+        y++;
+        if (y == numrows){
+            if (*x > linelen){
+                *x = linelen;
+            }
+        }
+        else{
+            if (*x > linelen-1){
+                *x = linelen-1;
+            }
+        }
+    }
+    return y;
+}
+
