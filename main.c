@@ -123,7 +123,6 @@ int main(int argc, char *argv[]) {
 			x = keyright(x, xLineEnd);
 		}
 		if (c == KEY_UP){
-			int x;
 			y = keyup(&x, y, strlen(file_buff->buffer[y-1])-1);
 		}
 		if (c == KEY_DOWN){
