@@ -50,5 +50,8 @@ Made functions that can save the buffer to a file and directly characters/lines 
 ### 2025-01-11, 01-12 - Stat and organization
 Integrated stat() info to be shown during display of the program, added extra comments to filehandle functions, moved around some other things for organization
 
-### 2025-01-13 - 
+### 2025-01-13 - Cleaning up bugs and extra information for stat
 Fix bugs relating to reallocating memory, changed the way stat is displayed and add extra information to the string. Added new function headers for cutpaste.h file 
+
+### 2025-01-14 - Saving issues and other
+Fixed many issues for user saving on nonexistent files/no arguments. Added structure for copy/paste and execute commands.
