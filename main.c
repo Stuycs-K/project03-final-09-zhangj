@@ -15,21 +15,12 @@
 #include "statdisplay.h"
 #include "filehandle.h"
 #include "cursor.h"
-#include "chars.h"
 
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
-	int c;
-	int x = 0;
-	int y = 1;
-	int height;
-	int width;
-	int taboffset = 0;
-	int saved = 0;
-	int changed = 0;
-	char *filename;
-	FILE *file ;
-	char *fileinfo;
+	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0;
+	char *filename, *fileinfo;
+	FILE *file;
 
 	if (argc == 1){
 		filename = "Untitled.txt";
@@ -55,7 +46,6 @@ int main(int argc, char *argv[]) {
 	initscr();
 	raw();
 	noecho();
-
 	getmaxyx(stdscr, height, width);
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
@@ -162,8 +152,16 @@ int main(int argc, char *argv[]) {
 		}
 		if (c>=32 && c<=126){
 			changed = 1;
-			x = addChar(x, &y, &yLineEnd, &xLineEnd, taboffset, width, file_buff, c);
+			if (x+taboffset>=width-1){
+				insert_row(file_buff,y);
+				y++;
+				yLineEnd++;
+				x = 0;
+				xLineEnd = 0;
+			}
+			insert_char(file_buff,y-1,x,c);
+			x++;
 		}
 	}
-  return 0;
+    return 0;
 }
