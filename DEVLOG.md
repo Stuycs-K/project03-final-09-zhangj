@@ -25,6 +25,9 @@ Integrated deleting chars (including newline) into the file buffer with displayi
 ### 2025-01-13 - Fixed bugs and adding tab support
 Worked on implementing make run without args to create a temp Untitled.txt file to write in (40 min CW time). Fixed bugs involving seg faults with files that did not end in a new line, running make run without any args, and text wrapping if you typed past the terminal window width. Also added tab support (1.5 hr HW time).
 
+### 2025-01-14 - Fixed bugs, implemented save (Ctrl+s), moved cursor movement to separate file
+Worked on implementing save (Ctrl+s) (40 min CW time). Fixed bugs with save, condensed main, created cursor.c to store cursor functions (1 hr HW time).
+
 
 
 ## David Schwartzberg
