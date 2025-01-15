@@ -29,16 +29,18 @@ int main(int argc, char *argv[]) {
 	char *filename, *fileinfo;
 	FILE *file;
 
+	fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
+
 	if (argc == 1){
 		filename = "Untitled.txt";
 		file = fopen(filename, "w+");
 		close_file(file);
-		fileinfo = stat_info(filename);
+		stat_info(filename, fileinfo);
 	}
 	else if (argc == 2){
 		filename = argv[1];
 		file = open_read(filename);
-		fileinfo = stat_info(argv[1]); // later: update this whenever user saves
+		fileinfo = stat_info(argv[1], fileinfo);
 	}
 	else {
 		printf("Incorrect number of arguments");
@@ -98,7 +100,7 @@ int main(int argc, char *argv[]) {
 		taboffset-=x;
 		wmove(win, y, x+taboffset);
 		wrefresh(win);
-		c = wgetch(win);
+		c = wgetch(win); // program waits on this
 		if (y == file_buff->rows){
 			xLineEnd = strlen(file_buff->buffer[y-1]);
 		}
@@ -111,6 +113,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == to_ctrl_char('s')) {
 			save(file_buff, filename);
+			stat_info(filename, fileinfo);
 			saved = 1;
 			changed = 0;
 		}
