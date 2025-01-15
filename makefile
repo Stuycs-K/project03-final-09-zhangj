@@ -1,5 +1,5 @@
 .PHONY: compile run clean test
-compile femto: main.o cutpaste.o filehandle.o statdisplay.o undoredo.o writesave.o cursor.o
+compile femto: main.o cutpaste.o filehandle.o statdisplay.o writesave.o cursor.o
 	@gcc -o femto main.o cutpaste.o filehandle.o statdisplay.o writesave.o cursor.o -lncurses -lm -Wall
 run: femto
 	@./femto $(ARGS)
