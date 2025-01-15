@@ -24,6 +24,7 @@ int main(int argc, char *argv[]) {
 	int height;
 	int width;
 	int taboffset = 0;
+	int saved = 0;
 	char *filename;
 	FILE *file ;
 	char *fileinfo;
@@ -74,9 +75,14 @@ int main(int argc, char *argv[]) {
 		getmaxyx(win, height, width);
 		wclear(win);
 		wrefresh(win);
-		mvwprintw(win,0,0, "Ctrl+Q - Exit\n");
+		mvwprintw(win,0,0, "Ctrl+Q - Exit  Ctrl+S - Save\n");
 		wmove(win, height-1, 0);
 		wprintw(win, "%s", fileinfo);
+		if (saved > 0){
+			wmove(win, height-2,0);
+			wprintw(win, "File Saved.");
+			saved = 0;
+		}
 		wmove(win, 1, 0);
 		for (int r = 0; r < file_buff->rows; r++) {
 			wprintw(win,"%s",file_buff->buffer[r]);
@@ -103,6 +109,10 @@ int main(int argc, char *argv[]) {
 		if (c == 17){
 			quit(file_buff, filename);
 			break;
+		}
+		if (c == 19){
+			save(filename, file_buff);
+			saved = 1;
 		}
 		if (c == KEY_LEFT){
 			if (x > 0){
