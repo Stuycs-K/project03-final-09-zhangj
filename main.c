@@ -9,12 +9,19 @@
 #include <time.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include <ctype.h>
 #include <ncurses.h>
 #include "cutpaste.h"
 #include "writesave.h"
 #include "statdisplay.h"
 #include "filehandle.h"
 #include "cursor.h"
+
+// ascii values 1-26 are ctrl + ch (ctrl A is 1)
+int to_ctrl_char(int ch) {
+	if (islower(ch)) { ch  = toupper(ch); }
+	return ch - 'A' + 1;
+}
 
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
@@ -98,13 +105,13 @@ int main(int argc, char *argv[]) {
 		else{
 			xLineEnd = strlen(file_buff->buffer[y-1])-1;
 		}
-		if (c == 17){
+		if (c == to_ctrl_char('q')) {
 			quit(file_buff, filename, changed);
 			break;
 		}
-		if (c == 19){
+		if (c == to_ctrl_char('s')) {
 			save(file_buff, filename);
-			struct file_buffer *file_buff = create_file_buffer(10);
+			// struct file_buffer *file_buff = create_file_buffer(10); // why is this here?
 			saved = 1;
 		}
 		if (c == KEY_LEFT){
@@ -143,14 +150,14 @@ int main(int argc, char *argv[]) {
 			x = 0;
 			xLineEnd = 0;
 		}
-		if (c == KEY_STAB || c == 9 || c=='\t'){
+		if (c == KEY_STAB || c=='\t'){
 			changed = 1;
 			if (x+taboffset+8-(taboffset%8)<width-1){
 				insert_char(file_buff,y-1,x,'\t');
 				x++;
 			}
 		}
-		if (c>=32 && c<=126){
+		if (32 <= c && c <= 126) { // alphanumerics, punctuation, etc.
 			changed = 1;
 			if (x+taboffset>=width-1){
 				insert_row(file_buff,y);
