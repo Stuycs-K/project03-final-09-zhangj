@@ -58,8 +58,10 @@ int main(int argc, char *argv[]) {
 	getmaxyx(stdscr, height, width);
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
+	scrollok(win, TRUE);
 
-	mvwprintw(win,0,0, "Ctrl+Q - Exit\n");
+	mvwprintw(win,0,0, "Ctrl+Q - Exit Ctrl+S - Save\n");
+	wmove(win,1,0);
 	for (int r = 0; r < file_buff->rows; r++) {
 		wprintw(win,"%s",file_buff->buffer[r]);
 	}
@@ -77,7 +79,7 @@ int main(int argc, char *argv[]) {
 		wclear(win);
 		wrefresh(win);
 		mvwprintw(win,0,0, "Ctrl+Q - Exit  Ctrl+S - Save\n");
-		wmove(win, height-1, 0);
+		wmove(win, height-2, 0);
 		wprintw(win, "%s", fileinfo);
 		if (saved > 0){
 			wmove(win, height-2,0);
@@ -114,8 +116,11 @@ int main(int argc, char *argv[]) {
 		if (c == to_ctrl_char('S')) {
 			save(file_buff, filename);
 			stat_info(filename, fileinfo);
+			struct file_buffer *file_buff = create_file_buffer(10);
 			saved = 1;
-			changed = 0;
+			if (strcmp(filename,"Untitled.txt") != 0){
+				changed = 0;
+			}
 		}
 		if (c == to_ctrl_char('C')) {
 			// copy
@@ -129,7 +134,7 @@ int main(int argc, char *argv[]) {
 		if (c == to_ctrl_char('T')) {
 			// execute
 		}
-		
+
 		if (c == KEY_LEFT){
 			x = keyleft(x);
 		}
