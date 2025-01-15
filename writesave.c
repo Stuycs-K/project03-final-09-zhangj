@@ -29,9 +29,11 @@ void save(struct file_buffer *file_buff, char *filename) {
       exit(1);
     }
 
-    // if (r == file_buff->rows-1){
-    //   elements = fwrite(newline, sizeof(char), 1, file);
-    // }
+    if (r == file_buff->rows-1){
+      if (strcmp(file_buff->buffer[r][length-1],'\n')!= 0){
+        elements = fwrite(newline, sizeof(char), 1, file);
+      }
+    }
   }
 
   close_file(file);
