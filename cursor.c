@@ -25,11 +25,11 @@ int keyright(int x, int xLineEnd){
     return x;
 }
 
-int keyup(int* x, int y, struct file_buffer *file_buff){
+int keyup(int* x, int y, int lineLen){
     if (y > 1){
         y--;
-        if (*x > strlen(file_buff->buffer[y-1])-1){
-            *x = strlen(file_buff->buffer[y-1])-1;
+        if (*x > lineLen){
+            *x = lineLen;
         }
     }
     return y;
