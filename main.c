@@ -113,7 +113,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == 19){
 			save(file_buff, filename);
-			file_buff = create_file_buffer(10);
+			struct file_buffer *file_buff = create_file_buffer(10);
 			saved = 1;
 		}
 		if (c == KEY_LEFT){
