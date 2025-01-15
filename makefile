@@ -1,6 +1,6 @@
 .PHONY: compile run clean test
-compile femto: main.o cutpaste.o filehandle.o  statdisplay.o undoredo.o writesave.o
-	@gcc -o femto main.o cutpaste.o filehandle.o  statdisplay.o undoredo.o writesave.o -lncurses -lm -Wall
+compile femto: main.o cutpaste.o filehandle.o  statdisplay.o undoredo.o writesave.o cursor.o
+	@gcc -o femto main.o cutpaste.o filehandle.o statdisplay.o writesave.o cursor.o -lncurses -lm -Wall
 run: femto
 	@./femto $(ARGS)
 clean:
@@ -14,7 +14,7 @@ filehandle.o: filehandle.h filehandle.c
 	@gcc -c filehandle.c -lncurses -lm -Wall
 statdisplay.o: statdisplay.h statdisplay.c
 	@gcc -c statdisplay.c -lncurses -lm -Wall
-undoredo.o: undoredo.h undoredo.c
-	@gcc -c undoredo.c -lncurses -lm -Wall
 writesave.o: writesave.h writesave.c
 	@gcc -c writesave.c -lncurses -lm -Wall
+cursor.o: cursor.h cursor.c
+	@gcc -c cursor.c -lncurses -lm -Wall
