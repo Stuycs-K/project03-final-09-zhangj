@@ -15,6 +15,7 @@
 #include "statdisplay.h"
 #include "filehandle.h"
 #include "cursor.h"
+#include "chars.h"
 
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
