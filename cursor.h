@@ -1,6 +1,6 @@
 #ifndef CURSOR_H
 #define CURSOR_H
 
-void keyleft(int *x);
+int keyleft(int x);
 
 #endif

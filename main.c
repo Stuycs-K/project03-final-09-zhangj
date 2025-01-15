@@ -117,7 +117,7 @@ int main(int argc, char *argv[]) {
 			saved = 1;
 		}
 		if (c == KEY_LEFT){
-			keyleft(&x);
+			x = keyleft(x);
 		}
 		if (c == KEY_RIGHT){
 			if (x < xLineEnd){

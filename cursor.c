@@ -11,10 +11,11 @@
 #include <dirent.h>
 #include <ncurses.h>
 
-void keyleft(int *x){
-    if (*x > 0){
-        *x--;
+int keyleft(int x){
+    if (x > 0){
+        x--;
 	}
+    return x;
 }
 
 // void keyright();
