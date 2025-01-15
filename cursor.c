@@ -10,6 +10,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <ncurses.h>
+#include "cursor.h"
 
 int keyleft(int x){
     if (x > 0){

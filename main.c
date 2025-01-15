@@ -161,15 +161,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (c>=32 && c<=126){
 			changed = 1;
-			if (x+taboffset>=width-1){
-				insert_row(file_buff,y);
-				y++;
-				yLineEnd++;
-				x = 0;
-				xLineEnd = 0;
-			}
-			insert_char(file_buff,y-1,x,c);
-			x++;
+			x = addChar(x, &y, &yLineEnd, &xLineEnd, taboffset, width, file_buff, c);
 		}
 	}
   return 0;
