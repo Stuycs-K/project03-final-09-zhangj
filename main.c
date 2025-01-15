@@ -113,9 +113,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == 19){
 			save(file_buff, filename);
-			file = open_read(filename);
-			read_into_buffer(file, file_buff);
-			close_file(file);
+			file_buff = create_file_buffer(10);
 			saved = 1;
 		}
 		if (c == KEY_LEFT){
