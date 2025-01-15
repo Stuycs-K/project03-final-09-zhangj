@@ -64,7 +64,6 @@ void resize(struct file_buffer *file_buff) {
 }
 
 // takes a file pointer and a struct file_buffer, and reads in the full contents of the file into the file_buffer's char** buffer
-// note: the buffer's lines are not separated by newlines, so those are included manually whenever the buffer is printed
 void read_into_buffer(FILE *file, struct file_buffer *file_buff) {
 	if (fseek(file, 0, SEEK_SET) != 0) {
 		fprintf(stderr, "read_into_buffer: failed to fseek to 0, SEEK_SET\nerrno %d: %s\n", errno, strerror(errno));

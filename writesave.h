@@ -2,7 +2,7 @@
 #define WRITESAVE_H
 #include "filehandle.h"
 
-void save(char *filename, struct file_buffer *file_buff);
-void quit(struct file_buffer *file_buff, char* fname);
+void save(struct file_buffer *file_buff, char *filename);
+void quit(struct file_buffer *file_buff, char* fname, int changed);
 
 #endif

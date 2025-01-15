@@ -14,7 +14,7 @@
 #include "writesave.h"
 
 // Takes in the buffer and writes it into a file,
-void save(char *filename, struct file_buffer *file_buff) {
+void save(struct file_buffer *file_buff, char *filename) {
   // w+ truncatres
   FILE *file = fopen(filename, "w+");
 
@@ -38,44 +38,52 @@ void save(char *filename, struct file_buffer *file_buff) {
 }
 
 // Quits out of raw mode and prompts user if they want to save the changes and asks them if they want to rename the file before quitting
-void quit(struct file_buffer *file_buff, char* fname) {
+void quit(struct file_buffer *file_buff, char* fname, int changed) {
   endwin();
-  printf("Would you like to save your modified changes? y/n ");
-  char response[256];
-  response[256] = '\0';
-  fgets(response, 255, stdin);
-  if (response[0] == 'y'){
-    if (strcmp(fname,"Untitled.txt") == 0){
-      printf("File name: ");
-      char newfname[256];
-      fgets(newfname, 255, stdin);
-      char* newfname1 = (char *) malloc(256);
-      sscanf(newfname, "%[^\n]", newfname1);
-      if (strlen(newfname1) <= 0){
+  if (changed == 1){
+    printf("Would you like to save your modified changes? y/n ");
+    char response[256];
+    response[256] = '\0';
+    fgets(response, 255, stdin);
+    if (response[0] == 'y'){
+      if (strcmp(fname,"Untitled.txt") == 0){
+        printf("File name: ");
+        char newfname[256];
+        fgets(newfname, 255, stdin);
+        char* newfname1 = (char *) malloc(256);
+        sscanf(newfname, "%[^\n]", newfname1);
+        if (strlen(newfname1) <= 0){
+          remove("Untitled.txt");
+          printf("Filename must be greater than length 0");
+          exit(1);
+        }
+        if (strcmp(newfname1,"Untitled.txt")==0){
+          remove("Untitled.txt");
+          printf("Filename cannot be Untitled.txt");
+          exit(1);
+        }
+        save(file_buff, newfname1);
+        free(newfname1);
         remove("Untitled.txt");
-        printf("Filename must be greater than length 0");
-        exit(1);
       }
-      if (strcmp(newfname1,"Untitled.txt")==0){
-        remove("Untitled.txt");
-        printf("Filename cannot be Untitled.txt");
-        exit(1);
+      else{
+        save(file_buff, fname);
       }
-      save(newfname1, file_buff);
-      free(newfname1);
-      remove("Untitled.txt");
+    }
+    else if (response[0] == 'n'){
+        if (strcmp(fname,"Untitled.txt") == 0){
+          remove("Untitled.txt");
+        }
+        printf("Quitting without saving...\n");
     }
     else{
-      save(fname, file_buff);
+        printf("Invalid input. Quitting without saving...\n");
     }
   }
-  else if (response[0] == 'n'){
-      if (strcmp(fname,"Untitled.txt") == 0){
-        remove("Untitled.txt");
-      }
-      printf("Quitting without saving...\n");
-  }
   else{
-      printf("Invalid input. Quitting without saving...\n");
+    if (strcmp(fname,"Untitled.txt")==0){
+      remove("Untitled.txt");
+    }
+    printf("Quitting... (no changes were made)\n");
   }
 }
