@@ -120,7 +120,7 @@ int main(int argc, char *argv[]) {
 			x = keyleft(x);
 		}
 		if (c == KEY_RIGHT){
-			x = keyright(x);
+			x = keyright(x, xLineEnd);
 		}
 		if (c == KEY_UP){
 			y = keyup(&x, y, file_buff);
