@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
 	int width;
 	int taboffset = 0;
 	int saved = 0;
+	int changed = 0;
 	char *filename;
 	FILE *file ;
 	char *fileinfo;
@@ -107,11 +108,15 @@ int main(int argc, char *argv[]) {
 			xLineEnd = strlen(file_buff->buffer[y-1])-1;
 		}
 		if (c == 17){
-			quit(file_buff, filename);
+			quit(file_buff, filename, changed);
 			break;
 		}
 		if (c == 19){
-			save(filename, file_buff);
+			save(file_buff, filename);
+			file_buff = create_file_buffer(10);
+			file = open_read(filename);
+			read_into_buffer(file, file_buff);
+			close_file(file);
 			saved = 1;
 		}
 		if (c == KEY_LEFT){
@@ -148,6 +153,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
+			changed = 1;
 			if (x == 0){
 				delete_row(file_buff, y-1);
 				y--;
@@ -162,6 +168,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		if (c == '\n'){
+			changed = 1;
 			insert_char(file_buff,y-1,x,'\n');
 			insert_row(file_buff,y);
 			y++;
@@ -170,12 +177,14 @@ int main(int argc, char *argv[]) {
 			xLineEnd = 0;
 		}
 		if (c == KEY_STAB || c == 9 || c=='\t'){
+			changed = 1;
 			if (x+taboffset+8-(taboffset%8)<width-1){
 				insert_char(file_buff,y-1,x,'\t');
 				x++;
 			}
 		}
 		if (c>=32 && c<=126){
+			changed = 1;
 			if (x+taboffset>=width-1){
 				insert_row(file_buff,y);
 				y++;
