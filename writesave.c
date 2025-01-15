@@ -30,7 +30,7 @@ void save(struct file_buffer *file_buff, char *filename) {
     }
 
     if (r == file_buff->rows-1){
-      if (strcmp(file_buff->buffer[r][length-1],'\n')!= 0){
+      if (file_buff->buffer[r][length-1] != '\n'){
         elements = fwrite(newline, sizeof(char), 1, file);
       }
     }
