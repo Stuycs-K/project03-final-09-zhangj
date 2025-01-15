@@ -10,11 +10,11 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <ncurses.h>
-#include "undoredo.h"
 #include "cutpaste.h"
 #include "writesave.h"
 #include "statdisplay.h"
 #include "filehandle.h"
+#include "cursor.h"
 
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
@@ -117,9 +117,7 @@ int main(int argc, char *argv[]) {
 			saved = 1;
 		}
 		if (c == KEY_LEFT){
-			if (x > 0){
-				x--;
-			}
+			keyleft(&x);
 		}
 		if (c == KEY_RIGHT){
 			if (x < xLineEnd){
