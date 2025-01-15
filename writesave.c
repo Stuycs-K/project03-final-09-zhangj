@@ -20,7 +20,6 @@ void save(struct file_buffer *file_buff, char *filename) {
 
   char newline[] = "\n";
 
-  //size_t written = fwrite(arr, sizeof(int), n, fp);
   for (int r = 0; r < file_buff->rows; r++) {
     int length = strlen(file_buff->buffer[r]);
     int elements = fwrite(file_buff->buffer[r], sizeof(char), length, file);

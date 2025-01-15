@@ -23,4 +23,6 @@ void insert_row(struct file_buffer *file_buff, int r);
 void delete_char(struct file_buffer *file_buff, int r, int c);
 void delete_row(struct file_buffer *file_buff, int r);
 
+void insert_newline(struct file_buffer *file_buff, int r, int c);
+
 #endif

@@ -129,7 +129,7 @@ int main(int argc, char *argv[]) {
 		if (c == to_ctrl_char('T')) {
 			// execute
 		}
-		
+
 		if (c == KEY_LEFT){
 			x = keyleft(x);
 		}
@@ -159,7 +159,14 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == '\n'){
 			changed = 1;
+			insert_newline(file_buff, )
 			insert_char(file_buff,y-1,x,'\n');
+
+			// hi there 1
+			// abc
+			// def
+
+
 			insert_row(file_buff,y);
 			y++;
 			yLineEnd++;

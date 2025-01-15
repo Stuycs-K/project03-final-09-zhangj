@@ -15,7 +15,7 @@
 // returns a file pointer to the file, opened only in read mode
 FILE* open_read(char *filename) {
 	FILE *file;
-	
+
 	// create the file if it does not exist
 	file = fopen(filename, "a");
 	if (file == NULL) {
@@ -181,4 +181,41 @@ void delete_row(struct file_buffer *file_buff, int r) {
 	for (int i = 0; i < LINE_SIZE; i++) {
 		file_buff->buffer[file_buff->rows+1][i] = '\0';
 	}
+}
+
+// need special case for newline char
+void insert_newline(struct file_buffer *file_buff, int r, int c) {
+	if (!(0 <= r && r < file_buff->rows)) {
+		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
+		exit(1);
+	}
+
+	int length = strlen(file_buff->buffer[r]);
+	if (!(c <= length)) {
+		fprintf(stderr, "c=%d is out of bounds, expected value between 0 and length=%d\n", c, length);
+		exit(1);
+	}
+
+	char *new_line = (char*) malloc(LINE_SIZE * sizeof(char));
+	for (int i = 0; i+c < length; i++) {
+		new_line[i] = file_buff->buffer[r][i+1+c];
+	}
+
+	file_buff->buffer[r][c] = '\n';
+	file_buff->buffer[r][c+1] = '\n';
+
+	file_buff->rows++;
+	if (file_buff->rows == file_buff->array_length) {
+		resize(file_buff);
+	}
+
+	char *temp;
+	char *line = (char*) malloc(LINE_SIZE * sizeof(char));
+	for (int i = r; i < file_buff->rows; i++) {
+		temp = file_buff->buffer[i];
+		file_buff->buffer[i] = line;
+		line = temp;
+	}
+
+	file_buff->buffer[file_buff->rows] = line;
 }
