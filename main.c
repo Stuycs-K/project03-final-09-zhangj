@@ -120,17 +120,10 @@ int main(int argc, char *argv[]) {
 			x = keyleft(x);
 		}
 		if (c == KEY_RIGHT){
-			if (x < xLineEnd){
-				x++;
-			}
+			x = keyright(x);
 		}
 		if (c == KEY_UP){
-			if (y > 1){
-				y--;
-				if (x > strlen(file_buff->buffer[y-1])-1){
-					x = strlen(file_buff->buffer[y-1])-1;
-				}
-			}
+			y = keyup(&x, y, file_buff);
 		}
 		if (c == KEY_DOWN){
 			if (y < yLineEnd){

@@ -18,8 +18,21 @@ int keyleft(int x){
     return x;
 }
 
-// void keyright();
+int keyright(int x, int xLineEnd){
+    if (x < xLineEnd){
+        x++;
+    }
+    return x;
+}
 
-// void keyup();
+int keyup(int* x, int y, struct file_buffer *file_buff){
+    if (y > 1){
+        y--;
+        if (*x > strlen(file_buff->buffer[y-1])-1){
+            *x = strlen(file_buff->buffer[y-1])-1;
+        }
+    }
+    return y;
+}
 
 // void keydown();
