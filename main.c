@@ -19,7 +19,7 @@
 
 // ascii values 1-26 are ctrl + ch (ctrl A is 1)
 int to_ctrl_char(int ch) {
-	if (islower(ch)) { ch  = toupper(ch); }
+	if (islower(ch)) { ch = toupper(ch); }
 	return ch - 'A' + 1;
 }
 
@@ -107,16 +107,29 @@ int main(int argc, char *argv[]) {
 		else{
 			xLineEnd = strlen(file_buff->buffer[y-1])-1;
 		}
-		if (c == to_ctrl_char('q')) {
+		if (c == to_ctrl_char('Q')) {
 			quit(file_buff, filename, changed);
 			break;
 		}
-		if (c == to_ctrl_char('s')) {
+		if (c == to_ctrl_char('S')) {
 			save(file_buff, filename);
 			stat_info(filename, fileinfo);
 			saved = 1;
 			changed = 0;
 		}
+		if (c == to_ctrl_char('C')) {
+			// copy
+		}
+		if (c == to_ctrl_char('V')) {
+			// paste
+		}
+		if (c == to_ctrl_char('X')) {
+			// cut (copy and remove)
+		}
+		if (c == to_ctrl_char('T')) {
+			// execute
+		}
+		
 		if (c == KEY_LEFT){
 			x = keyleft(x);
 		}
