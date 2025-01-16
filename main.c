@@ -117,7 +117,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		taboffset-=x;
-		wmove(win, curY, x+taboffset+numDigits(y));
+		wmove(win, curY, x+taboffset+numDigits(y)+2);
 		wrefresh(win);
 		c = wgetch(win); // program waits on this
 		if (y == file_buff->rows){

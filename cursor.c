@@ -18,10 +18,11 @@ int numDigits(int n){
     n /= 10;
     count++;
   } 
+  return count;
 }
 
 int keyleft(int x, int y){
-    if (x > numDigits(y)){
+    if (x > numDigits(y)+2){
         x--;
 	}
     return x;
