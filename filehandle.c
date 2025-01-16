@@ -207,13 +207,13 @@ void insert_newline(struct file_buffer *file_buff, int r, int c) {
 	file_buff->buffer[r][c] = '\n';
 	file_buff->buffer[r][c+1] = '\0';
 
-	file_buff->rows++;
+	(file_buff->rows)++;
 	if (file_buff->rows == file_buff->array_length) {
 		resize(file_buff);
 	}
 
 	char *temp;
-	for (int i = r+1; i < file_buff->rows; i++) {
+	for (int i = r+1; i < file_buff->rows-1; i++) {
 		temp = file_buff->buffer[i];
 		file_buff->buffer[i] = new_line;
 		new_line = temp;

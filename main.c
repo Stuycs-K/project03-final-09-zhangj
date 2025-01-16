@@ -53,21 +53,21 @@ int main(int argc, char *argv[]) {
 		read_into_buffer(file, file_buff);
 	}
 
-	/*
-	for (int r = 0; r < file_buff->rows; r++) {
-		printf("%d| %s", r, file_buff->buffer[r]);
-	}
-
-	printf("\ninserted newline at (2,0)\n");
-	insert_newline(file_buff, 2, 0);
-
-	for (int r = 0; r < file_buff->rows; r++) {
-		printf("%d| %s", r, file_buff->buffer[r]);
-	}
-
-	return 0;
-	*/
-
+	// 
+	// for (int r = 0; r < file_buff->rows; r++) {
+		// printf("%d| %s", r, file_buff->buffer[r]);
+	// }
+// 
+	// printf("\ninserted newline at (2,2)\n");
+	// insert_newline(file_buff, 2, 2);
+// 
+	// for (int r = 0; r < file_buff->rows; r++) {
+		// printf("%d| %s", r, file_buff->buffer[r]);
+	// }
+// 
+	// return 0;
+	
+	
 	initscr();
 	raw();
 	noecho();
