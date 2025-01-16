@@ -60,7 +60,6 @@ int main(int argc, char *argv[]) {
 	keypad(win, TRUE);
 	scrollok(win, TRUE);
 
-	mvwprintw(win,0,0, "Ctrl+Q - Exit Ctrl+S - Save\n");
 	wmove(win,1,0);
 	for (int r = 0; r < file_buff->rows; r++) {
 		wprintw(win,"%s",file_buff->buffer[r]);
@@ -79,7 +78,7 @@ int main(int argc, char *argv[]) {
 		wclear(win);
 		wrefresh(win);
 		mvwprintw(win,0,0, "Ctrl+Q - Exit  Ctrl+S - Save\n");
-		mvwprintw(win, height-1, 0, "%s", fileinfo);
+		mvwprintw(win, height, 0, "%s", fileinfo);
 		if (saved > 0){
 			mvwprintw(win, height-2, 0, "File Saved.");
 			saved = 0;
