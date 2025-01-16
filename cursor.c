@@ -37,7 +37,7 @@ int keyright(int x, int xLineEnd){
 int keyup(int* x, int y, int lineLen, int* curY){
     if (y > 1){
         y--;
-        *curY--;
+        *curY-=1;
         if (*x > lineLen){
             *x = lineLen;
         }
@@ -48,7 +48,7 @@ int keyup(int* x, int y, int lineLen, int* curY){
 int keydown(int* x, int y, int yLineEnd, int numrows, int linelen, int* curY){
     if (y < yLineEnd){
         y++;
-        *curY++;
+        *curY-=1;
         if (y == numrows){
             if (*x > linelen){
                 *x = linelen;

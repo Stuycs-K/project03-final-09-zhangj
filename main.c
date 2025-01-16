@@ -29,14 +29,6 @@ int to_ctrl_char(int ch) {
 	return ch - 'A' + 1;
 }
 
-int numDigits(int n){
-  int count = 0;
-  while (n != 0){
-    n /= 10;
-    count++;
-  } 
-}
-
 
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
