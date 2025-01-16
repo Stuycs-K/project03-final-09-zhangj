@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
 
 	wmove(win,1,0);
 	for (int r = 0; r < file_buff->rows; r++) {
-		wprintw(win,"%s",file_buff->buffer[r]);
+		wprintw(win,"%d| %s",r+1,file_buff->buffer[r]);
 	}
 	wrefresh(win);
 	x = getcurx(win);
@@ -88,7 +88,7 @@ int main(int argc, char *argv[]) {
 			top = y-1;
 			curY = 1;
 		}
-		if (y <= top && top > 1){
+		if (y <= top){
 			bottom -= y;
 			top -= y;
 			curY = height-3;
@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
 		wmove(win, 1, 0);
 		wrefresh(win);
 		for (int r = top; r < file_buff->rows; r++) {
-			wprintw(win,"%s",file_buff->buffer[r]);
+			wprintw(win,"%d| %s",r+1,file_buff->buffer[r]);
 		}
 		taboffset = 0;
 		for (int i = 0; i<x; i++){
@@ -116,7 +116,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		taboffset-=x;
-		wmove(win, curY, x+taboffset);
+		wmove(win, curY, x+taboffset+3);
 		wrefresh(win);
 		c = wgetch(win); // program waits on this
 		if (y == file_buff->rows){

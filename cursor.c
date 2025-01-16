@@ -13,7 +13,7 @@
 #include "cursor.h"
 
 int keyleft(int x){
-    if (x > 0){
+    if (x > 3){
         x--;
 	}
     return x;
