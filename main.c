@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
 		wmove(win, 1, 0);
 		wrefresh(win);
 		for (int r = top; r < bottom; r++) {
-			if (strlen(file_buff->buffer)==0){
+			if (strlen(file_buff->buffer[r])==0){
 				break;
 			}
 			wprintw(win,"%s",file_buff->buffer[r]);
