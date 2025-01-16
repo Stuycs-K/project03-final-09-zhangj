@@ -88,7 +88,7 @@ int main(int argc, char *argv[]) {
 			top = y-1;
 			curY = 1;
 		}
-		if (y <= top){
+		if (y <= top+1){
 			bottom -= y+1;
 			top -= y+1;
 			curY = 1;
