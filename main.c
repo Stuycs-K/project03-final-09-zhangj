@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
 		}
 		wclear(win);
 		wrefresh(win);
-		wmove(win,top,0);
+		wmove(win,top,1);
 		wrefresh(win);
 		wprintw(win,"Ctrl+Q - Exit  Ctrl+S - Save\n");
 		wmove(win, bottom-1, 0);
