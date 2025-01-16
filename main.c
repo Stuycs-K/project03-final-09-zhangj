@@ -99,7 +99,7 @@ int main(int argc, char *argv[]) {
 		if (bottom < height){
 			bottom = height;
 		}
-		wclear(win);
+		//wclear(win);
 		wrefresh(win);
 		wmove(win,top,0);
 		wrefresh(win);
