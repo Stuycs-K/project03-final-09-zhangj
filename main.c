@@ -65,10 +65,8 @@ int main(int argc, char *argv[]) {
 	getmaxyx(stdscr, height, width);
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
-	scrollok(win, TRUE);
 
 	wmove(win,1,0);
-	wrefresh(win);
 	for (int r = 0; r < file_buff->rows; r++) {
 		wprintw(win,"%s",file_buff->buffer[r]);
 	}
@@ -99,21 +97,15 @@ int main(int argc, char *argv[]) {
 		if (bottom < height){
 			bottom = height;
 		}
-		//wclear(win);
+		wclear(win);
 		wrefresh(win);
-		wmove(win,top,0);
-		wrefresh(win);
-		wprintw(win,"Ctrl+Q - Exit  Ctrl+S - Save");
-		wmove(win, bottom-1, 0);
-		wrefresh(win);
-		wprintw(win, "%s", fileinfo);
+		mvwprintw(win,0,0,"Ctrl+Q - Exit  Ctrl+S - Save\n");
+		mvwprintw(win,height-1,0, "%s", fileinfo);
 		if (saved > 0){
-			wmove(win, bottom-2, 0);
-			wrefresh(win);
-			wprintw(win, "File Saved.");
+			mvwprintw(win, height-2, 0, "File Saved.");
 			saved = 0;
 		}
-		wmove(win, top+1, 0);
+		wmove(win, 1, 0);
 		wrefresh(win);
 		for (int r = 0; r < file_buff->rows; r++) {
 			wprintw(win,"%s",file_buff->buffer[r]);
