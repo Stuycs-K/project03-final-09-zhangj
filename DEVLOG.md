@@ -55,3 +55,6 @@ Fix bugs relating to reallocating memory, changed the way stat is displayed and 
 
 ### 2025-01-14 - Saving issues and other
 Fixed many issues for user saving on nonexistent files/no arguments. Added structure for copy/paste and execute commands.
+
+### 2025-01-15 - Insert newlines and saving with untitled
+Made function for inserting newline because it needs special case checking for many cases and tried to make user enter filename if they had not initially entered args.
