@@ -79,10 +79,10 @@ int main(int argc, char *argv[]) {
 		wrefresh(win);
 		wmove(win,0,0);
 		wprintw(win,"Ctrl+Q - Exit  Ctrl+S - Save\n");
-		wmove(win, height-1, 0);
+		wmove(win, height, 0);
 		wprintw(win, "%s", fileinfo);
 		if (saved > 0){
-			wmove(win, height-2, 0);
+			wmove(win, height-1, 0);
 			wprintw(win, "File Saved.");
 			saved = 0;
 		}
