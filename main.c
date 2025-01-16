@@ -53,19 +53,26 @@ int main(int argc, char *argv[]) {
 		read_into_buffer(file, file_buff);
 	}
 
-	// 
-	// for (int r = 0; r < file_buff->rows; r++) {
-		// printf("%d| %s", r, file_buff->buffer[r]);
-	// }
-// 
+	
+	for (int r = 0; r < file_buff->rows; r++) {
+		printf("%d| %s", r, file_buff->buffer[r]);
+	}
+
 	// printf("\ninserted newline at (2,2)\n");
 	// insert_newline(file_buff, 2, 2);
 // 
 	// for (int r = 0; r < file_buff->rows; r++) {
 		// printf("%d| %s", r, file_buff->buffer[r]);
 	// }
-// 
-	// return 0;
+
+	printf("\ndelete newline at y=1\n");
+	delete_newline(file_buff, 1);
+
+	for (int r = 0; r < file_buff->rows; r++) {
+		printf("%d| %s", r, file_buff->buffer[r]);
+	}
+
+	return 0;
 	
 	
 	initscr();
@@ -172,12 +179,12 @@ int main(int argc, char *argv[]) {
 		if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
 			changed = 1;
 			if (x == 0){
-				delete_row(file_buff, y-1);
-				y--;
-				yLineEnd = y;
-				x = strlen(file_buff->buffer[y-1]);
-				delete_char(file_buff,y-1,x-1);
-				x--;
+				if (y != 1) {
+					delete_newline(file_buff, y);
+					y--;
+					x = strlen(file_buff->buffer[y])-1;
+					yLineEnd = y;
+				}
 			}
 			else{
 				delete_char(file_buff,y-1,x-1);

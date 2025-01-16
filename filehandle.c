@@ -221,3 +221,26 @@ void insert_newline(struct file_buffer *file_buff, int r, int c) {
 
 	file_buff->buffer[file_buff->rows-1] = new_line;
 }
+
+void delete_newline(struct file_buffer *file_buff, int r) {
+	if (!(0 < r && r < file_buff->rows)) {
+		fprintf(stderr, "r=%d is out of bounds, expected value 0 < r < rows=%d\n", r, file_buff->rows);
+		exit(1);
+	}
+
+	int length = strlen(file_buff->buffer[r-1])-1;
+	int i;
+	for (i = 0; i+length < LINE_SIZE && file_buff->buffer[r][i] != '\0'; i++) {
+		file_buff->buffer[r-1][i+length] = file_buff->buffer[r][i];
+	}
+	file_buff->buffer[r-1][length+i] = '\0';
+
+	free(file_buff->buffer[r]);
+	
+	for (i = r; i < file_buff->rows-1; i++) {
+		file_buff->buffer[i] = file_buff->buffer[i+1];
+	}
+
+	file_buff->rows--;
+	free(file_buff->buffer[file_buff->rows]);
+}
