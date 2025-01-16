@@ -81,22 +81,22 @@ int main(int argc, char *argv[]) {
 	int xLineEnd = x;
 	int yLineEnd = y;
 	int top = y - height;
-	if (y < 0){
-		y = 0;
+	if (top < 0){
+		top = 0;
 	}
 	int bottom = y;
-	if (y < height){
+	if (bottom < height){
 		bottom = height;
 	}
 
 	while (1) {
 		getmaxyx(win, height, width);
 		top = y - height;
-		if (y < 0){
-			y = 0;
+		if (top < 0){
+			top = 0;
 		}
 		bottom = y;
-		if (y < height){
+		if (bottom < height){
 			bottom = height;
 		}
 		wclear(win);
