@@ -96,10 +96,7 @@ int main(int argc, char *argv[]) {
 		}
 		wmove(win, 1, 0);
 		wrefresh(win);
-		for (int r = top; r < bottom; r++) {
-			if (strlen(file_buff->buffer[r])==0){
-				break;
-			}
+		for (int r = top; r < file_buff->rows; r++) {
 			wprintw(win,"%s",file_buff->buffer[r]);
 		}
 		taboffset = 0;
