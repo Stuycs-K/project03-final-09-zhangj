@@ -162,7 +162,8 @@ int main(int argc, char *argv[]) {
 			changed = 1;
 			if (x == 0){
 				delete_row(file_buff, y-1);
-				y--;
+				y--;\
+				curY--;
 				yLineEnd = y;
 				x = strlen(file_buff->buffer[y-1]);
 				delete_char(file_buff,y-1,x-1);
