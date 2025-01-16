@@ -197,12 +197,18 @@ void insert_newline(struct file_buffer *file_buff, int r, int c) {
 	}
 
 	char *new_line = (char*) malloc(LINE_SIZE * sizeof(char));
-	for (int i = 0; i+c < length; i++) {
-		new_line[i] = file_buff->buffer[r][i+1+c];
+	
+	for (int i = 0; i+c <= length; i++) {
+		if (i+c == length) {
+			new_line[i] = '\0';
+			break;
+		} else {
+			new_line[i] = file_buff->buffer[r][i+c];
+		}
 	}
 
 	file_buff->buffer[r][c] = '\n';
-	file_buff->buffer[r][c+1] = '\n';
+	file_buff->buffer[r][c+1] = '\0';
 
 	file_buff->rows++;
 	if (file_buff->rows == file_buff->array_length) {
@@ -210,12 +216,13 @@ void insert_newline(struct file_buffer *file_buff, int r, int c) {
 	}
 
 	char *temp;
-	char *line = (char*) malloc(LINE_SIZE * sizeof(char));
-	for (int i = r; i < file_buff->rows; i++) {
+	for (int i = r+1; i < file_buff->rows; i++) {
 		temp = file_buff->buffer[i];
-		file_buff->buffer[i] = line;
-		line = temp;
+		file_buff->buffer[i] = new_line;
+		new_line = temp;
 	}
 
-	file_buff->buffer[file_buff->rows] = line;
+	file_buff->buffer[file_buff->rows] = new_line;
+
+	free(new_line);
 }

@@ -52,6 +52,21 @@ int main(int argc, char *argv[]) {
 		read_into_buffer(file, file_buff);
 	}
 
+	/*
+	for (int r = 0; r < file_buff->rows; r++) {
+		printf("%d| %s", r, file_buff->buffer[r]);
+	}
+
+	printf("\ninserted newline at (2,0)\n");
+	insert_newline(file_buff, 2, 0);
+
+	for (int r = 0; r < file_buff->rows; r++) {
+		printf("%d| %s", r, file_buff->buffer[r]);
+	}
+
+	return 0;
+	*/
+
 	initscr();
 	raw();
 	noecho();
@@ -159,15 +174,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == '\n'){
 			changed = 1;
-			insert_newline(file_buff, )
-			insert_char(file_buff,y-1,x,'\n');
-
-			// hi there 1
-			// abc
-			// def
-
-
-			insert_row(file_buff,y);
+			insert_newline(file_buff, y-1, x);
 			y++;
 			yLineEnd++;
 			x = 0;
