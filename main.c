@@ -89,14 +89,14 @@ int main(int argc, char *argv[]) {
 			top = y-1;
 			curY = 1;
 		}
-		if (y <= top){
+		if (y <= top && top > 0){
 			bottom -= y;
 			top -= y;
 			curY = height-3;
 		}
 		wclear(win);
 		wrefresh(win);
-		mvwprintw(win,0,0,"%d Ctrl+Q - Exit  Ctrl+S - Save\n", top);
+		mvwprintw(win,0,0,"Ctrl+Q - Exit  Ctrl+S - Save\n");
 		mvwprintw(win,height-1,0, "%s", fileinfo);
 		if (saved > 0){
 			mvwprintw(win, height-2, 0, "File Saved.");
@@ -166,7 +166,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
 			changed = 1;
-			if (x == 0){
+			if (x == 0 && top > 0){
 				delete_row(file_buff, y-1);
 				y--;\
 				curY--;
