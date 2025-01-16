@@ -3,7 +3,7 @@
 
 int keyleft(int x);
 int keyright(int x, int xLineEnd);
-int keyup(int* x, int y, int lineLen);
-int keydown(int* x, int y, int yLineEnd, int numrows, int linelen);
+int keyup(int* x, int y, int lineLen, int* curY);
+int keydown(int* x, int y, int yLineEnd, int numrows, int linelen, int* curY);
 
 #endif
