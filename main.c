@@ -88,6 +88,11 @@ int main(int argc, char *argv[]) {
 			top = y-1;
 			curY = 1;
 		}
+		if (y <= top){
+			bottom -= y+1;
+			top -= y+1;
+			curY = 1;
+		}
 		wclear(win);
 		wrefresh(win);
 		mvwprintw(win,0,0,"Ctrl+Q - Exit  Ctrl+S - Save\n");
