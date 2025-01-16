@@ -161,7 +161,7 @@ int main(int argc, char *argv[]) {
 		}
 
 		if (c == KEY_LEFT){
-			x = keyleft(x);
+			x = keyleft(x, y);
 		}
 		if (c == KEY_RIGHT){
 			x = keyright(x, xLineEnd);

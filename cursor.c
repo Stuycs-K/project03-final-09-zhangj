@@ -12,8 +12,16 @@
 #include <ncurses.h>
 #include "cursor.h"
 
-int keyleft(int x){
-    if (x > 3){
+int numDigits(int n){
+  int count = 0;
+  while (n != 0){
+    n /= 10;
+    count++;
+  } 
+}
+
+int keyleft(int x, int y){
+    if (x > numDigits(y)){
         x--;
 	}
     return x;
