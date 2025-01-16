@@ -84,8 +84,8 @@ int main(int argc, char *argv[]) {
 	while (1) {
 		getmaxyx(win, height, width);
 		if (y >= bottom){
-			bottom += y;
-			top = y;
+			bottom += y-1;
+			top = y-1;
 			curY = 1;
 		}
 		wclear(win);
