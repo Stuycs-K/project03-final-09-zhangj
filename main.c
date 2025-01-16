@@ -17,11 +17,13 @@
 #include "filehandle.h"
 #include "cursor.h"
 
+// Group 20
+
 void signal_handler() {
   endwin();
   printf("Segfault\n");
   exit(1);
-} 
+}
 
 // ascii values 1-26 are ctrl + ch (ctrl A is 1)
 int to_ctrl_char(int ch) {
@@ -70,7 +72,7 @@ int main(int argc, char *argv[]) {
 
 	wmove(win,1,0);
 	for (int r = 0; r < file_buff->rows; r++) {
-		wprintw(win,"%d| %s",r+1,file_buff->buffer[r]);
+		wprintw(win,"%s",file_buff->buffer[r]);
 	}
 	wrefresh(win);
 	x = getcurx(win);
@@ -85,27 +87,34 @@ int main(int argc, char *argv[]) {
 	while (1) {
 		getmaxyx(win, height, width);
 		if (y >= bottom){
-			bottom += y-1;
-			top = y-1;
+			bottom += height-3;
+			top += height-3;
 			curY = 1;
 		}
 		if (y <= top && top > 0){
-			bottom -= y;
-			top -= y;
+			bottom -= height-3;
+			top -= height-3;
 			curY = height-3;
 		}
 		wclear(win);
 		wrefresh(win);
-		mvwprintw(win,0,0,"Ctrl+Q - Exit  Ctrl+S - Save\n");
+		mvwprintw(win,0,0,"%d:%d | Ctrl+Q - Exit  Ctrl+S - Save\n", y, x);
 		mvwprintw(win,height-1,0, "%s", fileinfo);
 		if (saved > 0){
 			mvwprintw(win, height-2, 0, "File Saved.");
 			saved = 0;
 		}
-		wmove(win, 1, 0);
-		wrefresh(win);
+		for (int r = top+1; r < file_buff->rows+1; r++){
+			if (r > bottom){
+				break;
+			}
+			mvwprintw(win, r, 0, "%d| ", r);
+		}
 		for (int r = top; r < file_buff->rows; r++) {
-			wprintw(win,"%d| %s",r+1,file_buff->buffer[r]);
+			if (r > bottom-2){
+				break;
+			}
+			mvwprintw(win,r-top+1,2+numDigits(r+1),"%s",file_buff->buffer[r]);
 		}
 		taboffset = 0;
 		for (int i = 0; i<x; i++){
@@ -166,7 +175,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
 			changed = 1;
-			if (x == 0 && top > 0){
+			if (x == 0 && y > 1){
 				delete_row(file_buff, y-1);
 				y--;\
 				curY--;
@@ -175,7 +184,7 @@ int main(int argc, char *argv[]) {
 				delete_char(file_buff,y-1,x-1);
 				x--;
 			}
-			else{
+			else if (x > 0){
 				delete_char(file_buff,y-1,x-1);
 				x--;
 			}
