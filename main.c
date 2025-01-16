@@ -79,12 +79,14 @@ int main(int argc, char *argv[]) {
 	insert_row(file_buff,y-1);
 	int xLineEnd = x;
 	int yLineEnd = y;
+	int curY = y;
 
 	while (1) {
 		getmaxyx(win, height, width);
 		if (y >= bottom){
 			bottom += y;
 			top = y;
+			curY = 1;
 		}
 		wclear(win);
 		wrefresh(win);
@@ -109,7 +111,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		taboffset-=x;
-		wmove(win, y, x+taboffset);
+		wmove(win, curY, x+taboffset);
 		wrefresh(win);
 		c = wgetch(win); // program waits on this
 		if (y == file_buff->rows){
@@ -151,10 +153,10 @@ int main(int argc, char *argv[]) {
 			x = keyright(x, xLineEnd);
 		}
 		if (c == KEY_UP){
-			y = keyup(&x, y, strlen(file_buff->buffer[y-2])-1);
+			y = keyup(&x, y, strlen(file_buff->buffer[y-2])-1, &curY);
 		}
 		if (c == KEY_DOWN){
-			y = keydown(&x, y, yLineEnd, file_buff->rows, strlen(file_buff->buffer[y]));
+			y = keydown(&x, y, yLineEnd, file_buff->rows, strlen(file_buff->buffer[y]), &curY);
 		}
 		if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
 			changed = 1;
@@ -176,6 +178,7 @@ int main(int argc, char *argv[]) {
 			insert_char(file_buff,y-1,x,'\n');
 			insert_row(file_buff,y);
 			y++;
+			curY++;
 			yLineEnd++;
 			x = 0;
 			xLineEnd = 0;
