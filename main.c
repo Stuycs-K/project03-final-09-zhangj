@@ -19,10 +19,9 @@
 
 void signal_handler() {
   endwin();
-  perror("Segfault: ");
+  printf("Segfault\n");
   exit(1);
-}
-  
+} 
 
 // ascii values 1-26 are ctrl + ch (ctrl A is 1)
 int to_ctrl_char(int ch) {
@@ -81,10 +80,11 @@ int main(int argc, char *argv[]) {
 	insert_row(file_buff,y-1);
 	int xLineEnd = x;
 	int yLineEnd = y;
-	int top = y - height;
-	if (y < 0){
-		y = 0;
-	}
+	int top = 0;
+	// int top = y - height;
+	// if (y < 0){
+	// 	y = 0;
+	// }
 	int bottom = y;
 	if (y < height){
 		y = height;
@@ -92,10 +92,11 @@ int main(int argc, char *argv[]) {
 
 	while (1) {
 		getmaxyx(win, height, width);
-		top = y - height;
-		if (y < 0){
-			y = 0;
-		}
+		int top = 0;
+		// top = y - height;
+		// if (y < 0){
+		// 	y = 0;
+		// }
 		bottom = y;
 		if (y < height){
 			y = height;
