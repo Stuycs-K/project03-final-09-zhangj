@@ -17,6 +17,13 @@
 #include "filehandle.h"
 #include "cursor.h"
 
+void signal_handler() {
+  endwin();
+  perror("Segfault: ");
+  exit(1);
+}
+  
+
 // ascii values 1-26 are ctrl + ch (ctrl A is 1)
 int to_ctrl_char(int ch) {
 	if (islower(ch)) { ch = toupper(ch); }
@@ -25,6 +32,7 @@ int to_ctrl_char(int ch) {
 
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
+	signal(SIGSEGV, signal_handler);
 	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0;
 	char *filename, *fileinfo;
 	FILE *file;
