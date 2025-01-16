@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
 		}
 		wmove(win, 1, 0);
 		wrefresh(win);
-		for (int top; r < bottom; r++) {
+		for (int r = top; r < bottom; r++) {
 			if (strlen(file_buff->buffer)==0){
 				break;
 			}
