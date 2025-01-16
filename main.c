@@ -85,9 +85,9 @@ int main(int argc, char *argv[]) {
 		y = 0;
 	}
 	int bottom = y;
-	// if (y < height){
-	// 	y = height;
-	// }
+	if (y < height){
+		bottom = height;
+	}
 
 	while (1) {
 		getmaxyx(win, height, width);
@@ -96,9 +96,9 @@ int main(int argc, char *argv[]) {
 			y = 0;
 		}
 		bottom = y;
-		// if (y < height){
-		// 	y = height;
-		// }
+		if (y < height){
+			bottom = height;
+		}
 		wclear(win);
 		wrefresh(win);
 		wmove(win,top,0);
