@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
 		wclear(win);
 		wrefresh(win);
 		mvwprintw(win,0,0, "Ctrl+Q - Exit  Ctrl+S - Save\n");
-		mvwprintw(win, height, 0, "%s", fileinfo);
+		//mvwprintw(win, height, 0, "%s", fileinfo);
 		if (saved > 0){
 			mvwprintw(win, height-2, 0, "File Saved.");
 			saved = 0;
