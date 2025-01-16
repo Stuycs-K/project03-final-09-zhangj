@@ -77,10 +77,13 @@ int main(int argc, char *argv[]) {
 		getmaxyx(win, height, width);
 		wclear(win);
 		wrefresh(win);
-		mvwprintw(win,0,0, "Ctrl+Q - Exit  Ctrl+S - Save\n");
-		//mvwprintw(win, height, 0, "%s", fileinfo);
+		wmove(win,0,0);
+		wprintw(win,0,0, "Ctrl+Q - Exit  Ctrl+S - Save\n");
+		wmove(win, height-1, 0);
+		wprintw(win, "%s", fileinfo);
 		if (saved > 0){
-			mvwprintw(win, height-2, 0, "File Saved.");
+			wmove(win, height-2, 0);
+			wprintw(win, "File Saved.");
 			saved = 0;
 		}
 		wmove(win, 1, 0);
