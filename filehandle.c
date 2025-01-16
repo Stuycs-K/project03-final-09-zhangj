@@ -197,15 +197,12 @@ void insert_newline(struct file_buffer *file_buff, int r, int c) {
 	}
 
 	char *new_line = (char*) malloc(LINE_SIZE * sizeof(char));
-	
-	for (int i = 0; i+c <= length; i++) {
-		if (i+c == length) {
-			new_line[i] = '\0';
-			break;
-		} else {
-			new_line[i] = file_buff->buffer[r][i+c];
-		}
+
+	int j;
+	for (j = 0; j+c < length; j++) {
+		new_line[j] = file_buff->buffer[r][j+c];
 	}
+	new_line[j] = '\0';
 
 	file_buff->buffer[r][c] = '\n';
 	file_buff->buffer[r][c+1] = '\0';
@@ -222,7 +219,5 @@ void insert_newline(struct file_buffer *file_buff, int r, int c) {
 		new_line = temp;
 	}
 
-	file_buff->buffer[file_buff->rows] = new_line;
-
-	free(new_line);
+	file_buff->buffer[file_buff->rows-1] = new_line;
 }
