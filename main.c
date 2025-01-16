@@ -25,7 +25,7 @@ int to_ctrl_char(int ch) {
 
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
-	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0;
+	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, is_initial_save = 1;
 	char *filename, *fileinfo;
 	FILE *file;
 
@@ -41,6 +41,7 @@ int main(int argc, char *argv[]) {
 		filename = argv[1];
 		file = open_read(filename);
 		fileinfo = stat_info(argv[1], fileinfo);
+		is_initial_save = 0;
 	}
 	else {
 		printf("Incorrect number of arguments");
@@ -127,6 +128,17 @@ int main(int argc, char *argv[]) {
 			break;
 		}
 		if (c == to_ctrl_char('S')) {
+			if (is_initial_save) {
+				mvwprintw(win,height-2,0, "Please enter filename: ");
+				noraw();
+				echo();
+				char new_filename_string[LINE_SIZE];
+				fgets(filename, LINE_SIZE, stdin);
+				is_initial_save = 0;
+				filename = new_filename_string;
+				raw();
+				noecho();
+			}
 			save(file_buff, filename);
 			stat_info(filename, fileinfo);
 			saved = 1;
