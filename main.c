@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
 		wclear(win);
 		wrefresh(win);
 		wmove(win,0,0);
-		wprintw(win,0,0, "Ctrl+Q - Exit  Ctrl+S - Save\n");
+		wprintw(win,"Ctrl+Q - Exit  Ctrl+S - Save\n");
 		wmove(win, height-1, 0);
 		wprintw(win, "%s", fileinfo);
 		if (saved > 0){
