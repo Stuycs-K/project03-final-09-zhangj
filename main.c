@@ -80,7 +80,6 @@ int main(int argc, char *argv[]) {
 	insert_row(file_buff,y-1);
 	int xLineEnd = x;
 	int yLineEnd = y;
-	int top = 0;
 	int top = y - height;
 	if (y < 0){
 		y = 0;
