@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (y <= top && top > 0){
 			bottom -= y;
-			top -= y;
+			top -= y-1;
 			curY = height-3;
 		}
 		wclear(win);
