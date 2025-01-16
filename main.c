@@ -29,6 +29,15 @@ int to_ctrl_char(int ch) {
 	return ch - 'A' + 1;
 }
 
+int numDigits(int n){
+  int count = 0;
+  while (n != 0){
+    n /= 10;
+    count++;
+  } 
+}
+
+
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
 	signal(SIGSEGV, signal_handler);
@@ -116,7 +125,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		taboffset-=x;
-		wmove(win, curY, x+taboffset+3);
+		wmove(win, curY, x+taboffset+numDigits(y));
 		wrefresh(win);
 		c = wgetch(win); // program waits on this
 		if (y == file_buff->rows){
