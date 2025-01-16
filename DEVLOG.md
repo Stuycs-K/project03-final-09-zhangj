@@ -28,6 +28,9 @@ Worked on implementing make run without args to create a temp Untitled.txt file 
 ### 2025-01-14 - Fixed bugs, implemented save (Ctrl+s), moved cursor movement to separate file
 Worked on implementing save (Ctrl+s) (40 min CW time). Fixed bugs with save, condensed main, created cursor.c to store cursor functions (1 hr HW time).
 
+### 2025-01-15 - Started implementing typing past window height support
+Worked on allowing typing past the window height. Tried using scroll features from ncurses but they broke everything. Settled on only displaying a certain section of the buffer instead (40 min Cw time + 1 hr HW time).
+
 
 
 ## David Schwartzberg
