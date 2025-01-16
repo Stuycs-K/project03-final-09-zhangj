@@ -32,7 +32,7 @@ int to_ctrl_char(int ch) {
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
 	signal(SIGSEGV, signal_handler);
-	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0;
+	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0;
 	char *filename, *fileinfo;
 	FILE *file;
 
@@ -63,6 +63,7 @@ int main(int argc, char *argv[]) {
 	raw();
 	noecho();
 	getmaxyx(stdscr, height, width);
+	int bottom = height-2;
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
 
@@ -78,24 +79,12 @@ int main(int argc, char *argv[]) {
 	insert_row(file_buff,y-1);
 	int xLineEnd = x;
 	int yLineEnd = y;
-	int top = y - height;
-	if (top < 0){
-		top = 0;
-	}
-	int bottom = y;
-	if (bottom < height){
-		bottom = height;
-	}
 
 	while (1) {
 		getmaxyx(win, height, width);
-		top = y - height;
-		if (top < 0){
-			top = 0;
-		}
-		bottom = y;
-		if (bottom < height){
-			bottom = height;
+		if (y >= bottom){
+			bottom += y;
+			top = y;
 		}
 		wclear(win);
 		wrefresh(win);
@@ -107,7 +96,10 @@ int main(int argc, char *argv[]) {
 		}
 		wmove(win, 1, 0);
 		wrefresh(win);
-		for (int r = 0; r < file_buff->rows; r++) {
+		for (int top; r < bottom; r++) {
+			if (strlen(file_buff->buffer)==0){
+				break;
+			}
 			wprintw(win,"%s",file_buff->buffer[r]);
 		}
 		taboffset = 0;
