@@ -37,7 +37,6 @@ int main(int argc, char *argv[]) {
 	signal(SIGSEGV, signal_handler);
 	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0, lineNum, c1;
 	char *filename, *fileinfo;
-	char lineBuff[8];
 	FILE *file;
 
 	fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
@@ -163,6 +162,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == to_ctrl_char('G')){
 			char* line = "";
+			char lineBuff[8];
 			wmove(win, height-2, 0);
 			wprintw(win, "Go to line: ");
 			wrefresh(win);
@@ -173,7 +173,7 @@ int main(int argc, char *argv[]) {
 				}
 				if (c >= 48 && c <= 57){
 					sprintf(lineBuff, "%d", c1);
-					strcat(line,&lineBuff[0]);
+					//strcat(line,&lineBuff[0]);
 					wprintw(win,"%c", lineBuff[0]);
 					wrefresh(win);
 				}
