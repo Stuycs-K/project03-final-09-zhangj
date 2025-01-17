@@ -184,7 +184,7 @@ int main(int argc, char *argv[]) {
 			if (lineNum < file_buff->rows){
 				y = lineNum;
 				curY = lineNum;
-				x = strlen(file_buff->buffer[y-1]);
+				x = strlen(file_buff->buffer[y-1]-1);
 			}
 		}
 		if (c == KEY_LEFT){
