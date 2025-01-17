@@ -169,18 +169,16 @@ int main(int argc, char *argv[]) {
 			wrefresh(win);
 			while (1){
 				c1 = wgetch(win);
-				for (int i = 0; i<strlen(line); i++){
-					wmove(win, height-2, getcurx(win)-1);
-					wclrtoeol(win);
-					wrefresh(win);
-					wprintw(win,"")
-				}
 				if (c1 == '\n'){
 					break;
 				}
 				if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
 					line[ind] = '\0';
 					ind--;
+          wmove(win, height-2, getcurx(win)-1);
+					wclrtoeol(win);
+					wrefresh(win);
+        }
 				if (49 <= c1 && c1 <= 57){
 					sprintf(lineBuff, "%c", c1);
 					line[ind] = lineBuff[0];
