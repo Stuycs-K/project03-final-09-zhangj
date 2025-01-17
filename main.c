@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
 			if (r > bottom){
 				break;
 			}
-			mvwprintw(win, r-top+2, 0, "%d| ", r);
+			mvwprintw(win, r-top, 0, "%d| ", r);
 		}
 		for (int r = top; r < file_buff->rows; r++) {
 			if (r > bottom-2){
