@@ -173,7 +173,7 @@ int main(int argc, char *argv[]) {
 				}
 				if (c >= 48 && c <= 57){
 					sprintf(lineBuff, "%d", c1);
-					strcat(line,lineBuff[0])
+					strcat(line,*lineBuff[0]);
 					wprintw("%c", c1);
 				}
 			}
