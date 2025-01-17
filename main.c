@@ -162,7 +162,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == to_ctrl_char('G')){
 			char* line = "";
-			char lineBuff[8];
+			char lineBuff[256];
 			wmove(win, height-2, 0);
 			wprintw(win, "Go to line: ");
 			wrefresh(win);
@@ -172,8 +172,8 @@ int main(int argc, char *argv[]) {
 					break;
 				}
 				if (c >= 49 && c <= 57){
-					sprintf(lineBuff, "%d", c1-49);
-					strcat(line,&lineBuff);
+					sprintf(lineBuff, "%c", c1);
+					//strcat(line,&lineBuff[0]);
 					wprintw(win,"%s", lineBuff);
 					wrefresh(win);
 				}
