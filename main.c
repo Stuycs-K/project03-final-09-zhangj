@@ -162,7 +162,7 @@ int main(int argc, char *argv[]) {
 			// execute
 		}
 		if (c == to_ctrl_char('G')){
-			// strcpy(line,"");
+			strcpy(line,"");
 			// wmove(win, height-2, 0);
 			// wprintw(win, "Go to line: ");
 			// wrefresh(win);
