@@ -17,7 +17,7 @@ int numDigits(int n){
   while (n != 0){
     n /= 10;
     count++;
-  } 
+  }
   return count;
 }
 
@@ -49,7 +49,7 @@ int keyup(int* x, int y, int lineLen, int* curY){
 int keydown(int* x, int y, int yLineEnd, int numrows, int linelen, int* curY){
     if (y < yLineEnd){
         y++;
-        *curY-=1;
+        *curY+=1;
         if (y == numrows){
             if (*x > linelen){
                 *x = linelen;
@@ -63,4 +63,3 @@ int keydown(int* x, int y, int yLineEnd, int numrows, int linelen, int* curY){
     }
     return y;
 }
-

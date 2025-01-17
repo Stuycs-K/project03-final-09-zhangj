@@ -17,11 +17,13 @@
 #include "filehandle.h"
 #include "cursor.h"
 
+// Group 20
+
 void signal_handler() {
   endwin();
   printf("Segfault\n");
   exit(1);
-} 
+}
 
 // ascii values 1-26 are ctrl + ch (ctrl A is 1)
 int to_ctrl_char(int ch) {
@@ -33,7 +35,7 @@ int to_ctrl_char(int ch) {
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
 	signal(SIGSEGV, signal_handler);
-	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0;
+	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0, lineNum, c1;
 	char *filename, *fileinfo;
 	FILE *file;
 
@@ -70,7 +72,7 @@ int main(int argc, char *argv[]) {
 
 	wmove(win,1,0);
 	for (int r = 0; r < file_buff->rows; r++) {
-		wprintw(win,"%d| %s",r+1,file_buff->buffer[r]);
+		wprintw(win,"%s",file_buff->buffer[r]);
 	}
 	wrefresh(win);
 	x = getcurx(win);
@@ -85,27 +87,34 @@ int main(int argc, char *argv[]) {
 	while (1) {
 		getmaxyx(win, height, width);
 		if (y >= bottom){
-			bottom += y-1;
-			top = y-1;
+			bottom += height-3;
+			top += height-3;
 			curY = 1;
 		}
 		if (y <= top && top > 0){
-			bottom -= y;
-			top -= y;
+			bottom -= height-3;
+			top -= height-3;
 			curY = height-3;
 		}
 		wclear(win);
 		wrefresh(win);
-		mvwprintw(win,0,0,"Ctrl+Q - Exit  Ctrl+S - Save\n");
+		mvwprintw(win,0,0,"%d:%d | Ctrl+Q - Exit  Ctrl+S - Save\n", y, x+1);
 		mvwprintw(win,height-1,0, "%s", fileinfo);
 		if (saved > 0){
 			mvwprintw(win, height-2, 0, "File Saved.");
 			saved = 0;
 		}
-		wmove(win, 1, 0);
-		wrefresh(win);
+		for (int r = top+1; r < file_buff->rows+1; r++){
+			if (r >= bottom){
+				break;
+			}
+			mvwprintw(win, r-top, 0, "%d| ", r);
+		}
 		for (int r = top; r < file_buff->rows; r++) {
-			wprintw(win,"%d| %s",r+1,file_buff->buffer[r]);
+			if (r > bottom-2){
+				break;
+			}
+			mvwprintw(win,r-top+1,2+numDigits(r+1),"%s",file_buff->buffer[r]);
 		}
 		taboffset = 0;
 		for (int i = 0; i<x; i++){
@@ -151,7 +160,41 @@ int main(int argc, char *argv[]) {
 		if (c == to_ctrl_char('T')) {
 			// execute
 		}
-
+		if (c == to_ctrl_char('G')){
+			char* line = malloc(256);
+			char lineBuff[255];
+			int ind = 0;
+			wmove(win, height-2, 0);
+			wprintw(win, "Go to line: ");
+			wrefresh(win);
+			while (1){
+				c1 = wgetch(win);
+				if (c1 == '\n'){
+					break;
+				}
+				if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
+					line[ind] = '\0';
+					ind--;
+          wmove(win, height-2, getcurx(win)-1);
+					wclrtoeol(win);
+					wrefresh(win);
+        }
+				if (49 <= c1 && c1 <= 57){
+					sprintf(lineBuff, "%c", c1);
+					line[ind] = lineBuff[0];
+					wprintw(win,"%s", lineBuff);
+					wrefresh(win);
+					ind++;
+				}
+			}
+			lineNum = atoi(line);
+			if (lineNum < file_buff->rows){
+				y = lineNum;
+				curY = lineNum;
+				x = strlen(file_buff->buffer[lineNum-1]-1);
+			}
+			free(line);
+		}
 		if (c == KEY_LEFT){
 			x = keyleft(x, y);
 		}
@@ -166,16 +209,16 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
 			changed = 1;
-			if (x == 0 && top > 0){
+			if (x == 0 && y > 1){
 				delete_row(file_buff, y-1);
-				y--;\
+				y--;
 				curY--;
 				yLineEnd = y;
 				x = strlen(file_buff->buffer[y-1]);
 				delete_char(file_buff,y-1,x-1);
 				x--;
 			}
-			else{
+			else if (x > 0){
 				delete_char(file_buff,y-1,x-1);
 				x--;
 			}
@@ -199,15 +242,20 @@ int main(int argc, char *argv[]) {
 		}
 		if (32 <= c && c <= 126) { // alphanumerics, punctuation, etc.
 			changed = 1;
-			if (x+taboffset>=width-1){
+			if (x+taboffset>=width-5){
+				insert_char(file_buff,y-1,x,'-');
+				insert_char(file_buff,y-1,x+1,'\n');
 				insert_row(file_buff,y);
 				y++;
+				curY++;
 				yLineEnd++;
 				x = 0;
 				xLineEnd = 0;
 			}
-			insert_char(file_buff,y-1,x,c);
-			x++;
+			else{
+				insert_char(file_buff,y-1,x,c);
+				x++;
+			}
 		}
 	}
     return 0;
