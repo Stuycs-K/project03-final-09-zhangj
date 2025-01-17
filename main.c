@@ -36,7 +36,7 @@ int to_ctrl_char(int ch) {
 int main(int argc, char *argv[]) {
 	signal(SIGSEGV, signal_handler);
 	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0, lineNum, c1;
-	char *filename, *fileinfo, *line;
+	char *filename, *fileinfo, *line = "";
 	FILE *file;
 
 	fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
@@ -162,7 +162,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == to_ctrl_char('G')){
 			strcpy(line,"");
-			char lineBuff[sizeof(int)];
+			char lineBuff[8];
 			mvwprintw(win, height-2, 0, "Go to line: ");
 			wmove(win, height-2, 12);
 			wrefresh(win);
@@ -174,7 +174,7 @@ int main(int argc, char *argv[]) {
 				if (c >= 48 && c <= 57){
 					sprintf(lineBuff, "%d", c1);
 					strcat(line,&lineBuff[0]);
-					wprintw("%s", lineBuff);
+					wprintw("%c", lineBuff[0]);
 				}
 			}
 			lineNum = atoi(line);
