@@ -61,6 +61,17 @@ int main(int argc, char *argv[]) {
 	if (argc == 2){
 		read_into_buffer(file, file_buff);
 	}
+  //
+  // for (int r = 0; r < file_buff->rows; r++) {
+  //   printf("r=%d: '%s'", r, file_buff->buffer[r]);
+  // }
+  // printf("\n\n\n\n");
+  // delete_newline(file_buff, 1);
+  // for (int r = 0; r < file_buff->rows; r++) {
+  //   printf("r=%d: '%s'", r, file_buff->buffer[r]);
+  // }
+  //
+  // return 0;
 
 	initscr();
 	raw();
@@ -192,7 +203,7 @@ int main(int argc, char *argv[]) {
 			if (lineNum < file_buff->rows){
 				y = lineNum;
 				curY = lineNum;
-				x = strlen(file_buff->buffer[lineNum-1]-1);
+				x = strlen(file_buff->buffer[y-1]);
 			}
 			free(line);
 		}
@@ -210,20 +221,11 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
 			changed = 1;
-<<<<<<< HEAD
-			if (x == 0 && top > 0){
-				if (y != 1) {
-					delete_newline(file_buff, y);
-					y--;
-					x = strlen(file_buff->buffer[y])-1;
-					yLineEnd = y;
-				}
-			}
-			else if (x != 0){
-=======
+
 			if (x == 0 && y > 1){
-				delete_row(file_buff, y-1);
-				y--;
+        delete_newline(file_buff, y-1);
+        y--;
+        x = strlen(file_buff->buffer[y])-1;
 				curY--;
 				yLineEnd = y;
 				x = strlen(file_buff->buffer[y-1]);
@@ -231,7 +233,6 @@ int main(int argc, char *argv[]) {
 				x--;
 			}
 			else if (x > 0){
->>>>>>> 7b7e53f7c6527d25b1e8641eb64b86b76f3e3ddd
 				delete_char(file_buff,y-1,x-1);
 				x--;
 			}
