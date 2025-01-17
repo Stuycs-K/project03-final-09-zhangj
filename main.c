@@ -161,8 +161,9 @@ int main(int argc, char *argv[]) {
 			// execute
 		}
 		if (c == to_ctrl_char('G')){
-			char* line = "";
-			char lineBuff[256];
+			char* line = malloc(256);
+			char lineBuff[255];
+			int ind = 0;
 			wmove(win, height-2, 0);
 			wprintw(win, "Go to line: ");
 			wrefresh(win);
@@ -173,9 +174,10 @@ int main(int argc, char *argv[]) {
 				}
 				if (49 <= c1 && c1 <= 57){
 					sprintf(lineBuff, "%c", c1);
-					strcat(line,&lineBuff[0]);
+					line[ind] = lineBuff[0];
 					wprintw(win,"%s", lineBuff);
 					wrefresh(win);
+					ind++;
 				}
 			}
 			lineNum = atoi(line);
