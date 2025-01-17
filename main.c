@@ -162,28 +162,28 @@ int main(int argc, char *argv[]) {
 			// execute
 		}
 		if (c == to_ctrl_char('G')){
-			strcpy(line,"");
-			wmove(win, height-2, 0);
-			wprintw(win, "Go to line: ");
-			wrefresh(win);
-			while (1){
-				c1 = wgetch(win);
-				if (c1 == '\n'){
-					break;
-				}
-				if (c >= 48 && c <= 57){
-					sprintf(lineBuff, "%d", c1);
-					strcat(line,&lineBuff[0]);
-					wprintw(win,"%c", lineBuff[0]);
-					wrefresh();
-				}
-			}
-			lineNum = atoi(line);
-			if (lineNum < file_buff->rows){
-				y = lineNum;
-				curY = lineNum;
-				x = strlen(file_buff->buffer[y-1]);
-			}
+			// strcpy(line,"");
+			// wmove(win, height-2, 0);
+			// wprintw(win, "Go to line: ");
+			// wrefresh(win);
+			// while (1){
+			// 	c1 = wgetch(win);
+			// 	if (c1 == '\n'){
+			// 		break;
+			// 	}
+			// 	if (c >= 48 && c <= 57){
+			// 		sprintf(lineBuff, "%d", c1);
+			// 		strcat(line,&lineBuff[0]);
+			// 		wprintw(win,"%c", lineBuff[0]);
+			// 		wrefresh();
+			// 	}
+			// }
+			// lineNum = atoi(line);
+			// if (lineNum < file_buff->rows){
+			// 	y = lineNum;
+			// 	curY = lineNum;
+			// 	x = strlen(file_buff->buffer[y-1]);
+			// }
 		}
 		if (c == KEY_LEFT){
 			x = keyleft(x, y);
