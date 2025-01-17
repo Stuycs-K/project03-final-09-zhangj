@@ -35,7 +35,7 @@ int to_ctrl_char(int ch) {
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
 	signal(SIGSEGV, signal_handler);
-	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0, overflow = 0, textOverflow = 0;
+	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0;
 	char *filename, *fileinfo;
 	FILE *file;
 
@@ -70,9 +70,8 @@ int main(int argc, char *argv[]) {
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
 
-	wmove(win,1,0);
 	for (int r = 0; r < file_buff->rows; r++) {
-		wprintw(win,"%s",file_buff->buffer[r]);
+		mvwprintw(win,r+1,2+numDigits(r+1),"%s",file_buff->buffer[r]);
 	}
 	wrefresh(win);
 	x = getcurx(win);
@@ -198,8 +197,6 @@ int main(int argc, char *argv[]) {
 			yLineEnd++;
 			x = 0;
 			xLineEnd = 0;
-			textOverflow = 0;
-			overflow = 0;
 		}
 		if (c == KEY_STAB || c=='\t'){
 			changed = 1;
@@ -211,18 +208,18 @@ int main(int argc, char *argv[]) {
 		if (32 <= c && c <= 126) { // alphanumerics, punctuation, etc.
 			changed = 1;
 			if (x+taboffset>=width-1){
-				overflow++;
+				insert_char(file_buff,y-1,x,'-');
+				insert_row(file_buff,y);
 				y++;
 				curY++;
 				yLineEnd++;
 				x = 0;
 				xLineEnd = 0;
 			}
-			if (overflow > 0){
-				textOverflow++;
+			else{
+				insert_char(file_buff,y-1,x,c);
+				x++;
 			}
-			insert_char(file_buff,y-1-overflow,x+textOverflow,c);
-			x++;
 		}
 	}
     return 0;
