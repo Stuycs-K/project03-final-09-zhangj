@@ -208,7 +208,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (32 <= c && c <= 126) { // alphanumerics, punctuation, etc.
 			changed = 1;
-			if (x+taboffset>=width-4){
+			if (x+taboffset>=width-5){
 				insert_char(file_buff,y-1,x,'-');
 				insert_char(file_buff,y-1,x+1,'\n');
 				insert_row(file_buff,y);
