@@ -12,8 +12,17 @@
 #include <ncurses.h>
 #include "cursor.h"
 
-int keyleft(int x){
-    if (x > 0){
+int numDigits(int n){
+  int count = 0;
+  while (n != 0){
+    n /= 10;
+    count++;
+  } 
+  return count;
+}
+
+int keyleft(int x, int y){
+    if (x > numDigits(y)+2){
         x--;
 	}
     return x;
@@ -26,9 +35,10 @@ int keyright(int x, int xLineEnd){
     return x;
 }
 
-int keyup(int* x, int y, int lineLen){
+int keyup(int* x, int y, int lineLen, int* curY){
     if (y > 1){
         y--;
+        *curY-=1;
         if (*x > lineLen){
             *x = lineLen;
         }
@@ -36,9 +46,10 @@ int keyup(int* x, int y, int lineLen){
     return y;
 }
 
-int keydown(int* x, int y, int yLineEnd, int numrows, int linelen){
+int keydown(int* x, int y, int yLineEnd, int numrows, int linelen, int* curY){
     if (y < yLineEnd){
         y++;
+        *curY-=1;
         if (y == numrows){
             if (*x > linelen){
                 *x = linelen;

@@ -17,15 +17,23 @@
 #include "filehandle.h"
 #include "cursor.h"
 
+void signal_handler() {
+  endwin();
+  printf("Segfault\n");
+  exit(1);
+} 
+
 // ascii values 1-26 are ctrl + ch (ctrl A is 1)
 int to_ctrl_char(int ch) {
 	if (islower(ch)) { ch = toupper(ch); }
 	return ch - 'A' + 1;
 }
 
+
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
-	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, is_initial_save = 1;
+	signal(SIGSEGV, signal_handler);
+	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0, is_initial_save=1;
 	char *filename, *fileinfo;
 	FILE *file;
 
@@ -52,39 +60,18 @@ int main(int argc, char *argv[]) {
 	if (argc == 2){
 		read_into_buffer(file, file_buff);
 	}
-
-	
-	for (int r = 0; r < file_buff->rows; r++) {
-		printf("%d| %s", r, file_buff->buffer[r]);
-	}
-
-	// printf("\ninserted newline at (2,2)\n");
-	// insert_newline(file_buff, 2, 2);
-// 
-	// for (int r = 0; r < file_buff->rows; r++) {
-		// printf("%d| %s", r, file_buff->buffer[r]);
-	// }
-
-	printf("\ndelete newline at y=1\n");
-	delete_newline(file_buff, 1);
-
-	for (int r = 0; r < file_buff->rows; r++) {
-		printf("%d| %s", r, file_buff->buffer[r]);
-	}
-
-	return 0;
-	
-	
+		
 	initscr();
 	raw();
 	noecho();
 	getmaxyx(stdscr, height, width);
+	int bottom = height-2;
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
 
-	mvwprintw(win,0,0, "Ctrl+Q - Exit\n");
+	wmove(win,1,0);
 	for (int r = 0; r < file_buff->rows; r++) {
-		wprintw(win,"%s",file_buff->buffer[r]);
+		wprintw(win,"%d| %s",r+1,file_buff->buffer[r]);
 	}
 	wrefresh(win);
 	x = getcurx(win);
@@ -94,22 +81,32 @@ int main(int argc, char *argv[]) {
 	insert_row(file_buff,y-1);
 	int xLineEnd = x;
 	int yLineEnd = y;
+	int curY = y;
 
 	while (1) {
 		getmaxyx(win, height, width);
+		if (y >= bottom){
+			bottom += y-1;
+			top = y-1;
+			curY = 1;
+		}
+		if (y <= top && top > 0){
+			bottom -= y;
+			top -= y;
+			curY = height-3;
+		}
 		wclear(win);
 		wrefresh(win);
-		mvwprintw(win,0,0, "Ctrl+Q - Exit  Ctrl+S - Save\n");
-		wmove(win, height-1, 0);
-		wprintw(win, "%s", fileinfo);
+		mvwprintw(win,0,0,"Ctrl+Q - Exit  Ctrl+S - Save\n");
+		mvwprintw(win,height-1,0, "%s", fileinfo);
 		if (saved > 0){
-			wmove(win, height-2,0);
-			wprintw(win, "File Saved.");
+			mvwprintw(win, height-2, 0, "File Saved.");
 			saved = 0;
 		}
 		wmove(win, 1, 0);
-		for (int r = 0; r < file_buff->rows; r++) {
-			wprintw(win,"%s",file_buff->buffer[r]);
+		wrefresh(win);
+		for (int r = top; r < file_buff->rows; r++) {
+			wprintw(win,"%d| %s",r+1,file_buff->buffer[r]);
 		}
 		taboffset = 0;
 		for (int i = 0; i<x; i++){
@@ -121,7 +118,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		taboffset-=x;
-		wmove(win, y, x+taboffset);
+		wmove(win, curY, x+taboffset+numDigits(y)+2);
 		wrefresh(win);
 		c = wgetch(win); // program waits on this
 		if (y == file_buff->rows){
@@ -149,7 +146,9 @@ int main(int argc, char *argv[]) {
 			save(file_buff, filename);
 			stat_info(filename, fileinfo);
 			saved = 1;
-			changed = 0;
+			if (strcmp(filename,"Untitled.txt") != 0){
+				changed = 0;
+			}
 		}
 		if (c == to_ctrl_char('C')) {
 			// copy
@@ -165,20 +164,20 @@ int main(int argc, char *argv[]) {
 		}
 
 		if (c == KEY_LEFT){
-			x = keyleft(x);
+			x = keyleft(x, y);
 		}
 		if (c == KEY_RIGHT){
 			x = keyright(x, xLineEnd);
 		}
 		if (c == KEY_UP){
-			y = keyup(&x, y, strlen(file_buff->buffer[y-2])-1);
+			y = keyup(&x, y, strlen(file_buff->buffer[y-2])-1, &curY);
 		}
 		if (c == KEY_DOWN){
-			y = keydown(&x, y, yLineEnd, file_buff->rows, strlen(file_buff->buffer[y]));
+			y = keydown(&x, y, yLineEnd, file_buff->rows, strlen(file_buff->buffer[y]), &curY);
 		}
 		if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
 			changed = 1;
-			if (x == 0){
+			if (x == 0 && top > 0){
 				if (y != 1) {
 					delete_newline(file_buff, y);
 					y--;
@@ -195,6 +194,7 @@ int main(int argc, char *argv[]) {
 			changed = 1;
 			insert_newline(file_buff, y-1, x);
 			y++;
+			curY++;
 			yLineEnd++;
 			x = 0;
 			xLineEnd = 0;

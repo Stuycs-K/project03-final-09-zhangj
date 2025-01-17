@@ -28,6 +28,12 @@ Worked on implementing make run without args to create a temp Untitled.txt file 
 ### 2025-01-14 - Fixed bugs, implemented save (Ctrl+s), moved cursor movement to separate file
 Worked on implementing save (Ctrl+s) (40 min CW time). Fixed bugs with save, condensed main, created cursor.c to store cursor functions (1 hr HW time).
 
+### 2025-01-15 - Started implementing typing past window height support
+Worked on allowing typing past the window height. Tried using scroll features from ncurses but they broke everything. Settled on only displaying a certain section of the buffer instead (40 min Cw time + 1 hr HW time).
+
+### 2025-01-16 - Implemented line numbers, typing past window length, started go to line
+Added line numbers to the window. Added display for cursor location in the top left (40 min CW time). Implemented support for typing past window length, to be fully implemented once buffer code for line break is updated. Start the go to line command (Ctrl+G) (1h hr time).
+
 
 
 ## David Schwartzberg
@@ -50,5 +56,11 @@ Made functions that can save the buffer to a file and directly characters/lines 
 ### 2025-01-11, 01-12 - Stat and organization
 Integrated stat() info to be shown during display of the program, added extra comments to filehandle functions, moved around some other things for organization
 
-### 2025-01-13 - 
+### 2025-01-13 - Cleaning up bugs and extra information for stat
 Fix bugs relating to reallocating memory, changed the way stat is displayed and add extra information to the string. Added new function headers for cutpaste.h file 
+
+### 2025-01-14 - Saving issues and other
+Fixed many issues for user saving on nonexistent files/no arguments. Added structure for copy/paste and execute commands.
+
+### 2025-01-15 - Insert newlines and saving with untitled
+Made function for inserting newline because it needs special case checking for many cases and tried to make user enter filename if they had not initially entered args.
