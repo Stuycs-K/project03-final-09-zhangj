@@ -174,7 +174,7 @@ int main(int argc, char *argv[]) {
 				if (c >= 48 && c <= 57){
 					sprintf(lineBuff, "%d", c1);
 					//strcat(line,&lineBuff[0]);
-					wprintw(win,"%c", lineBuff[0]);
+					wprintw(win,"%s", lineBuff);
 					wrefresh(win);
 				}
 			}
