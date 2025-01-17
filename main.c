@@ -70,8 +70,9 @@ int main(int argc, char *argv[]) {
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
 
+	wmove(win,1,0);
 	for (int r = 0; r < file_buff->rows; r++) {
-		mvwprintw(win,r+1,2+numDigits(r+1),"%s",file_buff->buffer[r]);
+		wprintw(win,"%s",file_buff->buffer[r]);
 	}
 	wrefresh(win);
 	x = getcurx(win);
