@@ -12,15 +12,6 @@
 #include <ncurses.h>
 #include "cursor.h"
 
-int numDigits(int n){
-  int count = 0;
-  while (n != 0){
-    n /= 10;
-    count++;
-  }
-  return count;
-}
-
 int keyleft(int x, int y){
     if (x > 0){
         x--;

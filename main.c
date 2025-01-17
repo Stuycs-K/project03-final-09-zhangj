@@ -110,13 +110,13 @@ int main(int argc, char *argv[]) {
 			if (r >= bottom){
 				break;
 			}
-			mvwprintw(win, r-top, 0, "%d| ", r);
+			mvwprintw(win, r-top, 0, "%03d| ", r);
 		}
 		for (int r = top; r < file_buff->rows; r++) {
 			if (r > bottom-2){
 				break;
 			}
-			mvwprintw(win,r-top+1,2+numDigits(r+1),"%s",file_buff->buffer[r]);
+			mvwprintw(win,r-top+1,5,"%s",file_buff->buffer[r]);
 		}
 		taboffset = 0;
 		for (int i = 0; i<x; i++){
@@ -128,7 +128,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		taboffset-=x;
-		wmove(win, curY, x+taboffset+numDigits(y)+2);
+		wmove(win, curY, x+taboffset+5);
 		wrefresh(win);
 		c = wgetch(win); // program waits on this
 		if (y == file_buff->rows){
@@ -142,13 +142,42 @@ int main(int argc, char *argv[]) {
 			break;
 		}
 		if (c == to_ctrl_char('S')) {
+      if (strcmp(filename,"Untitled.txt") == 0){
+        char* line = malloc(256);
+  			char lineBuff[255];
+  			int ind = 0;
+  			wmove(win, height-2, 0);
+  			wprintw(win, "File name: ");
+  			wrefresh(win);
+  			while (1){
+  				c1 = wgetch(win);
+  				if (c1 == '\n'){
+  					break;
+  				}
+  				if (c1 == KEY_BACKSPACE || c1 == KEY_DC || c1 == 127){
+  					line[ind] = '\0';
+  					ind--;
+            wmove(win, height-2, getcurx(win)-1);
+  					wclrtoeol(win);
+  					wrefresh(win);
+          }
+  				if (32 <= c1 && c1 <= 126){
+  					sprintf(lineBuff, "%c", c1);
+  					line[ind] = lineBuff[0];
+  					wprintw(win,"%s", lineBuff);
+  					wrefresh(win);
+  					ind++;
+  				}
+  			}
+        strcpy(filename,line);
+        free(line);
+			}
 			save(file_buff, filename);
 			stat_info(filename, fileinfo);
 			struct file_buffer *file_buff = create_file_buffer(10);
 			saved = 1;
-			if (strcmp(filename,"Untitled.txt") != 0){
-				changed = 0;
-			}
+      changed = 0;
+
 		}
 		if (c == to_ctrl_char('C')) {
 			// copy
@@ -190,10 +219,18 @@ int main(int argc, char *argv[]) {
 				}
 			}
 			lineNum = atoi(line);
-			if (lineNum < file_buff->rows){
+			if (lineNum <= file_buff->rows){
+        while (lineNum < top){
+          top -= height-3;
+          bottom -= height-3;
+        }
+        while (lineNum > bottom){
+          top += height-3;
+          bottom += height-3;
+        }
 				y = lineNum;
 				curY = lineNum;
-				x = strlen(file_buff->buffer[lineNum-1]-1);
+				x = strlen(file_buff->buffer[lineNum-1])-1;
 			}
 			free(line);
 		}
@@ -203,7 +240,7 @@ int main(int argc, char *argv[]) {
 		if (c == KEY_RIGHT){
 			x = keyright(x, xLineEnd);
 		}
-		if (c == KEY_UP){
+		if (c == KEY_UP && y > 1){
 			y = keyup(&x, y, strlen(file_buff->buffer[y-2])-1, &curY);
 		}
 		if (c == KEY_DOWN){
