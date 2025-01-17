@@ -79,10 +79,12 @@ int main(int argc, char *argv[]) {
 	y = getcury(win);
 	wmove(win, y, x);
 	wrefresh(win);
-	insert_row(file_buff,y-1);
 	int xLineEnd = x;
 	int yLineEnd = y;
 	int curY = y;
+  if (strcmp(filename,"Untitled.txt")==0){
+    insert_row(file_buff,y-1);
+  }
 
 	while (1) {
 		getmaxyx(win, height, width);
@@ -171,7 +173,7 @@ int main(int argc, char *argv[]) {
 				if (c1 == '\n'){
 					break;
 				}
-				if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
+				if (c1 == KEY_BACKSPACE || c1 == KEY_DC || c1 == 127){
 					line[ind] = '\0';
 					ind--;
           wmove(win, height-2, getcurx(win)-1);

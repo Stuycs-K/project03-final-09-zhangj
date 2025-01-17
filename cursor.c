@@ -22,7 +22,7 @@ int numDigits(int n){
 }
 
 int keyleft(int x, int y){
-    if (x > numDigits(y)+2){
+    if (x > 0){
         x--;
 	}
     return x;
