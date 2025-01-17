@@ -208,13 +208,13 @@ int main(int argc, char *argv[]) {
 		}
 		if (32 <= c && c <= 126) { // alphanumerics, punctuation, etc.
 			changed = 1;
-			if (x+taboffset>=width-1){
-				insert_row(file_buff,y);
-				y++;
-				yLineEnd++;
-				x = 0;
-				xLineEnd = 0;
-			}
+			// if (x+taboffset>=width-1){
+			// 	insert_row(file_buff,y);
+			// 	y++;
+			// 	yLineEnd++;
+			// 	x = 0;
+			// 	xLineEnd = 0;
+			// }
 			insert_char(file_buff,y-1,x,c);
 			x++;
 		}
