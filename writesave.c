@@ -23,6 +23,9 @@ void save(struct file_buffer *file_buff, char *filename) {
   //size_t written = fwrite(arr, sizeof(int), n, fp);
   for (int r = 0; r < file_buff->rows; r++) {
     int length = strlen(file_buff->buffer[r]);
+    if (file_buff->buffer[r][length-2] == '-' && file_buff->buffer[r][length-1] == '\n'){
+      //Insert new delete here, should delete - and \n then append line below to line above before writing to file
+    }
     int elements = fwrite(file_buff->buffer[r], sizeof(char), length, file);
     if (elements != length) {
       printf("fwrite wrote incorrect number of elements=%d, expected %d\n", elements, length);

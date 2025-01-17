@@ -35,7 +35,7 @@ int to_ctrl_char(int ch) {
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
 	signal(SIGSEGV, signal_handler);
-	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0;
+	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0, lineNum;
 	char *filename, *fileinfo;
 	FILE *file;
 
@@ -160,7 +160,28 @@ int main(int argc, char *argv[]) {
 		if (c == to_ctrl_char('T')) {
 			// execute
 		}
-
+		if (c == to_ctrl_char('G')){
+			char* line;
+			mvwprintw(win, height-2, 0, "Go to line: ");
+			mv(win, height-2, 12);
+			wrefresh();
+			while (1){
+				c1 = wgetch(win);
+				if (c1 == '\n'){
+					break;
+				}
+				if (c >= 48 && <= 57){
+					strcat(line,c1);
+					wprintw("%c", c1);
+				}
+			}
+			lineNum = atoi(line);
+			if (lineNum < file_buff->rows){
+				y = lineNum;
+				curY = lineNum;
+				x = strlen(file_buff->buffer[y-1]);
+			}
+		}
 		if (c == KEY_LEFT){
 			x = keyleft(x, y);
 		}
@@ -177,7 +198,7 @@ int main(int argc, char *argv[]) {
 			changed = 1;
 			if (x == 0 && y > 1){
 				delete_row(file_buff, y-1);
-				y--;\
+				y--;
 				curY--;
 				yLineEnd = y;
 				x = strlen(file_buff->buffer[y-1]);
