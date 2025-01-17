@@ -236,11 +236,12 @@ void delete_newline(struct file_buffer *file_buff, int r) {
 	file_buff->buffer[r-1][length+i] = '\0';
 
 	free(file_buff->buffer[r]);
-	
-	for (i = r; i < file_buff->rows-1; i++) {
-		file_buff->buffer[i] = file_buff->buffer[i+1];
-	}
 
 	file_buff->rows--;
-	free(file_buff->buffer[file_buff->rows]);
+	for (i = r; i < file_buff->rows; i++) {
+		file_buff->buffer[i] = file_buff->buffer[i+1];
+		printf("i=%d: %s\n", i, file_buff->buffer[i]);
+	}
+
+	file_buff->buffer[file_buff->rows] = (char*) malloc(LINE_SIZE * sizeof(char));
 }
