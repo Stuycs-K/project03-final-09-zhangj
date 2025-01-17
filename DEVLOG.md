@@ -31,6 +31,9 @@ Worked on implementing save (Ctrl+s) (40 min CW time). Fixed bugs with save, con
 ### 2025-01-15 - Started implementing typing past window height support
 Worked on allowing typing past the window height. Tried using scroll features from ncurses but they broke everything. Settled on only displaying a certain section of the buffer instead (40 min Cw time + 1 hr HW time).
 
+### 2025-01-16 - Implemented line numbers, typing past window length, started go to line
+Added line numbers to the window. Added display for cursor location in the top left (40 min CW time). Implemented support for typing past window length, to be fully implemented once buffer code for line break is updated. Start the go to line command (Ctrl+G) (1h hr time).
+
 
 
 ## David Schwartzberg
