@@ -171,7 +171,7 @@ int main(int argc, char *argv[]) {
 				if (c1 == '\n'){
 					break;
 				}
-				if (c >= 49 && c <= 57){
+				else{
 					sprintf(lineBuff, "%c", c1);
 					//strcat(line,&lineBuff[0]);
 					wprintw(win,"%s", lineBuff);
