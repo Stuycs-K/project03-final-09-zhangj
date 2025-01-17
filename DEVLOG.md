@@ -64,3 +64,6 @@ Fixed many issues for user saving on nonexistent files/no arguments. Added struc
 
 ### 2025-01-15 - Insert newlines and saving with untitled
 Made function for inserting newline because it needs special case checking for many cases and tried to make user enter filename if they had not initially entered args.
+
+### 2025-01-16 - Deleting newlines
+Fixed further issues with insertion of newlines and made function for deleting newlines.
