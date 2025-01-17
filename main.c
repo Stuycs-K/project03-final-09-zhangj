@@ -161,16 +161,16 @@ int main(int argc, char *argv[]) {
 			// execute
 		}
 		if (c == to_ctrl_char('G')){
-			char* line;
+			char* line, c1;
 			mvwprintw(win, height-2, 0, "Go to line: ");
-			mv(win, height-2, 12);
-			wrefresh();
+			wmove(win, height-2, 12);
+			wrefresh(win);
 			while (1){
 				c1 = wgetch(win);
 				if (c1 == '\n'){
 					break;
 				}
-				if (c >= 48 && <= 57){
+				if (c >= 48 && c <= 57){
 					strcat(line,c1);
 					wprintw("%c", c1);
 				}
