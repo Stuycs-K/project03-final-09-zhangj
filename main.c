@@ -14,7 +14,7 @@
 #include "cutpaste.h"
 #include "writesave.h"
 #include "statdisplay.h"
-#include "filehandle.h"
+#include "filebuffer.h"
 #include "cursor.h"
 #include "execprint.h"
 
@@ -65,9 +65,9 @@ void my_fgets(WINDOW *win, char *line, int height, int char_range_min, int char_
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
 	signal(SIGSEGV, signal_handler);
-	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0, lineNum, c1;
+	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0, lineNum;
 	char *fileinfo;
-	char* filename = malloc(256);
+	char* filename = malloc(256 * sizeof(char));
 	FILE *file;
 
 	fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
@@ -198,32 +198,12 @@ int main(int argc, char *argv[]) {
 			// cut (copy and remove)
 		}
 		if (c == to_ctrl_char('T')) {
-			char* line = malloc(256);
-			char lineBuff[255];
-			int ind = 0;
 			wmove(win, height-2, 0);
-			wprintw(win, "File name: ");
+			wprintw(win, "Enter Command: ");
 			wrefresh(win);
-			while (1){
-				c1 = wgetch(win);
-				if (c1 == '\n'){
-					break;
-				}
-				if (c1 == KEY_BACKSPACE || c1 == KEY_DC || c1 == 127){
-					line[ind] = '\0';
-					ind--;
-					wmove(win, height-2, getcurx(win)-1);
-					wclrtoeol(win);
-					wrefresh(win);
-				}
-				if (32 <= c1 && c1 <= 126){
-					sprintf(lineBuff, "%c", c1);
-					line[ind] = lineBuff[0];
-					wprintw(win,"%s", lineBuff);
-					wrefresh(win);
-					ind++;
-				}
-			}
+			char* cmd_args = malloc(256 * sizeof(char));
+			my_fgets(win, cmd_args, height, 32, 126);
+			
 			// Fork, pipe output of execvp to parent, copy output from pipe to file buffer
 			// char * args[256];
 			// parse_args(line, args);

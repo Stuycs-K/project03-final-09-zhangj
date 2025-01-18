@@ -10,7 +10,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <math.h>
-#include "filehandle.h"
+#include "filebuffer.h"
 
 // system-specific things
 #define LINUX 0

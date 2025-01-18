@@ -10,7 +10,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <ncurses.h>
-#include "filehandle.h"
+#include "filebuffer.h"
 #include "writesave.h"
 
 // Takes in the buffer and writes it into a file,

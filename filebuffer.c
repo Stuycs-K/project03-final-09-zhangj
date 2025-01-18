@@ -10,7 +10,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <ncurses.h>
-#include "filehandle.h"
+#include "filebuffer.h"
 
 // returns a file pointer to the file, opened only in read mode
 FILE* open_read(char *filename) {

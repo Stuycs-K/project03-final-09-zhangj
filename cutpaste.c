@@ -9,7 +9,7 @@
 #include <time.h>
 #include <sys/types.h>
 #include <dirent.h>
-#include "filehandle.h"
+#include "filebuffer.h"
 
 // copies (and maybe removes) the string ranging from (r1, c1) to (r2, c2) into the copy-buffer
 // "remove_string" is a boolean that will also modify the buffer to remove the string if it is non-zero
