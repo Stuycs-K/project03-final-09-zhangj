@@ -169,7 +169,7 @@ int main(int argc, char *argv[]) {
 						ind++;
 					}
 				}
-				char* filename = line;
+				*filename = *line;
 				free(line);
 			}
 			save(file_buff, filename);
