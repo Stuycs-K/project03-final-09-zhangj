@@ -170,6 +170,7 @@ int main(int argc, char *argv[]) {
 					}
 				}
 				wprintw(win,"%s", line);
+				wrefresh(win);
 				sleep(5);
 				strcpy(filename,line);
 				wprintw(win,"%s",filename);
