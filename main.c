@@ -142,42 +142,41 @@ int main(int argc, char *argv[]) {
 			break;
 		}
 		if (c == to_ctrl_char('S')) {
-      if (strcmp(filename,"Untitled.txt") == 0){
-        char* line = malloc(256);
-  			char lineBuff[255];
-  			int ind = 0;
-  			wmove(win, height-2, 0);
-  			wprintw(win, "File name: ");
-  			wrefresh(win);
-  			while (1){
-  				c1 = wgetch(win);
-  				if (c1 == '\n'){
-  					break;
-  				}
-  				if (c1 == KEY_BACKSPACE || c1 == KEY_DC || c1 == 127){
-  					line[ind] = '\0';
-  					ind--;
-            wmove(win, height-2, getcurx(win)-1);
-  					wclrtoeol(win);
-  					wrefresh(win);
-          }
-  				if (32 <= c1 && c1 <= 126){
-  					sprintf(lineBuff, "%c", c1);
-  					line[ind] = lineBuff[0];
-  					wprintw(win,"%s", lineBuff);
-  					wrefresh(win);
-  					ind++;
-  				}
-  			}
-        strcpy(filename,line);
-        free(line);
+			if (strcmp(filename,"Untitled.txt") == 0){
+				char* line = malloc(256);
+				char lineBuff[255];
+				int ind = 0;
+				wmove(win, height-2, 0);
+				wprintw(win, "File name: ");
+				wrefresh(win);
+				while (1){
+					c1 = wgetch(win);
+					if (c1 == '\n'){
+						break;
+					}
+					if (c1 == KEY_BACKSPACE || c1 == KEY_DC || c1 == 127){
+						line[ind] = '\0';
+						ind--;
+						wmove(win, height-2, getcurx(win)-1);
+						wclrtoeol(win);
+						wrefresh(win);
+					}
+					if (32 <= c1 && c1 <= 126){
+						sprintf(lineBuff, "%c", c1);
+						line[ind] = lineBuff[0];
+						wprintw(win,"%s", lineBuff);
+						wrefresh(win);
+						ind++;
+					}
+				}
+				//strcpy(filename,line);
+				free(line);
 			}
 			save(file_buff, filename);
 			stat_info(filename, fileinfo);
 			struct file_buffer *file_buff = create_file_buffer(10);
 			saved = 1;
       changed = 0;
-
 		}
 		if (c == to_ctrl_char('C')) {
 			// copy
@@ -206,10 +205,10 @@ int main(int argc, char *argv[]) {
 				if (c1 == KEY_BACKSPACE || c1 == KEY_DC || c1 == 127){
 					line[ind] = '\0';
 					ind--;
-          wmove(win, height-2, getcurx(win)-1);
+					wmove(win, height-2, getcurx(win)-1);
 					wclrtoeol(win);
 					wrefresh(win);
-        }
+				}
 				if (49 <= c1 && c1 <= 57){
 					sprintf(lineBuff, "%c", c1);
 					line[ind] = lineBuff[0];
