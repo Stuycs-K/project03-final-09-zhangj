@@ -169,7 +169,7 @@ int main(int argc, char *argv[]) {
 						ind++;
 					}
 				}
-				sprintf(filename, "%s", line);
+				strcpy(filename,"");
 				free(line);
 			}
 			save(file_buff, filename);
