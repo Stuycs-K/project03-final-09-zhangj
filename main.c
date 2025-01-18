@@ -169,7 +169,7 @@ int main(int argc, char *argv[]) {
 						ind++;
 					}
 				}
-				memcpy(filename,line,strlen(line));
+				memcpy(filename,line,ind+1);
 				free(line);
 			}
 			save(file_buff, filename);
