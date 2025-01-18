@@ -254,7 +254,7 @@ int main(int argc, char *argv[]) {
 		        y--;
 		        x = newX;
 				curY--;
-				yLineEnd = y+1;
+				yLineEnd--;
 			}
 			else if (x > 0){
 				delete_char(file_buff,y-1,x-1);
