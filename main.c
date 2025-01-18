@@ -171,6 +171,7 @@ int main(int argc, char *argv[]) {
 				}
 				line[ind] = '\0';
 				strcpy(filename,line);
+				wprintw(win,"%s",filename);
 				free(line);
 			}
 			save(file_buff, filename);
