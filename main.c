@@ -294,9 +294,10 @@ int main(int argc, char *argv[]) {
 			changed = 1;
 
 			if (x == 0 && y > 1){
+				int newX = strlen(file_buff->buffer[y-2])-1;
 		        delete_newline(file_buff, y-1);
 		        y--;
-		        x = strlen(file_buff->buffer[y])-1;
+		        x = newX;
 				curY--;
 				yLineEnd = y;
 			}
