@@ -32,7 +32,7 @@ int to_ctrl_char(int ch) {
 	return ch - 'A' + 1;
 }
 
-void my_fgets(WINDOW *win, char *line, int height) {
+void my_fgets(WINDOW *win, char *line, int height, int char_range_min, int char_range_max) {
 	int ind = 0;
 	int c1;
 	char lineBuff[255];
@@ -49,7 +49,7 @@ void my_fgets(WINDOW *win, char *line, int height) {
 			wclrtoeol(win);
 			wrefresh(win);
 		}
-		if (49 <= c1 && c1 <= 57){
+		if (char_range_min <= c1 && c1 <= char_range_max){
 			sprintf(lineBuff, "%c", c1);
 			line[ind] = lineBuff[0];
 			wprintw(win,"%s", lineBuff);
@@ -92,18 +92,7 @@ int main(int argc, char *argv[]) {
 	if (argc == 2){
 		read_into_buffer(file, file_buff);
 	}
-  /*
-  	for (int r = 0; r < file_buff->rows; r++) {
-     printf("r=%d: '%s'", r, file_buff->buffer[r]);
-   }
-   printf("after del line 1\n\n\n\n");
-   delete_newline(file_buff, 1);
-   for (int r = 0; r < file_buff->rows; r++) {
-     printf("r=%d: '%s'", r, file_buff->buffer[r]);
-   }
-  
-   return 0;
-*/
+
 	initscr();
 	raw();
 	noecho();
@@ -186,36 +175,13 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == to_ctrl_char('S')) {
 			if (strcmp(filename,"Untitled.txt") == 0){
-				char* line = malloc(256);
-				char lineBuff[255];
-				int ind = 0;
 				wmove(win, height-2, 0);
-				wprintw(win, "File name: ");
+				wprintw(win, "(Save) Enter Filename: ");
 				wrefresh(win);
-				while (1){
-					c1 = wgetch(win);
-					if (c1 == '\n'){
-						break;
-					}
-					if (c1 == KEY_BACKSPACE || c1 == KEY_DC || c1 == 127){
-						line[ind] = '\0';
-						ind--;
-						wmove(win, height-2, getcurx(win)-1);
-						wclrtoeol(win);
-						wrefresh(win);
-					}
-					if (32 <= c1 && c1 <= 126){
-						sprintf(lineBuff, "%c", c1);
-						line[ind] = lineBuff[0];
-						wprintw(win,"%s", lineBuff);
-						wrefresh(win);
-						ind++;
-					}
-				}
+				char* line = malloc(256 * sizeof(char));
+				my_fgets(win, line, height, 32, 126);
 				free(filename);
-				filename = malloc(256);
-				strcpy(filename,line);
-				free(line);
+				filename = line;
 			}
 			save(file_buff, filename);
 			stat_info(filename, fileinfo);
@@ -269,7 +235,7 @@ int main(int argc, char *argv[]) {
 			wprintw(win, "Go to line: ");
 			wrefresh(win);
 			char* line = malloc(256 * sizeof(char));
-			my_fgets(win, line, height); // custom fgets for window
+			my_fgets(win, line, height, '0', '9'); // custom fgets for window
 			lineNum = atoi(line);
 			
 			if (lineNum <= file_buff->rows){
