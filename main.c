@@ -43,13 +43,13 @@ int main(int argc, char *argv[]) {
 	fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
 
 	if (argc == 1){
-		filename = "Untitled.txt";
+		sprintf(filename, "Untitled.txt");
 		file = fopen(filename, "w+");
 		close_file(file);
 		stat_info(filename, fileinfo);
 	}
 	else if (argc == 2){
-		filename = argv[1];
+		sprintf(filename,"%s",argv[1]);
 		file = open_read(filename);
 		fileinfo = stat_info(argv[1], fileinfo);
 	}
