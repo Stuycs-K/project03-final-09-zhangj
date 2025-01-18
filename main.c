@@ -36,7 +36,8 @@ int to_ctrl_char(int ch) {
 int main(int argc, char *argv[]) {
 	signal(SIGSEGV, signal_handler);
 	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0, lineNum, c1;
-	char *filename, *fileinfo;
+	char *fileinfo;
+	char* filename = malloc(256);
 	FILE *file;
 
 	fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
@@ -139,6 +140,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == to_ctrl_char('Q')) {
 			quit(file_buff, filename, changed);
+			free(filename);
 			break;
 		}
 		if (c == to_ctrl_char('S')) {
@@ -169,7 +171,7 @@ int main(int argc, char *argv[]) {
 						ind++;
 					}
 				}
-				*filename = *line;
+				strcpy(filename,line);
 				free(line);
 			}
 			save(file_buff, filename);
