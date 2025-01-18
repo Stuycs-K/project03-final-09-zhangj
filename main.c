@@ -169,8 +169,10 @@ int main(int argc, char *argv[]) {
 						ind++;
 					}
 				}
-				line[ind] = '\0';
-				filename = line;
+				wprintw(win,"%s", line);
+				sleep(5);
+				strcpy(filename,line);
+				wprintw(win,"%s",filename);
 				free(line);
 			}
 			save(file_buff, filename);
