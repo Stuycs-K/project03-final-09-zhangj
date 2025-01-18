@@ -71,3 +71,6 @@ Made function for inserting newline because it needs special case checking for m
 
 ### 2025-01-16 - Deleting newlines
 Fixed further issues with insertion of newlines and made function for deleting newlines.
+
+### 2025-01-17 - Bug-fixing and working more towards exec functionality
+Made all newline functions work now, started to refactor the main loop to make the exec sections easier
