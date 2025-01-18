@@ -16,6 +16,7 @@
 #include "statdisplay.h"
 #include "filehandle.h"
 #include "cursor.h"
+#include "execprint.h"
 
 // Group 20
 
@@ -192,7 +193,37 @@ int main(int argc, char *argv[]) {
 			// cut (copy and remove)
 		}
 		if (c == to_ctrl_char('T')) {
-			// execute
+			char* line = malloc(256);
+			char lineBuff[255];
+			int ind = 0;
+			wmove(win, height-2, 0);
+			wprintw(win, "File name: ");
+			wrefresh(win);
+			while (1){
+				c1 = wgetch(win);
+				if (c1 == '\n'){
+					break;
+				}
+				if (c1 == KEY_BACKSPACE || c1 == KEY_DC || c1 == 127){
+					line[ind] = '\0';
+					ind--;
+					wmove(win, height-2, getcurx(win)-1);
+					wclrtoeol(win);
+					wrefresh(win);
+				}
+				if (32 <= c1 && c1 <= 126){
+					sprintf(lineBuff, "%c", c1);
+					line[ind] = lineBuff[0];
+					wprintw(win,"%s", lineBuff);
+					wrefresh(win);
+					ind++;
+				}
+			}
+			// Fork, pipe output of execvp to parent, copy output from pipe to file buffer
+			// char * args[256];
+			// parse_args(line, args);
+			// execvp(args[0], args);
+			// free(line);
 		}
 		if (c == to_ctrl_char('G')){
 			char* line = malloc(256);
