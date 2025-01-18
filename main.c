@@ -171,7 +171,7 @@ int main(int argc, char *argv[]) {
 						ind++;
 					}
 				}
-				free(filename);
+				//free(filename);
 				char* filename = malloc(256);
 				strcpy(filename,line);
 				free(line);
