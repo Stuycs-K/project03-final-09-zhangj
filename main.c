@@ -61,18 +61,18 @@ int main(int argc, char *argv[]) {
 	if (argc == 2){
 		read_into_buffer(file, file_buff);
 	}
-  //
-  // for (int r = 0; r < file_buff->rows; r++) {
-  //   printf("r=%d: '%s'", r, file_buff->buffer[r]);
-  // }
-  // printf("\n\n\n\n");
-  // delete_newline(file_buff, 1);
-  // for (int r = 0; r < file_buff->rows; r++) {
-  //   printf("r=%d: '%s'", r, file_buff->buffer[r]);
-  // }
-  //
-  // return 0;
-
+  /*
+  	for (int r = 0; r < file_buff->rows; r++) {
+     printf("r=%d: '%s'", r, file_buff->buffer[r]);
+   }
+   printf("after del line 1\n\n\n\n");
+   delete_newline(file_buff, 1);
+   for (int r = 0; r < file_buff->rows; r++) {
+     printf("r=%d: '%s'", r, file_buff->buffer[r]);
+   }
+  
+   return 0;
+*/
 	initscr();
 	raw();
 	noecho();
@@ -223,14 +223,11 @@ int main(int argc, char *argv[]) {
 			changed = 1;
 
 			if (x == 0 && y > 1){
-        delete_newline(file_buff, y-1);
-        y--;
-        x = strlen(file_buff->buffer[y])-1;
+		        delete_newline(file_buff, y-1);
+		        y--;
+		        x = strlen(file_buff->buffer[y])-1;
 				curY--;
 				yLineEnd = y;
-				x = strlen(file_buff->buffer[y-1]);
-				delete_char(file_buff,y-1,x-1);
-				x--;
 			}
 			else if (x > 0){
 				delete_char(file_buff,y-1,x-1);

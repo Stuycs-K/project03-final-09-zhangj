@@ -232,10 +232,14 @@ void delete_newline(struct file_buffer *file_buff, int r) {
 	printf("length is :%d\n", length);
 	int i;
 	for (i = 0; i+length < LINE_SIZE && file_buff->buffer[r][i] != '\0'; i++) {
-		printf("i=%d: ascii %d\n", i, file_buff->buffer[r-1][i+length]);
+		//printf("i=%d: ascii %d\n", i, file_buff->buffer[r-1][i+length]);
 		file_buff->buffer[r-1][i+length] = file_buff->buffer[r][i];
-		printf("i=%d: ascii %d\n", i, file_buff->buffer[r-1][i+length]);
+		//printf("i=%d: ascii %d\n", i, file_buff->buffer[r-1][i+length]);
 	}
+
+	
+	//printf("length+i+1: %d\n", file_buff->buffer[r-1][length+i+1]);
+	printf("length+i-1: %d\n", file_buff->buffer[r-1][length+i-1]);
 	file_buff->buffer[r-1][length+i] = '\0';
 
 	free(file_buff->buffer[r]);
