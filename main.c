@@ -32,6 +32,35 @@ int to_ctrl_char(int ch) {
 	return ch - 'A' + 1;
 }
 
+void my_fgets(WINDOW *win, char *line, int height) {
+	int ind = 0;
+	int c1;
+	char lineBuff[255];
+	
+	while (1){
+		c1 = wgetch(win);
+		if (c1 == '\n'){
+			return;
+		}
+		if (c1 == KEY_BACKSPACE || c1 == KEY_DC || c1 == 127){
+			line[ind] = '\0';
+			ind--;
+			wmove(win, height-2, getcurx(win)-1);
+			wclrtoeol(win);
+			wrefresh(win);
+		}
+		if (49 <= c1 && c1 <= 57){
+			sprintf(lineBuff, "%c", c1);
+			line[ind] = lineBuff[0];
+			wprintw(win,"%s", lineBuff);
+			wrefresh(win);
+			ind++;
+		}
+	}
+
+	return;
+}
+
 
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
@@ -236,33 +265,13 @@ int main(int argc, char *argv[]) {
 			// free(line);
 		}
 		if (c == to_ctrl_char('G')){
-			char* line = malloc(256);
-			char lineBuff[255];
-			int ind = 0;
 			wmove(win, height-2, 0);
 			wprintw(win, "Go to line: ");
 			wrefresh(win);
-			while (1){
-				c1 = wgetch(win);
-				if (c1 == '\n'){
-					break;
-				}
-				if (c1 == KEY_BACKSPACE || c1 == KEY_DC || c1 == 127){
-					line[ind] = '\0';
-					ind--;
-					wmove(win, height-2, getcurx(win)-1);
-					wclrtoeol(win);
-					wrefresh(win);
-				}
-				if (49 <= c1 && c1 <= 57){
-					sprintf(lineBuff, "%c", c1);
-					line[ind] = lineBuff[0];
-					wprintw(win,"%s", lineBuff);
-					wrefresh(win);
-					ind++;
-				}
-			}
+			char* line = malloc(256 * sizeof(char));
+			my_fgets(win, line, height); // custom fgets for window
 			lineNum = atoi(line);
+			
 			if (lineNum <= file_buff->rows){
         while (lineNum < top){
           top -= height-3;
@@ -299,7 +308,7 @@ int main(int argc, char *argv[]) {
 		        y--;
 		        x = newX;
 				curY--;
-				yLineEnd = y;
+				yLineEnd = y+1;
 			}
 			else if (x > 0){
 				delete_char(file_buff,y-1,x-1);
