@@ -103,6 +103,19 @@ int main(int argc, char *argv[]) {
 		read_into_buffer(file, file_buff);
 	}
 
+	/*
+	for (int r = 0; r < file_buff->rows; r++) {
+		printf("%d: '%s'", r, file_buff->buffer[r]);
+	}
+	printf("\n\n\n");
+	char line_to_add[] = "hello world";
+	insert_at_end(file_buff, line_to_add);
+	for (int r = 0; r < file_buff->rows; r++) {
+		printf("%d: '%s'", r, file_buff->buffer[r]);
+	}
+	exit(0);
+	*/
+	
 	initscr();
 	raw();
 	noecho();
@@ -219,11 +232,13 @@ int main(int argc, char *argv[]) {
 			}
 			parse_args(cmd_args, arg_array);
 
+			/*
 			wmove(win, height-10, 0);
 			wprintw(win, "command has been entered:\n");
 			for (int rr = 0; arg_array[rr] != NULL; rr++) {
 				wprintw(win, "r=%d: '%s'\n", rr, arg_array[rr]);
 			}
+			*/
 
 			pipe(pipe_fds);
 			int forkpid = fork();
@@ -253,9 +268,12 @@ int main(int argc, char *argv[]) {
 
 			} else { // main process
 				close(pipe_fds[WRITE_FD]);
+
+				/*
 				wmove(win, height-3, 0);
 				wprintw(win, "main process: waiting for child now");
 				wrefresh(win);
+				*/
 				int status;
 				waitpid(forkpid, &status, 0);
 
@@ -270,6 +288,8 @@ int main(int argc, char *argv[]) {
 					insert_at_end(file_buff, line);
 				}
 			}
+
+			changed = 1;
 
 		}
 		if (c == to_ctrl_char('G')){
