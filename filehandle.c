@@ -45,20 +45,22 @@ void close_file(FILE *file) {
 }
 
 // Initialize file
-void initFile(int argc, char *argv[], char* filename, char* fileinfo, FILE* file){
+FILE* initFile(int argc, char *argv[], char* filename, char* fileinfo){
+  FILE *file;
   if (argc == 1){
 		sprintf(filename, "Untitled.txt");
-		*file = fopen(filename, "w+");
+		file = fopen(filename, "w+");
 		close_file(file);
 		stat_info(filename, fileinfo);
 	}
 	else if (argc == 2){
 		sprintf(filename,"%s",argv[1]);
-		*file = open_read(filename);
+		file = open_read(filename);
 		*fileinfo = stat_info(argv[1], fileinfo);
 	}
 	else {
 		printf("Incorrect number of arguments");
 		exit(1);
 	}
+  return file;
 }
