@@ -210,7 +210,7 @@ void delete_newline(struct file_buffer *file_buff, int r) {
 	file_buff->rows--;
 	for (i = r; i < file_buff->rows; i++) {
 		file_buff->buffer[i] = file_buff->buffer[i+1];
-		printf("i=%d: %s\n", i, file_buff->buffer[i]);
+		//printf("i=%d: %s\n", i, file_buff->buffer[i]);
 	}
 
 	file_buff->buffer[file_buff->rows] = (char*) malloc(LINE_SIZE * sizeof(char));
