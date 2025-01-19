@@ -1,5 +1,5 @@
-#ifndef FILEHANDLE_H
-#define FILEHANDLE_H
+#ifndef FILEBUFFER_H
+#define FILEBUFFER_H
 #include <stdio.h>
 
 #define LINE_SIZE 1000
@@ -25,5 +25,7 @@ void delete_row(struct file_buffer *file_buff, int r);
 
 void insert_newline(struct file_buffer *file_buff, int r, int c);
 void delete_newline(struct file_buffer *file_buff, int r);
+
+void insert_at_end(struct file_buffer *file_buff, char *line);
 
 #endif

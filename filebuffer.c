@@ -222,6 +222,7 @@ void insert_newline(struct file_buffer *file_buff, int r, int c) {
 	file_buff->buffer[file_buff->rows-1] = new_line;
 }
 
+// does stuff
 void delete_newline(struct file_buffer *file_buff, int r) {
 	if (!(0 < r && r < file_buff->rows)) {
 		fprintf(stderr, "r=%d is out of bounds, expected value 0 < r < rows=%d\n", r, file_buff->rows);
@@ -251,4 +252,33 @@ void delete_newline(struct file_buffer *file_buff, int r) {
 	}
 
 	file_buff->buffer[file_buff->rows] = (char*) malloc(LINE_SIZE * sizeof(char));
+}
+
+// does stuff
+void insert_at_end(struct file_buffer *file_buff, char *line) {
+	int r = file_buff->rows-1;
+	int c = strlen(file_buff->buffer[r]);
+
+	int i;
+	for (i = 0; i < LINE_SIZE && line[i] != '\0'; i++) {
+		char ch = line[i];
+	
+		file_buff->buffer[r][c] = ch;
+
+		if (ch == '\n') {
+			file_buff->buffer[r][c+1] = '\0';
+			r++;
+			c = 0;
+
+			(file_buff->rows)++;
+			if (file_buff->rows == file_buff->array_length) {
+				resize(file_buff);
+			}
+		} else {
+			c++;
+		}
+	
+	}
+
+	file_buff->buffer[r][c] = '\0';
 }
