@@ -1,5 +1,5 @@
-#ifndef FILEHANDLE_H
-#define FILEHANDLE_H
+#ifndef FILEBUFFER_H
+#define FILEBUFFER_H
 #include <stdio.h>
 
 #define LINE_SIZE 1000

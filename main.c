@@ -13,11 +13,11 @@
 #include <ncurses.h>
 #include "cutpaste.h"
 #include "writesave.h"
-#include "filehandle.h"
 #include "statdisplay.h"
 #include "filebuffer.h"
 #include "cursor.h"
 #include "execprint.h"
+#include "filehandle.h"
 
 // Group 20
 
@@ -68,8 +68,7 @@ int main(int argc, char *argv[]) {
 	char *fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
 	char* filename = malloc(256 * sizeof(char));
 
-	FILE* file;
-	initFile(argc,argv,filename,fileinfo);
+	FILE* file = initFile(argc,argv,filename,fileinfo);
 
 	struct file_buffer *file_buff = create_file_buffer(10);
 	if (argc == 2){
