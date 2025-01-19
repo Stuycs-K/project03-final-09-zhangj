@@ -17,7 +17,7 @@
 #include "filebuffer.h"
 #include "cursor.h"
 #include "execprint.h"
-#include "filehandle.c"
+#include "filehandle.h"
 
 // Group 20
 
