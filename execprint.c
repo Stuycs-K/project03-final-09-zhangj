@@ -10,17 +10,18 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <ncurses.h>
+#include <string.h>
 #include "execprint.h"
+#include "filebuffer.h"
 
 void parse_args( char * line, char ** arg_ary ){
-  int counter = 0;
-  while (line){
-    char * token;
-    token = strsep(&line, " ");
-    arg_ary[counter] = token;
-    counter++;
-  }
-  arg_ary[counter] = NULL;
+	int i = 0;
+	while (line) {
+		char *token = strsep(&line, " ");
+		arg_ary[i] = token;
+		i++;
+	}
+	arg_ary[i] = NULL;
 }
 
 void redirect_stdout(int fd) {
