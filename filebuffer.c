@@ -236,12 +236,12 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff, int winLen) {
 		strncpy(file_buff->buffer[file_buff->rows], line, LINE_SIZE);
 
 		length = strlen(file_buff->buffer[file_buff->rows]);
-		// if (length >= winLen-7){
-		// 	if (file_buff->rows+1 >= file_buff->array_length) {
-		// 		resize(file_buff);
-		// 	}
-		// 	// insert_char(file_buff,file_buff->rows-1,length,'-');
-		// 	// insert_newline(file_buff,file_buff->rows-1,winLen-8);
-		// }
+		if (length >= winLen-7){
+			if (file_buff->rows+1 >= file_buff->array_length) {
+				resize(file_buff);
+			}
+			insert_char(file_buff,file_buff->rows,length,'-');
+			insert_newline(file_buff,file_buff->rows,winLen-8);
+		}
 	}
 }
