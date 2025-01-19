@@ -237,7 +237,7 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff, int winLen) {
 		file_buff->rows++;
 
 		length = strlen(file_buff->buffer[file_buff->rows-1]);
-		while (length >= winLen-7){
+		while (length >= winLen-6){
 			if (file_buff->rows >= file_buff->array_length) {
 				resize(file_buff);
 			}
