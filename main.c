@@ -158,6 +158,7 @@ int main(int argc, char *argv[]) {
         }
 				free(filename);
 				filename = line;
+				remove("Untitled.txt");
 			}
 			save(file_buff, filename);
 			free(file_buff);
