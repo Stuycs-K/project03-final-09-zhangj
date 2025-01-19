@@ -89,14 +89,14 @@ int main(int argc, char *argv[]) {
 	// }
 	// wrefresh(win);
 	y = file_buff->rows+1;
+	insert_row(file_buff,y-1);
 	x = strlen(file_buff->buffer[y-1]);
 	wmove(win, y, x);
 	wrefresh(win);
 	int xLineEnd = x;
 	int yLineEnd = y;
 	int curY = y;
-	insert_row(file_buff,y-1);
-
+	
 	while (1) {
 		getmaxyx(win, height, width);
 		if (y >= bottom){
