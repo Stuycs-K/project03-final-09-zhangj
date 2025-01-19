@@ -98,6 +98,7 @@ int main(int argc, char *argv[]) {
   if (strcmp(filename,"Untitled.txt")==0){
     insert_row(file_buff,y-1);
   }
+	return 0;
 
 	while (1) {
 		getmaxyx(win, height, width);
