@@ -18,7 +18,7 @@ FILE* open_read(char *filename) {
 	FILE *file;
 
 	// create the file if it does not exist
-	file = fopen(filename, "w+");
+	file = fopen(filename, "a");
 	if (file == NULL) {
 		endwin();
 		fprintf(stderr, "open_read: failed to create file\nerrno %d: %s\n", errno, strerror(errno));
