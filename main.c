@@ -260,7 +260,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (32 <= c && c <= 126) { // alphanumerics, punctuation, etc.
 			changed = 1;
-			if (x+taboffset>=width-8){
+			if (x+taboffset>=width-7){
 				insert_char(file_buff,y-1,x,'-');
 				insert_char(file_buff,y-1,x+1,'\n');
 				insert_row(file_buff,y);
@@ -269,11 +269,10 @@ int main(int argc, char *argv[]) {
 				yLineEnd++;
 				x = 0;
 				xLineEnd = 0;
+				insert
 			}
-			else{
-				insert_char(file_buff,y-1,x,c);
-				x++;
-			}
+			insert_char(file_buff,y-1,x,c);
+			x++;
 		}
 	}
   return 0;
