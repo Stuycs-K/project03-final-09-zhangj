@@ -22,8 +22,10 @@ void save(struct file_buffer *file_buff, char *filename) {
 
   for (int r = 0; r < file_buff->rows; r++) {
     int length = strlen(file_buff->buffer[r]);
-    if (file_buff->buffer[r][length-2] == '-' && file_buff->buffer[r][length-1] == '\n'){
-      //Insert new delete here, should delete - and \n then append line below to line above before writing to file
+    while (file_buff->buffer[r][length-2] == '-' && file_buff->buffer[r][length-1] == '\n'){
+      delete_char(file_buff,r,length-2);
+      delete_newline(file_buff,r+1);
+      length = strlen(file_buff->buffer[r]);
     }
     int elements = fwrite(file_buff->buffer[r], sizeof(char), length, file);
     if (elements != length) {
@@ -56,12 +58,12 @@ void quit(struct file_buffer *file_buff, char* fname, int changed) {
         sscanf(newfname, "%[^\n]", newfname1);
         if (strlen(newfname1) <= 0){
           remove("Untitled.txt");
-          printf("Filename must be greater than length 0");
+          printf("Filename must be greater than length 0\n");
           exit(1);
         }
         if (strcmp(newfname1,"Untitled.txt")==0){
           remove("Untitled.txt");
-          printf("Filename cannot be Untitled.txt");
+          printf("Filename cannot be Untitled.txt\n");
           exit(1);
         }
         save(file_buff, newfname1);
@@ -86,6 +88,6 @@ void quit(struct file_buffer *file_buff, char* fname, int changed) {
     if (strcmp(fname,"Untitled.txt")==0){
       remove("Untitled.txt");
     }
-    printf("Quitting... (no changes were made)\n");
+    printf("Quitting... (no changes were made since last save)\n");
   }
 }

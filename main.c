@@ -18,12 +18,13 @@
 #include "filebuffer.h"
 #include "cursor.h"
 #include "execprint.h"
+#include "filehandle.h"
 
 // Group 20
 
 void signal_handler() {
   endwin();
-  printf("Segfault\n");
+  printf("Program Segfaulted\n");
   exit(1);
 }
 
@@ -63,8 +64,6 @@ void my_fgets(WINDOW *win, char *line, int height, int char_range_min, int char_
 			ind++;
 		}
 	}
-
-	return;
 }
 
 
@@ -72,36 +71,19 @@ void my_fgets(WINDOW *win, char *line, int height, int char_range_min, int char_
 int main(int argc, char *argv[]) {
 	signal(SIGSEGV, signal_handler);
 	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0, lineNum;
-	char *fileinfo;
-	char* filename = malloc(256 * sizeof(char));
+	char *fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
+
 	FILE *file;
+	char* filename = malloc(256 * sizeof(char));
 	int pipe_fds[2];
 
 	char* cmd_args = malloc(LINE_SIZE * sizeof(char));
 	char **arg_array = (char**) malloc(ARRAY_SIZE * sizeof(char*));
 
 	fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
-
-	if (argc == 1){
-		sprintf(filename, "Untitled.txt");
-		file = fopen(filename, "w+");
-		close_file(file);
-		stat_info(filename, fileinfo);
-	}
-	else if (argc == 2){
-		sprintf(filename,"%s",argv[1]);
-		file = open_read(filename);
-		fileinfo = stat_info(argv[1], fileinfo);
-	}
-	else {
-		printf("Incorrect number of arguments");
-		exit(1);
-	}
-
+	
 	struct file_buffer *file_buff = create_file_buffer(10);
-	if (argc == 2){
-		read_into_buffer(file, file_buff);
-	}
+	file = initFile(argc,argv,filename,fileinfo);
 
 	/*
 	for (int r = 0; r < file_buff->rows; r++) {
@@ -124,22 +106,16 @@ int main(int argc, char *argv[]) {
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
 
-	wmove(win,1,0);
-	for (int r = 0; r < file_buff->rows; r++) {
-		wprintw(win,"%s",file_buff->buffer[r]);
+	if (argc == 2){
+		read_into_buffer(file, file_buff, width);
 	}
-	wrefresh(win);
-	x = getcurx(win);
-	y = getcury(win);
-	wmove(win, y, x);
-	wrefresh(win);
+	y = file_buff->rows+1;
+	insert_row(file_buff,y-1);
+	x = strlen(file_buff->buffer[y-1]);
 	int xLineEnd = x;
 	int yLineEnd = y;
 	int curY = y;
-  if (strcmp(filename,"Untitled.txt")==0){
-    insert_row(file_buff,y-1);
-  }
-
+	
 	while (1) {
 		getmaxyx(win, height, width);
 		if (y >= bottom){
@@ -154,7 +130,7 @@ int main(int argc, char *argv[]) {
 		}
 		wclear(win);
 		wrefresh(win);
-		mvwprintw(win,0,0,"%d:%d | Ctrl+Q - Exit  Ctrl+S - Save\n", y, x+1);
+		mvwprintw(win,0,0,"%d:%d | Ctrl+Q - Exit  Ctrl+S - Save  Ctrl+T - execute  Ctrl+G - go to line\n", y, x+1);
 		mvwprintw(win,height-1,0, "%s", fileinfo);
 		if (saved > 0){
 			mvwprintw(win, height-2, 0, "File Saved.");
@@ -203,10 +179,20 @@ int main(int argc, char *argv[]) {
 				wrefresh(win);
 				char* line = malloc(256 * sizeof(char));
 				my_fgets(win, line, height, 32, 126);
+				if (strcmp(line,"Untitled.txt")==0){
+          remove("Untitled.txt");
+          printf("Filename cannot be Untitled.txt\n");
+          exit(1);
+        }
 				free(filename);
 				filename = line;
+				remove("Untitled.txt");
 			}
 			save(file_buff, filename);
+			free(file_buff);
+			file_buff = create_file_buffer(10);
+			file = open_read(filename);
+			read_into_buffer(file, file_buff, width);
 			stat_info(filename, fileinfo);
 			saved = 1;
       changed = 0;
@@ -329,12 +315,11 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
 			changed = 1;
-
 			if (x == 0 && y > 1){
 				int newX = strlen(file_buff->buffer[y-2])-1;
-		        delete_newline(file_buff, y-1);
-		        y--;
-		        x = newX;
+				delete_newline(file_buff, y-1);
+				y--;
+				x = newX;
 				curY--;
 				yLineEnd--;
 			}
@@ -361,7 +346,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (32 <= c && c <= 126) { // alphanumerics, punctuation, etc.
 			changed = 1;
-			if (x+taboffset>=width-5){
+			if (x+taboffset>=width-7){
 				insert_char(file_buff,y-1,x,'-');
 				insert_char(file_buff,y-1,x+1,'\n');
 				insert_row(file_buff,y);
@@ -371,11 +356,9 @@ int main(int argc, char *argv[]) {
 				x = 0;
 				xLineEnd = 0;
 			}
-			else{
-				insert_char(file_buff,y-1,x,c);
-				x++;
-			}
+			insert_char(file_buff,y-1,x,c);
+			x++;
 		}
 	}
-    return 0;
+  return 0;
 }

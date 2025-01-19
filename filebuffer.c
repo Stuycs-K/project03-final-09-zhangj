@@ -12,35 +12,6 @@
 #include <ncurses.h>
 #include "filebuffer.h"
 
-// returns a file pointer to the file, opened only in read mode
-FILE* open_read(char *filename) {
-	FILE *file;
-
-	// create the file if it does not exist
-	file = fopen(filename, "a");
-	if (file == NULL) {
-		fprintf(stderr, "open_read: failed to create file\nerrno %d: %s\n", errno, strerror(errno));
-		exit(1);
-	}
-	close_file(file);
-
-	file = fopen(filename, "r");
-	if (file == NULL) {
-		fprintf(stderr, "open_read: failed to open file\nerrno %d: %s\n", errno, strerror(errno));
-		exit(1);
-	}
-
-	return file;
-}
-
-// closes a file pointer
-void close_file(FILE *file) {
-	if (fclose(file) == EOF) {
-		fprintf(stderr, "close_file: failed to close file\nerrno %d: %s\n", errno, strerror(errno));
-		exit(1);
-	}
-}
-
 // creates a struct file_buffer, initializing its contents:
 // buffer: init_array_length amount of LINE_SIZE length rows
 // array_length: init_array_length
@@ -62,6 +33,7 @@ void resize(struct file_buffer *file_buff) {
 	file_buff->array_length = 2*file_buff->array_length + 1;
 	char **new_buffer = (char**) realloc(file_buff->buffer, file_buff->array_length * sizeof(char*));
 	if (new_buffer == NULL) {
+		endwin();
 		fprintf(stderr, "resize: realloc failed\nerrno %d: %s\n", errno, strerror(errno));
 		exit(1);
 	} else {
@@ -73,42 +45,26 @@ void resize(struct file_buffer *file_buff) {
 	}
 }
 
-// takes a file pointer and a struct file_buffer, and reads in the full contents of the file into the file_buffer's char** buffer
-void read_into_buffer(FILE *file, struct file_buffer *file_buff) {
-	if (fseek(file, 0, SEEK_SET) != 0) {
-		fprintf(stderr, "read_into_buffer: failed to fseek to 0, SEEK_SET\nerrno %d: %s\n", errno, strerror(errno));
-		exit(1);
-	}
-
-	char line[LINE_SIZE];
-	for (file_buff->rows = 0; fgets(line, LINE_SIZE, file) != NULL; file_buff->rows++) {
-		// grow the array if needed
-		if (file_buff->rows >= file_buff->array_length) {
-			resize(file_buff);
-		}
-
-		line[LINE_SIZE-1] = '\0'; // safety null
-		strncpy(file_buff->buffer[file_buff->rows], line, LINE_SIZE);
-	}
-}
-
 // note: all these insert / delete functions use a O(n) shift for EVERY character which is really bad even for relatively short strings, but maybe it's fine
 
 // inserts a character ch such that it is at buffer[r][c] after insertion
 void insert_char(struct file_buffer *file_buff, int r, int c, char ch) {
 	if (!(0 <= r && r < file_buff->rows)) {
+		endwin();
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
 
 	int length = strlen(file_buff->buffer[r]);
 	if (!(c <= length)) {
+		endwin();
 		fprintf(stderr, "c=%d is out of bounds, expected value between 0 and length=%d\n", c, length);
 		exit(1);
 	}
 
 	if (!(length+1 < LINE_SIZE)) {
 		// maybe figure out how to realloc lines later
+		endwin();
 		printf("out of room");
 		return;
 	}
@@ -127,6 +83,7 @@ void insert_char(struct file_buffer *file_buff, int r, int c, char ch) {
 // inserts an empty row such that it is at buffer[r] after insertion
 void insert_row(struct file_buffer *file_buff, int r) {
 	if (!(0 <= r && r <= file_buff->rows)) {
+		endwin();
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
@@ -150,12 +107,14 @@ void insert_row(struct file_buffer *file_buff, int r) {
 // removes the character at buffer[r][c], left-shifting over all the characters to its right
 void delete_char(struct file_buffer *file_buff, int r, int c) {
 	if (!(0 <= r && r < file_buff->rows)) {
+		endwin();
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
 
 	int length = strlen(file_buff->buffer[r]);
 	if (!(c < length)) {
+		endwin();
 		fprintf(stderr, "c=%d is out of bounds, expected value between 0 and length=%d\n", c, length);
 		exit(1);
 	}
@@ -169,6 +128,7 @@ void delete_char(struct file_buffer *file_buff, int r, int c) {
 // removes the row at buffer[r], shifting all the rows after it
 void delete_row(struct file_buffer *file_buff, int r) {
 	if (!(0 <= r && r < file_buff->rows)) {
+		endwin();
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
@@ -186,12 +146,14 @@ void delete_row(struct file_buffer *file_buff, int r) {
 // need special case for newline char
 void insert_newline(struct file_buffer *file_buff, int r, int c) {
 	if (!(0 <= r && r < file_buff->rows)) {
+		endwin();
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
 
 	int length = strlen(file_buff->buffer[r]);
 	if (!(c <= length)) {
+		endwin();
 		fprintf(stderr, "c=%d is out of bounds, expected value between 0 and length=%d\n", c, length);
 		exit(1);
 	}
@@ -225,12 +187,13 @@ void insert_newline(struct file_buffer *file_buff, int r, int c) {
 // does stuff
 void delete_newline(struct file_buffer *file_buff, int r) {
 	if (!(0 < r && r < file_buff->rows)) {
+		endwin();
 		fprintf(stderr, "r=%d is out of bounds, expected value 0 < r < rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
 
 	int length = strlen(file_buff->buffer[r-1]) - 1; // -1 to overwrite newline
-	printf("length is :%d\n", length);
+	//printf("length is :%d\n", length);
 	int i;
 	for (i = 0; i+length < LINE_SIZE && file_buff->buffer[r][i] != '\0'; i++) {
 		//printf("i=%d: ascii %d\n", i, file_buff->buffer[r-1][i+length]);
@@ -240,7 +203,7 @@ void delete_newline(struct file_buffer *file_buff, int r) {
 
 	
 	//printf("length+i+1: %d\n", file_buff->buffer[r-1][length+i+1]);
-	printf("length+i-1: %d\n", file_buff->buffer[r-1][length+i-1]);
+	//printf("length+i-1: %d\n", file_buff->buffer[r-1][length+i-1]);
 	file_buff->buffer[r-1][length+i] = '\0';
 
 	free(file_buff->buffer[r]);
@@ -248,11 +211,12 @@ void delete_newline(struct file_buffer *file_buff, int r) {
 	file_buff->rows--;
 	for (i = r; i < file_buff->rows; i++) {
 		file_buff->buffer[i] = file_buff->buffer[i+1];
-		printf("i=%d: %s\n", i, file_buff->buffer[i]);
+		//printf("i=%d: %s\n", i, file_buff->buffer[i]);
 	}
 
 	file_buff->buffer[file_buff->rows] = (char*) malloc(LINE_SIZE * sizeof(char));
 }
+
 
 // does stuff
 void insert_at_end(struct file_buffer *file_buff, char *line) {
@@ -288,4 +252,38 @@ void insert_at_end(struct file_buffer *file_buff, char *line) {
 	}
 
 	file_buff->buffer[r][c] = '\0';
+}
+
+// takes a file pointer and a struct file_buffer, and reads in the full contents of the file into the file_buffer's char** buffer
+void read_into_buffer(FILE *file, struct file_buffer *file_buff, int winLen) {
+	if (fseek(file, 0, SEEK_SET) != 0) {
+		endwin();
+		fprintf(stderr, "read_into_buffer: failed to fseek to 0, SEEK_SET\nerrno %d: %s\n", errno, strerror(errno));
+		exit(1);
+	}
+
+	char line[LINE_SIZE];
+	int length;
+	while(fgets(line, LINE_SIZE, file) != NULL) {
+		// grow the array if needed
+		if (file_buff->rows >= file_buff->array_length) {
+			resize(file_buff);
+		}
+
+		line[LINE_SIZE-1] = '\0'; // safety null
+		strncpy(file_buff->buffer[file_buff->rows], line, LINE_SIZE);
+		file_buff->rows++;
+
+		length = strlen(file_buff->buffer[file_buff->rows-1]);
+		while (length >= winLen-5){
+			if (file_buff->rows >= file_buff->array_length) {
+				resize(file_buff);
+			}
+			insert_newline(file_buff,file_buff->rows-1,winLen-7);
+			length = strlen(file_buff->buffer[file_buff->rows-2]);
+			insert_char(file_buff,file_buff->rows-2,length-1,'-');
+			insert_char(file_buff,file_buff->rows-2,length,'\n');
+			insert_char(file_buff,file_buff->rows-2,length+1,'\0');
+		}
+	}
 }
