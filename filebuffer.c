@@ -243,9 +243,9 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff, int winLen) {
 			}
 			insert_newline(file_buff,file_buff->rows-1,winLen-9);
 			length = strlen(file_buff->buffer[file_buff->rows-2]);
-			insert_char(file_buff,file_buff->rows-2,length-2,'-');
-			insert_char(file_buff,file_buff->rows-2,length-1,'\n');
-			insert_char(file_buff,file_buff->rows-2,length,'\0');
+			insert_char(file_buff,file_buff->rows-2,length-1,'-');
+			insert_char(file_buff,file_buff->rows-2,length,'\n');
+			insert_char(file_buff,file_buff->rows-2,length+1,'\0');
 		}
 	}
 }
