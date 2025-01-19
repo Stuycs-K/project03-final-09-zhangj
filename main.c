@@ -182,12 +182,12 @@ int main(int argc, char *argv[]) {
 				// - the filename is not "untitled.txt"
 				if (strcmp(line, "") == 0) {
 					saved_error = 1;
-					sprintf(saved_error_message, "Error cannot use empty string as filename.");
+					sprintf(saved_error_message, "Error: cannot use empty string as filename.");
 					can_save = 0;
 				}
 				else if (strcmp(line, UNTITLED_FILENAME) == 0) {
 					saved_error = 1;
-					sprintf(saved_error_message, "Error cannot use %s as filename.", UNTITLED_FILENAME);
+					sprintf(saved_error_message, "Error: cannot use %s as filename.", UNTITLED_FILENAME);
 					can_save = 0;
 		        } 
 

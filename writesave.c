@@ -11,11 +11,12 @@
 #include <dirent.h>
 #include <ncurses.h>
 #include "filebuffer.h"
+#include "filehandle.h"
 #include "writesave.h"
 
 // Takes in the buffer and writes it into a file,
 void save(struct file_buffer *file_buff, char *filename) {
-  // w+ truncatres
+  // w+ truncates
   FILE *file = fopen(filename, "w+");
 
   char newline[] = "\n";
@@ -50,33 +51,33 @@ void quit(struct file_buffer *file_buff, char* fname, int changed) {
     response[256] = '\0';
     fgets(response, 255, stdin);
     if (response[0] == 'y'){
-      if (strcmp(fname,"Untitled.txt") == 0){
+      if (strcmp(fname,UNTITLED_FILENAME) == 0){
         printf("File name: ");
         char newfname[256];
         fgets(newfname, 255, stdin);
         char* newfname1 = (char *) malloc(256);
         sscanf(newfname, "%[^\n]", newfname1);
         if (strlen(newfname1) <= 0){
-          remove("Untitled.txt");
+          remove(UNTITLED_FILENAME);
           printf("Filename must be greater than length 0\n");
           exit(1);
         }
-        if (strcmp(newfname1,"Untitled.txt")==0){
-          remove("Untitled.txt");
-          printf("Filename cannot be Untitled.txt\n");
+        if (strcmp(newfname1,UNTITLED_FILENAME)==0){
+          remove(UNTITLED_FILENAME);
+          fprintf(stderr, "Filename cannot be %s\n", UNTITLED_FILENAME);
           exit(1);
         }
         save(file_buff, newfname1);
         free(newfname1);
-        remove("Untitled.txt");
+        remove(UNTITLED_FILENAME);
       }
       else{
         save(file_buff, fname);
       }
     }
     else if (response[0] == 'n'){
-        if (strcmp(fname,"Untitled.txt") == 0){
-          remove("Untitled.txt");
+        if (strcmp(fname,UNTITLED_FILENAME) == 0){
+          remove(UNTITLED_FILENAME);
         }
         printf("Quitting without saving...\n");
     }
@@ -85,8 +86,8 @@ void quit(struct file_buffer *file_buff, char* fname, int changed) {
     }
   }
   else{
-    if (strcmp(fname,"Untitled.txt")==0){
-      remove("Untitled.txt");
+    if (strcmp(fname,UNTITLED_FILENAME)==0){
+      remove(UNTITLED_FILENAME);
     }
     printf("Quitting... (no changes were made since last save)\n");
   }
