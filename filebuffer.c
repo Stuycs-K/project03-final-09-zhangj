@@ -259,6 +259,13 @@ void insert_at_end(struct file_buffer *file_buff, char *line) {
 	int r = file_buff->rows-1;
 	int c = strlen(file_buff->buffer[r]);
 
+	file_buff->buffer[r][c] = '\n';
+	file_buff->buffer[r][c+1] = '\0';
+
+	(file_buff->rows)++;
+	r++;
+	c = 0;
+
 	int i;
 	for (i = 0; i < LINE_SIZE && line[i] != '\0'; i++) {
 		char ch = line[i];
