@@ -234,7 +234,7 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff, int winLen) {
 		line[LINE_SIZE-1] = '\0'; // safety null
 		strncpy(file_buff->buffer[file_buff->rows], line, LINE_SIZE);
 
-		// int length = strlen(file_buff->buffer[file_buff->rows-1]);
+		int length = strlen(file_buff->buffer[file_buff->rows-1]);
 		// if (length >= winLen-7){
 		// 	if (file_buff->rows+1 >= file_buff->array_length) {
 		// 		resize(file_buff);
