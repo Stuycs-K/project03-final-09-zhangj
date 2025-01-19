@@ -123,6 +123,7 @@ int main(int argc, char *argv[]) {
 		mvwprintw(win,height-1,0, "%s", fileinfo);
 		if (saved > 0){
 			mvwprintw(win, height-2, 0, "File Saved.");
+
 			saved = 0;
 		}
 		else if (saved_error > 0) {
@@ -206,8 +207,8 @@ int main(int argc, char *argv[]) {
 				read_into_buffer(file, file_buff, width);
 				stat_info(filename, fileinfo);
 				saved = 1;
+				changed = 0;
 			}
-      changed = 0;
 		}
 		if (c == to_ctrl_char('C')) {
 			// copy
