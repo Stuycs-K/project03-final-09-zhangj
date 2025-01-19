@@ -13,11 +13,11 @@
 #include <ncurses.h>
 #include "cutpaste.h"
 #include "writesave.h"
+#include "filehandle.h"
 #include "statdisplay.h"
 #include "filebuffer.h"
 #include "cursor.h"
 #include "execprint.h"
-#include "filehandle.h"
 
 // Group 20
 
