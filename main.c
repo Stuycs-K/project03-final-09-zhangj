@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
 	char *fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
 	char* filename = malloc(256 * sizeof(char));
 
-	FILE *file = initFile(argc,argv,filename,fileinfo);
+	FILE *file = initFile(argc,argv[1],filename,fileinfo);
 
 	struct file_buffer *file_buff = create_file_buffer(10);
 	if (argc == 2){
@@ -162,6 +162,11 @@ int main(int argc, char *argv[]) {
 				wrefresh(win);
 				char* line = malloc(256 * sizeof(char));
 				my_fgets(win, line, height, 32, 126);
+				if (strcmp(line,"Untitled.txt")==0){
+          remove("Untitled.txt");
+          printf("Filename cannot be Untitled.txt\n");
+          exit(1);
+        }
 				free(filename);
 				filename = line;
 			}

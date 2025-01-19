@@ -46,7 +46,7 @@ void close_file(FILE *file) {
 }
 
 // Initialize file
-FILE* initFile(int argc, char *argv[], char* filename, char* fileinfo){
+FILE* initFile(int argc, char *argv, char* filename, char* fileinfo){
   FILE *file;
   if (argc == 1){
 		sprintf(filename, "Untitled.txt");
@@ -55,12 +55,12 @@ FILE* initFile(int argc, char *argv[], char* filename, char* fileinfo){
 		stat_info(filename, fileinfo);
 	}
 	else if (argc == 2){
-		sprintf(filename,"%s",argv[1]);
+		sprintf(filename,"%s",argv);
 		file = open_read(filename);
 		fileinfo = stat_info(argv[1], fileinfo);
 	}
 	else {
-		printf("Incorrect number of arguments");
+		printf("Incorrect number of arguments\n");
 		exit(1);
 	}
   return file;
