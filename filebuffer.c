@@ -19,6 +19,7 @@ FILE* open_read(char *filename) {
 	// create the file if it does not exist
 	file = fopen(filename, "a");
 	if (file == NULL) {
+		endwin();
 		fprintf(stderr, "open_read: failed to create file\nerrno %d: %s\n", errno, strerror(errno));
 		exit(1);
 	}
@@ -26,6 +27,7 @@ FILE* open_read(char *filename) {
 
 	file = fopen(filename, "r");
 	if (file == NULL) {
+		endwin();
 		fprintf(stderr, "open_read: failed to open file\nerrno %d: %s\n", errno, strerror(errno));
 		exit(1);
 	}
@@ -36,6 +38,7 @@ FILE* open_read(char *filename) {
 // closes a file pointer
 void close_file(FILE *file) {
 	if (fclose(file) == EOF) {
+		endwin();
 		fprintf(stderr, "close_file: failed to close file\nerrno %d: %s\n", errno, strerror(errno));
 		exit(1);
 	}
@@ -62,6 +65,7 @@ void resize(struct file_buffer *file_buff) {
 	file_buff->array_length = 2*file_buff->array_length + 1;
 	char **new_buffer = (char**) realloc(file_buff->buffer, file_buff->array_length * sizeof(char*));
 	if (new_buffer == NULL) {
+		endwin();
 		fprintf(stderr, "resize: realloc failed\nerrno %d: %s\n", errno, strerror(errno));
 		exit(1);
 	} else {
@@ -76,6 +80,7 @@ void resize(struct file_buffer *file_buff) {
 // takes a file pointer and a struct file_buffer, and reads in the full contents of the file into the file_buffer's char** buffer
 void read_into_buffer(FILE *file, struct file_buffer *file_buff) {
 	if (fseek(file, 0, SEEK_SET) != 0) {
+		endwin();
 		fprintf(stderr, "read_into_buffer: failed to fseek to 0, SEEK_SET\nerrno %d: %s\n", errno, strerror(errno));
 		exit(1);
 	}
@@ -97,18 +102,21 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff) {
 // inserts a character ch such that it is at buffer[r][c] after insertion
 void insert_char(struct file_buffer *file_buff, int r, int c, char ch) {
 	if (!(0 <= r && r < file_buff->rows)) {
+		endwin();
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
 
 	int length = strlen(file_buff->buffer[r]);
 	if (!(c <= length)) {
+		endwin();
 		fprintf(stderr, "c=%d is out of bounds, expected value between 0 and length=%d\n", c, length);
 		exit(1);
 	}
 
 	if (!(length+1 < LINE_SIZE)) {
 		// maybe figure out how to realloc lines later
+		endwin();
 		printf("out of room");
 		return;
 	}
@@ -127,6 +135,7 @@ void insert_char(struct file_buffer *file_buff, int r, int c, char ch) {
 // inserts an empty row such that it is at buffer[r] after insertion
 void insert_row(struct file_buffer *file_buff, int r) {
 	if (!(0 <= r && r <= file_buff->rows)) {
+		endwin();
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
@@ -150,12 +159,14 @@ void insert_row(struct file_buffer *file_buff, int r) {
 // removes the character at buffer[r][c], left-shifting over all the characters to its right
 void delete_char(struct file_buffer *file_buff, int r, int c) {
 	if (!(0 <= r && r < file_buff->rows)) {
+		endwin();
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
 
 	int length = strlen(file_buff->buffer[r]);
 	if (!(c < length)) {
+		endwin();
 		fprintf(stderr, "c=%d is out of bounds, expected value between 0 and length=%d\n", c, length);
 		exit(1);
 	}
@@ -169,6 +180,7 @@ void delete_char(struct file_buffer *file_buff, int r, int c) {
 // removes the row at buffer[r], shifting all the rows after it
 void delete_row(struct file_buffer *file_buff, int r) {
 	if (!(0 <= r && r < file_buff->rows)) {
+		endwin();
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
@@ -186,12 +198,14 @@ void delete_row(struct file_buffer *file_buff, int r) {
 // need special case for newline char
 void insert_newline(struct file_buffer *file_buff, int r, int c) {
 	if (!(0 <= r && r < file_buff->rows)) {
+		endwin();
 		fprintf(stderr, "r=%d is out of bounds, expected value between 0 and rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
 
 	int length = strlen(file_buff->buffer[r]);
 	if (!(c <= length)) {
+		endwin();
 		fprintf(stderr, "c=%d is out of bounds, expected value between 0 and length=%d\n", c, length);
 		exit(1);
 	}
@@ -224,12 +238,13 @@ void insert_newline(struct file_buffer *file_buff, int r, int c) {
 
 void delete_newline(struct file_buffer *file_buff, int r) {
 	if (!(0 < r && r < file_buff->rows)) {
+		endwin();
 		fprintf(stderr, "r=%d is out of bounds, expected value 0 < r < rows=%d\n", r, file_buff->rows);
 		exit(1);
 	}
 
 	int length = strlen(file_buff->buffer[r-1]) - 1; // -1 to overwrite newline
-	printf("length is :%d\n", length);
+	//printf("length is :%d\n", length);
 	int i;
 	for (i = 0; i+length < LINE_SIZE && file_buff->buffer[r][i] != '\0'; i++) {
 		//printf("i=%d: ascii %d\n", i, file_buff->buffer[r-1][i+length]);
@@ -239,7 +254,7 @@ void delete_newline(struct file_buffer *file_buff, int r) {
 
 	
 	//printf("length+i+1: %d\n", file_buff->buffer[r-1][length+i+1]);
-	printf("length+i-1: %d\n", file_buff->buffer[r-1][length+i-1]);
+	//printf("length+i-1: %d\n", file_buff->buffer[r-1][length+i-1]);
 	file_buff->buffer[r-1][length+i] = '\0';
 
 	free(file_buff->buffer[r]);

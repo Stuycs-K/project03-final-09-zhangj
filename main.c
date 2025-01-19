@@ -22,7 +22,7 @@
 
 void signal_handler() {
   endwin();
-  printf("Segfault\n");
+  printf("Program Segfaulted\n");
   exit(1);
 }
 
@@ -247,14 +247,13 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
 			changed = 1;
-
 			if (x == 0 && y > 1){
 				int newX = strlen(file_buff->buffer[y-2])-1;
-		        delete_newline(file_buff, y-1);
-		        y--;
-		        x = newX;
+				delete_newline(file_buff, y-1);
+				y--;
+				x = newX;
 				curY--;
-				yLineEnd = y+1;
+				yLineEnd--;
 			}
 			else if (x > 0){
 				delete_char(file_buff,y-1,x-1);
@@ -295,5 +294,5 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	}
-    return 0;
+  return 0;
 }
