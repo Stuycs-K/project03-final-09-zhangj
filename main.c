@@ -165,7 +165,6 @@ int main(int argc, char *argv[]) {
 			file_buff = create_file_buffer(10);
 			file = open_read(filename);
 			read_into_buffer(file, file_buff, width);
-			delete_char(file_buff,y-1,x);
 			stat_info(filename, fileinfo);
 			saved = 1;
       changed = 0;
