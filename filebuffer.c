@@ -243,7 +243,7 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff, int winLen) {
 			}
 			insert_newline(file_buff,file_buff->rows-1,winLen-8);
 			file_buff->rows++;
-			insert_char(file_buff,file_buff->rows-2,length,'-');
+			insert_char(file_buff,file_buff->rows-2,strlen(file_buff->rows-2),'-');
 			length = strlen(file_buff->buffer[file_buff->rows-2]);
 		}
 	}
