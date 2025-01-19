@@ -12,38 +12,6 @@
 #include <ncurses.h>
 #include "filebuffer.h"
 
-// returns a file pointer to the file, opened only in read mode
-FILE* open_read(char *filename) {
-	FILE *file;
-
-	// create the file if it does not exist
-	file = fopen(filename, "a");
-	if (file == NULL) {
-		endwin();
-		fprintf(stderr, "open_read: failed to create file\nerrno %d: %s\n", errno, strerror(errno));
-		exit(1);
-	}
-	close_file(file);
-
-	file = fopen(filename, "r");
-	if (file == NULL) {
-		endwin();
-		fprintf(stderr, "open_read: failed to open file\nerrno %d: %s\n", errno, strerror(errno));
-		exit(1);
-	}
-
-	return file;
-}
-
-// closes a file pointer
-void close_file(FILE *file) {
-	if (fclose(file) == EOF) {
-		endwin();
-		fprintf(stderr, "close_file: failed to close file\nerrno %d: %s\n", errno, strerror(errno));
-		exit(1);
-	}
-}
-
 // creates a struct file_buffer, initializing its contents:
 // buffer: init_array_length amount of LINE_SIZE length rows
 // array_length: init_array_length

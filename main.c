@@ -17,6 +17,7 @@
 #include "filebuffer.h"
 #include "cursor.h"
 #include "execprint.h"
+#include "filehandle.c"
 
 // Group 20
 
@@ -57,8 +58,6 @@ void my_fgets(WINDOW *win, char *line, int height, int char_range_min, int char_
 			ind++;
 		}
 	}
-
-	return;
 }
 
 
@@ -66,27 +65,11 @@ void my_fgets(WINDOW *win, char *line, int height, int char_range_min, int char_
 int main(int argc, char *argv[]) {
 	signal(SIGSEGV, signal_handler);
 	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0, lineNum;
-	char *fileinfo;
+	char *fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
 	char* filename = malloc(256 * sizeof(char));
 	FILE *file;
 
-	fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
-
-	if (argc == 1){
-		sprintf(filename, "Untitled.txt");
-		file = fopen(filename, "w+");
-		close_file(file);
-		stat_info(filename, fileinfo);
-	}
-	else if (argc == 2){
-		sprintf(filename,"%s",argv[1]);
-		file = open_read(filename);
-		fileinfo = stat_info(argv[1], fileinfo);
-	}
-	else {
-		printf("Incorrect number of arguments");
-		exit(1);
-	}
+	initFile(argc,argv,filename,fileinfo,file);
 
 	struct file_buffer *file_buff = create_file_buffer(10);
 	if (argc == 2){
