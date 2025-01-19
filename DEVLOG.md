@@ -34,8 +34,11 @@ Worked on allowing typing past the window height. Tried using scroll features fr
 ### 2025-01-16 - Implemented line numbers, typing past window length, started go to line
 Added line numbers to the window. Added display for cursor location in the top left (40 min CW time). Implemented support for typing past window length, to be fully implemented once buffer code for line break is updated. Start the go to line command (Ctrl+G) (1h hr time).
 
-### 2025-01-16 - Fixed bugs with cursor movement from typing past window length, implemented go to line, implemented input file name on first save for an untitled file, started work on execute
+### 2025-01-17 - Fixed bugs with cursor movement from typing past window length, implemented go to line, implemented input file name on first save for an untitled file, started work on execute
 Fixed a few bugs with moving the cursor with arrow keys when you typed past the window length and went back up. Fully implemented go to line (Ctrl+G) (40 min CW). Implemented inputting the file name on first save if the file is untitled (make run with no args) and writing the buffer to that new file. Started framework on execute (Ctrl+T) (45 min HW time).
+
+### 2025-01-18 - Fixed error handling, created new file filehandle.c, worked on fixing bugs involving saving/typing past window length, changed cursor position setup
+Fixed error handling so that all errors exit the ncurses window when on it, moved file functions to new file filehandle.c and moved file initilization in main.c to filehandle.c, fixed bugs involving saving and typing past window length (while discovering more), changed cursor position setup to not use a unncessary loop
 
 
 
