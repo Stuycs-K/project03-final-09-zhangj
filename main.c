@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
 	char* filename = malloc(256 * sizeof(char));
 	struct file_buffer *file_buff = create_file_buffer(10);
 	FILE* file = initFile(argc,argv,filename,fileinfo);
-	
+
 	initscr();
 	raw();
 	noecho();
@@ -160,6 +160,7 @@ int main(int argc, char *argv[]) {
 				filename = line;
 			}
 			save(file_buff, filename);
+			read_into_buffer(file_buff, width);
 			stat_info(filename, fileinfo);
 			saved = 1;
       changed = 0;
