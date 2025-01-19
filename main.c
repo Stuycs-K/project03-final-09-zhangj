@@ -69,7 +69,7 @@ void my_fgets(WINDOW *win, char *line, int height, int char_range_min, int char_
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
 	signal(SIGSEGV, signal_handler);
-	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0, lineNum, saved_error=0;
+	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0, lineNum, has_error=0;
 	char *fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
 
 	FILE *file;
@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
 	int yLineEnd = y;
 	int curY = y;
 
-	char *saved_error_message = malloc(LINE_SIZE * sizeof(char));
+	char *error_message = malloc(LINE_SIZE * sizeof(char));
 	
 	while (1) {
 		getmaxyx(win, height, width);
@@ -125,9 +125,12 @@ int main(int argc, char *argv[]) {
 
 			saved = 0;
 		}
-		else if (saved_error > 0) {
-			mvwprintw(win, height-2, 0, "%s", saved_error_message);
-			saved_error = 0;
+		else if (has_error > 0) {
+			wmove(win, height-2, 0);
+			for (int i = 0; i < width; i++)
+				wprintw(win, " ");
+			mvwprintw(win, height-2, 0, "%s", error_message);
+			has_error = 0;
 		}
 		for (int r = top+1; r < file_buff->rows+1; r++){
 			if (r >= bottom){
@@ -181,13 +184,13 @@ int main(int argc, char *argv[]) {
 				// - the filename is not empty and
 				// - the filename is not "untitled.txt"
 				if (strcmp(line, "") == 0) {
-					saved_error = 1;
-					sprintf(saved_error_message, "Error: cannot use empty string as filename.");
+					has_error = 1;
+					sprintf(error_message, "Error: cannot use empty string as filename.");
 					can_save = 0;
 				}
 				else if (strcmp(line, UNTITLED_FILENAME) == 0) {
-					saved_error = 1;
-					sprintf(saved_error_message, "Error: cannot use %s as filename.", UNTITLED_FILENAME);
+					has_error = 1;
+					sprintf(error_message, "Error: cannot use %s as filename.", UNTITLED_FILENAME);
 					can_save = 0;
 		        } 
 
@@ -293,26 +296,35 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == to_ctrl_char('G')){
 			wmove(win, height-2, 0);
+			for (int i = 0; i < width; i++)
+				wprintw(win, " ");
+			wmove(win, height-2, 0);
 			wprintw(win, "Go to line: ");
 			wrefresh(win);
 			char* line = malloc(256 * sizeof(char));
 			my_fgets(win, line, height, '0', '9'); // custom fgets for window
 			lineNum = atoi(line);
 			
-			if (lineNum <= file_buff->rows){
-        while (lineNum < top){
-          top -= height-3;
-          bottom -= height-3;
-        }
-        while (lineNum > bottom){
-          top += height-3;
-          bottom += height-3;
-        }
-				y = lineNum;
-				curY = lineNum;
-				x = strlen(file_buff->buffer[lineNum-1])-1;
+			if (!(1 <= lineNum && lineNum <= file_buff->rows)) {
+				has_error = 1;
+				sprintf(error_message, "Error: cannot goto line #%d", lineNum);
+			} else {
+				
+				if (lineNum <= file_buff->rows){
+	        while (lineNum < top){
+	          top -= height-3;
+	          bottom -= height-3;
+	        }
+	        while (lineNum > bottom){
+	          top += height-3;
+	          bottom += height-3;
+	        }
+					y = lineNum;
+					curY = lineNum;
+					x = strlen(file_buff->buffer[lineNum-1])-1;
+				}
+				free(line);
 			}
-			free(line);
 		}
 		if (c == KEY_LEFT){
 			x = keyleft(x, y);
