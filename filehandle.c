@@ -52,12 +52,12 @@ FILE* initFile(int argc, char **argv, char* filename, char* fileinfo){
 		sprintf(filename, "Untitled.txt");
 		file = fopen(filename, "w+");
 		close_file(file);
-		*fileinfo = stat_info(filename, fileinfo);
+		stat_info(filename, fileinfo);
 	}
 	else if (argc == 2){
 		sprintf(filename,"%s",argv[1]);
 		file = open_read(filename);
-		*fileinfo = stat_info(filename, fileinfo);
+		stat_info(filename, fileinfo);
 	}
 	else {
 		printf("Incorrect number of arguments\n");
