@@ -24,7 +24,7 @@ void save(struct file_buffer *file_buff, char *filename) {
     int length = strlen(file_buff->buffer[r]);
     while (file_buff->buffer[r][length-2] == '-' && file_buff->buffer[r][length-1] == '\n'){
       delete_char(file_buff,r,length-2);
-      delete_char(file_buff,r,length-2);
+      delete_char(file_buff,r,length-1);
       delete_newline(file_buff,r+1);
       length = strlen(file_buff->buffer[r]);
     }
