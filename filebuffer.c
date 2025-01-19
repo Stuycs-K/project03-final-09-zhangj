@@ -240,7 +240,7 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff, int winLen) {
 				resize(file_buff);
 			}
 			insert_char(file_buff,file_buff->rows-1,length,'-');
-			insert_newline(file_buff,file_buff->rows-1,winLen-8);
+			//insert_newline(file_buff,file_buff->rows-1,winLen-8);
 		}
 	}
 }
