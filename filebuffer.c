@@ -29,6 +29,7 @@ struct file_buffer* create_file_buffer(int init_array_length) {
 	return file_buff;
 }
 
+// not included in filebuffer.h
 void resize(struct file_buffer *file_buff) {
 	file_buff->array_length = 2*file_buff->array_length + 1;
 	char **new_buffer = (char**) realloc(file_buff->buffer, file_buff->array_length * sizeof(char*));
@@ -42,6 +43,40 @@ void resize(struct file_buffer *file_buff) {
 
 	for (int r = file_buff->rows; r < file_buff->array_length; r++) {
 		file_buff->buffer[r] = (char*) malloc(LINE_SIZE * sizeof(char));
+	}
+}
+
+// takes a file pointer and a struct file_buffer, and reads in the full contents of the file into the file_buffer's char** buffer
+void read_into_buffer(FILE *file, struct file_buffer *file_buff, int winLen) {
+	if (fseek(file, 0, SEEK_SET) != 0) {
+		endwin();
+		fprintf(stderr, "read_into_buffer: failed to fseek to 0, SEEK_SET\nerrno %d: %s\n", errno, strerror(errno));
+		exit(1);
+	}
+
+	char line[LINE_SIZE];
+	int length;
+	while(fgets(line, LINE_SIZE, file) != NULL) {
+		// grow the array if needed
+		if (file_buff->rows >= file_buff->array_length) {
+			resize(file_buff);
+		}
+
+		line[LINE_SIZE-1] = '\0'; // safety null
+		strncpy(file_buff->buffer[file_buff->rows], line, LINE_SIZE);
+		file_buff->rows++;
+
+		length = strlen(file_buff->buffer[file_buff->rows-1]);
+		while (length >= winLen-5){
+			if (file_buff->rows >= file_buff->array_length) {
+				resize(file_buff);
+			}
+			insert_newline(file_buff,file_buff->rows-1,winLen-7);
+			length = strlen(file_buff->buffer[file_buff->rows-2]);
+			insert_char(file_buff,file_buff->rows-2,length-1,'-');
+			insert_char(file_buff,file_buff->rows-2,length,'\n');
+			insert_char(file_buff,file_buff->rows-2,length+1,'\0');
+		}
 	}
 }
 
@@ -252,38 +287,4 @@ void insert_at_end(struct file_buffer *file_buff, char *line) {
 	}
 
 	file_buff->buffer[r][c] = '\0';
-}
-
-// takes a file pointer and a struct file_buffer, and reads in the full contents of the file into the file_buffer's char** buffer
-void read_into_buffer(FILE *file, struct file_buffer *file_buff, int winLen) {
-	if (fseek(file, 0, SEEK_SET) != 0) {
-		endwin();
-		fprintf(stderr, "read_into_buffer: failed to fseek to 0, SEEK_SET\nerrno %d: %s\n", errno, strerror(errno));
-		exit(1);
-	}
-
-	char line[LINE_SIZE];
-	int length;
-	while(fgets(line, LINE_SIZE, file) != NULL) {
-		// grow the array if needed
-		if (file_buff->rows >= file_buff->array_length) {
-			resize(file_buff);
-		}
-
-		line[LINE_SIZE-1] = '\0'; // safety null
-		strncpy(file_buff->buffer[file_buff->rows], line, LINE_SIZE);
-		file_buff->rows++;
-
-		length = strlen(file_buff->buffer[file_buff->rows-1]);
-		while (length >= winLen-5){
-			if (file_buff->rows >= file_buff->array_length) {
-				resize(file_buff);
-			}
-			insert_newline(file_buff,file_buff->rows-1,winLen-7);
-			length = strlen(file_buff->buffer[file_buff->rows-2]);
-			insert_char(file_buff,file_buff->rows-2,length-1,'-');
-			insert_char(file_buff,file_buff->rows-2,length,'\n');
-			insert_char(file_buff,file_buff->rows-2,length+1,'\0');
-		}
-	}
 }
