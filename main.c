@@ -12,7 +12,6 @@
 #include <ctype.h>
 #include <ncurses.h>
 #include <sys/wait.h>
-#include "cutpaste.h"
 #include "writesave.h"
 #include "statdisplay.h"
 #include "filebuffer.h"
