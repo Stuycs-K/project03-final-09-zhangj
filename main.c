@@ -95,9 +95,7 @@ int main(int argc, char *argv[]) {
 	int xLineEnd = x;
 	int yLineEnd = y;
 	int curY = y;
-  if (strcmp(filename,"Untitled.txt")==0){
-    insert_row(file_buff,y-1);
-  }
+  insert_row(file_buff,y-1);
 
 	while (1) {
 		getmaxyx(win, height, width);
