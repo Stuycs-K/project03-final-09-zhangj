@@ -83,19 +83,19 @@ int main(int argc, char *argv[]) {
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
 
-	wmove(win,1,0);
-	for (int r = 0; r < file_buff->rows; r++) {
-		wprintw(win,"%s",file_buff->buffer[r]);
-	}
-	wrefresh(win);
-	x = getcurx(win);
-	y = getcury(win);
+	// wmove(win,1,0);
+	// for (int r = 0; r < file_buff->rows; r++) {
+	// 	wprintw(win,"%s",file_buff->buffer[r]);
+	// }
+	// wrefresh(win);
+	y = file_buff->rows+1;
+	x = strlen(file_buff->buffer[y-1]);
 	wmove(win, y, x);
 	wrefresh(win);
 	int xLineEnd = x;
 	int yLineEnd = y;
 	int curY = y;
-  insert_row(file_buff,y-1);
+	insert_row(file_buff,y-1);
 
 	while (1) {
 		getmaxyx(win, height, width);
