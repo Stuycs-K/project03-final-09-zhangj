@@ -56,6 +56,7 @@ FILE* initFile(int argc, char *argv, char* filename, char* fileinfo){
 	}
 	else if (argc == 2){
 		sprintf(filename,"%s",argv);
+    printf("%s\n", filename);
 		file = open_read(filename);
 		stat_info(argv, fileinfo);
 	}
