@@ -56,9 +56,8 @@ FILE* initFile(int argc, char *argv, char* filename, char* fileinfo){
 	}
 	else if (argc == 2){
 		sprintf(filename,"%s",argv);
-    printf("%s\n", filename);
 		file = open_read(filename);
-		stat_info(argv, fileinfo);
+		stat_info(filename, fileinfo);
 	}
 	else {
 		printf("Incorrect number of arguments\n");
