@@ -22,3 +22,9 @@ void parse_args( char * line, char ** arg_ary ){
   }
   arg_ary[counter] = NULL;
 }
+
+void redirect_stdout(int fd) {
+	fflush(stdout); // unsure if needed
+	
+	dup2(fd, STDOUT_FILENO);
+}

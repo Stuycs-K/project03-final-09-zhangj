@@ -11,6 +11,7 @@
 #include <dirent.h>
 #include <ctype.h>
 #include <ncurses.h>
+#include <sys/wait.h>
 #include "cutpaste.h"
 #include "writesave.h"
 #include "statdisplay.h"
@@ -25,6 +26,11 @@ void signal_handler() {
   printf("Segfault\n");
   exit(1);
 }
+
+// put this somewhere else later
+#define ARRAY_SIZE 16
+#define READ_FD 0
+#define WRITE_FD 1
 
 // ascii values 1-26 are ctrl + ch (ctrl A is 1)
 int to_ctrl_char(int ch) {
@@ -69,6 +75,8 @@ int main(int argc, char *argv[]) {
 	char *fileinfo;
 	char* filename = malloc(256 * sizeof(char));
 	FILE *file;
+	int pipe_fds[2];
+	pipe(pipe_fds);
 
 	fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
 
@@ -203,7 +211,24 @@ int main(int argc, char *argv[]) {
 			wrefresh(win);
 			char* cmd_args = malloc(256 * sizeof(char));
 			my_fgets(win, cmd_args, height, 32, 126);
-			
+
+			char **arg_array = (char**) malloc(ARRAY_SIZE * sizeof(char*));
+			parse_args(cmd_args, arg_array);
+
+			int forkpid = fork();
+			if (forkpid == -1) {
+				fprintf(stderr, "Failed to fork");
+				endwin();
+				exit(1);
+			} else if (forkpid == 0) { // child process
+				redirect_stdout(pipe_fds[WRITE_FD]);
+				execvp(arg_array[0], arg_array);
+				fprintf(stderr, "Failed to execvp '%s'", arg_array[0]);
+				exit(1);
+			} else { // main process
+				int status;
+				waitpid(forkpid, &status, 0);
+			}
 			// Fork, pipe output of execvp to parent, copy output from pipe to file buffer
 			// char * args[256];
 			// parse_args(line, args);
