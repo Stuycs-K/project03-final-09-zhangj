@@ -47,15 +47,15 @@ void quit(struct file_buffer *file_buff, char* fname, int changed) {
   endwin();
   if (changed == 1){
     printf("Would you like to save your modified changes? y/n ");
-    char response[256];
-    response[256] = '\0';
-    fgets(response, 255, stdin);
+    char response[LINE_SIZE];
+    fgets(response, LINE_SIZE, stdin);
+    response[LINE_SIZE-1] = '\0';
     if (response[0] == 'y'){
       if (strcmp(fname,UNTITLED_FILENAME) == 0){
         printf("File name: ");
-        char newfname[256];
-        fgets(newfname, 255, stdin);
-        char* newfname1 = (char *) malloc(256);
+        char newfname[LINE_SIZE];
+        fgets(newfname, LINE_SIZE, stdin);
+        char* newfname1 = (char *) malloc(LINE_SIZE * sizeof(char));
         sscanf(newfname, "%[^\n]", newfname1);
         if (strlen(newfname1) <= 0){
           remove(UNTITLED_FILENAME);
