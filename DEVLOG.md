@@ -74,3 +74,6 @@ Fixed further issues with insertion of newlines and made function for deleting n
 
 ### 2025-01-17 - Bug-fixing and working more towards exec functionality
 Made all newline functions work now, started to refactor the main loop to make the exec sections easier
+
+### 2025-01-18 - Execvp in the text editor
+Worked on implementation of execvp. Buggy but functional
