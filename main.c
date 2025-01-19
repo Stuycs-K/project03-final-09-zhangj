@@ -160,6 +160,8 @@ int main(int argc, char *argv[]) {
 				filename = line;
 			}
 			save(file_buff, filename);
+			free(file_buff);
+			file_buff = create_file_buffer(10);
 			file = open_read(filename);
 			read_into_buffer(file, file_buff, width);
 			stat_info(filename, fileinfo);
