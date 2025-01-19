@@ -45,26 +45,6 @@ void resize(struct file_buffer *file_buff) {
 	}
 }
 
-// takes a file pointer and a struct file_buffer, and reads in the full contents of the file into the file_buffer's char** buffer
-void read_into_buffer(FILE *file, struct file_buffer *file_buff) {
-	if (fseek(file, 0, SEEK_SET) != 0) {
-		endwin();
-		fprintf(stderr, "read_into_buffer: failed to fseek to 0, SEEK_SET\nerrno %d: %s\n", errno, strerror(errno));
-		exit(1);
-	}
-
-	char line[LINE_SIZE];
-	for (file_buff->rows = 0; fgets(line, LINE_SIZE, file) != NULL; file_buff->rows++) {
-		// grow the array if needed
-		if (file_buff->rows >= file_buff->array_length) {
-			resize(file_buff);
-		}
-
-		line[LINE_SIZE-1] = '\0'; // safety null
-		strncpy(file_buff->buffer[file_buff->rows], line, LINE_SIZE);
-	}
-}
-
 // note: all these insert / delete functions use a O(n) shift for EVERY character which is really bad even for relatively short strings, but maybe it's fine
 
 // inserts a character ch such that it is at buffer[r][c] after insertion
@@ -234,4 +214,33 @@ void delete_newline(struct file_buffer *file_buff, int r) {
 	}
 
 	file_buff->buffer[file_buff->rows] = (char*) malloc(LINE_SIZE * sizeof(char));
+}
+
+// takes a file pointer and a struct file_buffer, and reads in the full contents of the file into the file_buffer's char** buffer
+void read_into_buffer(FILE *file, struct file_buffer *file_buff, int winLen) {
+	if (fseek(file, 0, SEEK_SET) != 0) {
+		endwin();
+		fprintf(stderr, "read_into_buffer: failed to fseek to 0, SEEK_SET\nerrno %d: %s\n", errno, strerror(errno));
+		exit(1);
+	}
+
+	char line[LINE_SIZE];
+	for (file_buff->rows = 0; fgets(line, LINE_SIZE, file) != NULL; file_buff->rows++) {
+		// grow the array if needed
+		if (file_buff->rows >= file_buff->array_length) {
+			resize(file_buff);
+		}
+
+		line[LINE_SIZE-1] = '\0'; // safety null
+		strncpy(file_buff->buffer[file_buff->rows], line, LINE_SIZE);
+
+		int length = strlen(file_buff->buffer[file_buff->rows-1]);
+		if (length >= winLen-7){
+			if (file_buff->rows+1 >= file_buff->array_length) {
+				resize(file_buff);
+			}
+			insert_char(file_buff,file_buff->buffer[file_buff->rows-1],length,'-');
+			insert_newline(file_buff,file_buff->buffer[file_buff->rows-1],winLen-8);
+		}
+	}
 }

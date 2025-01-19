@@ -67,14 +67,9 @@ int main(int argc, char *argv[]) {
 	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0, lineNum;
 	char *fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
 	char* filename = malloc(256 * sizeof(char));
-
-	FILE* file = initFile(argc,argv,filename,fileinfo);
-
 	struct file_buffer *file_buff = create_file_buffer(10);
-	if (argc == 2){
-		read_into_buffer(file, file_buff);
-	}
-
+	FILE* file = initFile(argc,argv,filename,fileinfo);
+	
 	initscr();
 	raw();
 	noecho();
@@ -83,6 +78,9 @@ int main(int argc, char *argv[]) {
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
 
+	if (argc == 2){
+		read_into_buffer(file, file_buff, width);
+	}
 	y = file_buff->rows+1;
 	insert_row(file_buff,y-1);
 	x = strlen(file_buff->buffer[y-1]);
