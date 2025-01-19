@@ -269,7 +269,6 @@ int main(int argc, char *argv[]) {
 				yLineEnd++;
 				x = 0;
 				xLineEnd = 0;
-				insert
 			}
 			insert_char(file_buff,y-1,x,c);
 			x++;
