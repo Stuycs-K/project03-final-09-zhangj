@@ -68,7 +68,8 @@ int main(int argc, char *argv[]) {
 	char *fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
 	char* filename = malloc(256 * sizeof(char));
 
-	FILE *file = initFile(argc,argv,filename,fileinfo);
+	FILE * file;
+	file = initFile(argc,argv,filename,fileinfo);
 
 	struct file_buffer *file_buff = create_file_buffer(10);
 	if (argc == 2){
