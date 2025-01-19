@@ -226,7 +226,7 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff, int winLen) {
 
 	char line[LINE_SIZE];
 	int length;
-	for (file_buff->rows = 0; fgets(line, LINE_SIZE, file) != NULL) {
+	while(fgets(line, LINE_SIZE, file) != NULL) {
 		// grow the array if needed
 		if (file_buff->rows >= file_buff->array_length) {
 			resize(file_buff);
@@ -237,14 +237,14 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff, int winLen) {
 		file_buff->rows++;
 
 		length = strlen(file_buff->buffer[file_buff->rows-1]);
-		if (length >= winLen-7){
+		while (length >= winLen-7){
 			if (file_buff->rows >= file_buff->array_length) {
 				resize(file_buff);
 			}
 			insert_newline(file_buff,file_buff->rows-1,winLen-8);
 			file_buff->rows++;
 			insert_char(file_buff,file_buff->rows-2,length,'-');
-			
+			length = strlen(file_buff->buffer[file_buff->rows-2]);
 		}
 	}
 }
