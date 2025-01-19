@@ -170,6 +170,9 @@ int main(int argc, char *argv[]) {
 			if (strcmp(filename, UNTITLED_FILENAME) == 0){
 				char* line = malloc(256 * sizeof(char));
 				wmove(win, height-2, 0);
+				for (int i = 0; i < width; i++)
+					wprintw(win, " ");
+				wmove(win, height-2, 0);
 				wprintw(win, "(Save) Enter Filename: ");
 				wrefresh(win);
 				
@@ -186,7 +189,9 @@ int main(int argc, char *argv[]) {
 					saved_error = 1;
 					sprintf(saved_error_message, "Error cannot use %s as filename.", UNTITLED_FILENAME);
 					can_save = 0;
-		        } else {
+		        } 
+
+		        else {
 					free(filename);
 					filename = line;
 					remove(UNTITLED_FILENAME);
