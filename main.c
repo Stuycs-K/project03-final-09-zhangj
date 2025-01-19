@@ -76,7 +76,6 @@ int main(int argc, char *argv[]) {
 	char* filename = malloc(256 * sizeof(char));
 	FILE *file;
 	int pipe_fds[2];
-	pipe(pipe_fds);
 
 	char* cmd_args = malloc(LINE_SIZE * sizeof(char));
 	char **arg_array = (char**) malloc(ARRAY_SIZE * sizeof(char*));
@@ -226,17 +225,34 @@ int main(int argc, char *argv[]) {
 				wprintw(win, "r=%d: '%s'\n", rr, arg_array[rr]);
 			}
 
+			pipe(pipe_fds);
 			int forkpid = fork();
 			if (forkpid == -1) {
 				fprintf(stderr, "Failed to fork");
 				endwin();
 				exit(1);
 			} else if (forkpid == 0) { // child process
+				close(pipe_fds[READ_FD]);
 				redirect_stdout(pipe_fds[WRITE_FD]);
-				execvp(arg_array[0], arg_array);
-				fprintf(stderr, "Failed to execvp '%s'", arg_array[0]);
-				exit(1);
+
+				int forkpid2 = fork();
+				if (forkpid2 == -1) {
+					fprintf(stderr, "Failed to fork 2");
+					endwin();
+					exit(1);
+				} else if (forkpid == 0) {
+					execvp(arg_array[0], arg_array);
+					fprintf(stderr, "Failed to execvp '%s'", arg_array[0]);
+					exit(1);
+				} else {
+					int status;
+					waitpid(forkpid, &status, 0);
+					close(pipe_fds[WRITE_FD]);
+					exit(0);
+				}
+
 			} else { // main process
+				close(pipe_fds[WRITE_FD]);
 				wmove(win, height-3, 0);
 				wprintw(win, "main process: waiting for child now");
 				wrefresh(win);
