@@ -237,11 +237,11 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff, int winLen) {
 		file_buff->rows++;
 
 		length = strlen(file_buff->buffer[file_buff->rows-1]);
-		while (length >= winLen-6){
+		while (length >= winLen-7){
 			if (file_buff->rows >= file_buff->array_length) {
 				resize(file_buff);
 			}
-			insert_newline(file_buff,file_buff->rows-1,winLen-8);
+			insert_newline(file_buff,file_buff->rows-1,winLen-9);
 			length = strlen(file_buff->buffer[file_buff->rows-2]);
 			insert_char(file_buff,file_buff->rows-2,length-1,'-');
 			insert_char(file_buff,file_buff->rows-2,length,'\n');
