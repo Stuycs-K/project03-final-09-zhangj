@@ -130,7 +130,7 @@ int main(int argc, char *argv[]) {
 		}
 		wclear(win);
 		wrefresh(win);
-		mvwprintw(win,0,0,"%d:%d | Ctrl+Q - Exit  Ctrl+S - Save  Ctrl+T - execute  Ctrl+G - go to line\n", y, x+1);
+		mvwprintw(win,0,0,"%d:%d | Ctrl+Q - Exit  Ctrl+S - Save  Ctrl+T - Execute  Ctrl+G - Go to line #\n", y, x+1);
 		mvwprintw(win,height-1,0, "%s", fileinfo);
 		if (saved > 0){
 			mvwprintw(win, height-2, 0, "File Saved.");
@@ -218,14 +218,6 @@ int main(int argc, char *argv[]) {
 			}
 			parse_args(cmd_args, arg_array);
 
-			/*
-			wmove(win, height-10, 0);
-			wprintw(win, "command has been entered:\n");
-			for (int rr = 0; arg_array[rr] != NULL; rr++) {
-				wprintw(win, "r=%d: '%s'\n", rr, arg_array[rr]);
-			}
-			*/
-
 			pipe(pipe_fds);
 			int forkpid = fork();
 			if (forkpid == -1) {
@@ -273,6 +265,13 @@ int main(int argc, char *argv[]) {
 
 					insert_at_end(file_buff, line);
 				}
+				file_buff->rows--;
+
+				y = file_buff->rows;
+				x = strlen(file_buff->buffer[y-1])-1;
+				curY = y;
+				yLineEnd = y;
+				xLineEnd = x;
 			}
 
 			changed = 1;
