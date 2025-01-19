@@ -70,7 +70,7 @@ void my_fgets(WINDOW *win, char *line, int height, int char_range_min, int char_
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
 	signal(SIGSEGV, signal_handler);
-	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0, lineNum;
+	int c, x = 0, y = 0, height, width, taboffset = 0, saved = 0, changed = 0, top = 0, lineNum, saved_error=0;
 	char *fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
 
 	FILE *file;
@@ -85,19 +85,6 @@ int main(int argc, char *argv[]) {
 	struct file_buffer *file_buff = create_file_buffer(10);
 	file = initFile(argc,argv,filename,fileinfo);
 
-	/*
-	for (int r = 0; r < file_buff->rows; r++) {
-		printf("%d: '%s'", r, file_buff->buffer[r]);
-	}
-	printf("\n\n\n");
-	char line_to_add[] = "hello world";
-	insert_at_end(file_buff, line_to_add);
-	for (int r = 0; r < file_buff->rows; r++) {
-		printf("%d: '%s'", r, file_buff->buffer[r]);
-	}
-	exit(0);
-	*/
-	
 	initscr();
 	raw();
 	noecho();
@@ -115,6 +102,8 @@ int main(int argc, char *argv[]) {
 	int xLineEnd = x;
 	int yLineEnd = y;
 	int curY = y;
+
+	char *saved_error_message = malloc(LINE_SIZE * sizeof(char));
 	
 	while (1) {
 		getmaxyx(win, height, width);
@@ -135,6 +124,10 @@ int main(int argc, char *argv[]) {
 		if (saved > 0){
 			mvwprintw(win, height-2, 0, "File Saved.");
 			saved = 0;
+		}
+		else if (saved_error > 0) {
+			mvwprintw(win, height-2, 0, "%s", saved_error_message);
+			saved_error = 0;
 		}
 		for (int r = top+1; r < file_buff->rows+1; r++){
 			if (r >= bottom){
@@ -173,28 +166,42 @@ int main(int argc, char *argv[]) {
 			break;
 		}
 		if (c == to_ctrl_char('S')) {
-			if (strcmp(filename,"Untitled.txt") == 0){
+			int can_save = 1;
+			if (strcmp(filename, UNTITLED_FILENAME) == 0){
+				char* line = malloc(256 * sizeof(char));
 				wmove(win, height-2, 0);
 				wprintw(win, "(Save) Enter Filename: ");
 				wrefresh(win);
-				char* line = malloc(256 * sizeof(char));
+				
 				my_fgets(win, line, height, 32, 126);
-				if (strcmp(line,"Untitled.txt")==0){
-          remove("Untitled.txt");
-          printf("Filename cannot be Untitled.txt\n");
-          exit(1);
-        }
-				free(filename);
-				filename = line;
-				remove("Untitled.txt");
+				// check that:
+				// - the filename is not empty and
+				// - the filename is not "untitled.txt"
+				if (strcmp(line, "") == 0) {
+					saved_error = 1;
+					sprintf(saved_error_message, "Error cannot use empty string as filename.");
+					can_save = 0;
+				}
+				else if (strcmp(line, UNTITLED_FILENAME) == 0) {
+					saved_error = 1;
+					sprintf(saved_error_message, "Error cannot use %s as filename.", UNTITLED_FILENAME);
+					can_save = 0;
+		        } else {
+					free(filename);
+					filename = line;
+					remove(UNTITLED_FILENAME);
+				}
 			}
-			save(file_buff, filename);
-			free(file_buff);
-			file_buff = create_file_buffer(10);
-			file = open_read(filename);
-			read_into_buffer(file, file_buff, width);
-			stat_info(filename, fileinfo);
-			saved = 1;
+
+			if (can_save) {
+				save(file_buff, filename);
+				free(file_buff);
+				file_buff = create_file_buffer(10);
+				file = open_read(filename);
+				read_into_buffer(file, file_buff, width);
+				stat_info(filename, fileinfo);
+				saved = 1;
+			}
       changed = 0;
 		}
 		if (c == to_ctrl_char('C')) {
@@ -261,6 +268,8 @@ int main(int argc, char *argv[]) {
 				while ((bytes_read = read(pipe_fds[READ_FD], line, LINE_SIZE-1))) {
 					if (bytes_read == -1) {
 						fprintf(stderr, "Failed to read from pipe\n");
+						endwin();
+						exit(1);
 					}
 
 					insert_at_end(file_buff, line);

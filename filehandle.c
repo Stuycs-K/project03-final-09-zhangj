@@ -49,7 +49,7 @@ void close_file(FILE *file) {
 FILE* initFile(int argc, char **argv, char* filename, char* fileinfo){
   FILE *file;
   if (argc == 1){
-		sprintf(filename, "Untitled.txt");
+		sprintf(filename, UNTITLED_FILENAME);
 		file = fopen(filename, "w+");
 		close_file(file);
 		stat_info(filename, fileinfo);
