@@ -78,6 +78,9 @@ int main(int argc, char *argv[]) {
 	int pipe_fds[2];
 	pipe(pipe_fds);
 
+	char* cmd_args = malloc(LINE_SIZE * sizeof(char));
+	char **arg_array = (char**) malloc(ARRAY_SIZE * sizeof(char*));
+
 	fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
 
 	if (argc == 1){
@@ -209,11 +212,19 @@ int main(int argc, char *argv[]) {
 			wmove(win, height-2, 0);
 			wprintw(win, "Enter Command: ");
 			wrefresh(win);
-			char* cmd_args = malloc(256 * sizeof(char));
+			
 			my_fgets(win, cmd_args, height, 32, 126);
-
-			char **arg_array = (char**) malloc(ARRAY_SIZE * sizeof(char*));
+			int cmd_args_length = strlen(cmd_args);
+			if (cmd_args[cmd_args_length-1] == '\n') { // strip newline
+				cmd_args[cmd_args_length-1] = '\0';
+			}
 			parse_args(cmd_args, arg_array);
+
+			wmove(win, height-10, 0);
+			wprintw(win, "command has been entered:\n");
+			for (int rr = 0; arg_array[rr] != NULL; rr++) {
+				wprintw(win, "r=%d: '%s'\n", rr, arg_array[rr]);
+			}
 
 			int forkpid = fork();
 			if (forkpid == -1) {
@@ -226,14 +237,24 @@ int main(int argc, char *argv[]) {
 				fprintf(stderr, "Failed to execvp '%s'", arg_array[0]);
 				exit(1);
 			} else { // main process
+				wmove(win, height-3, 0);
+				wprintw(win, "main process: waiting for child now");
+				wrefresh(win);
 				int status;
 				waitpid(forkpid, &status, 0);
+
+				// copy everything from the child's command into the file_buffer
+				int bytes_read;
+				char line[LINE_SIZE];
+				while ((bytes_read = read(pipe_fds[READ_FD], line, LINE_SIZE-1))) {
+					if (bytes_read == -1) {
+						fprintf(stderr, "Failed to read from pipe\n");
+					}
+
+					insert_at_end(file_buff, line);
+				}
 			}
-			// Fork, pipe output of execvp to parent, copy output from pipe to file buffer
-			// char * args[256];
-			// parse_args(line, args);
-			// execvp(args[0], args);
-			// free(line);
+
 		}
 		if (c == to_ctrl_char('G')){
 			wmove(win, height-2, 0);
