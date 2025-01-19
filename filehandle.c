@@ -11,6 +11,7 @@
 #include <dirent.h>
 #include <ncurses.h>
 #include "filehandle.h"
+#include "statdisplay.h"
 
 // returns a file pointer to the file, opened only in read mode
 FILE* open_read(char *filename) {
