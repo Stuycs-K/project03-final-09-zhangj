@@ -23,7 +23,9 @@ void save(struct file_buffer *file_buff, char *filename) {
   for (int r = 0; r < file_buff->rows; r++) {
     int length = strlen(file_buff->buffer[r]);
     if (file_buff->buffer[r][length-2] == '-' && file_buff->buffer[r][length-1] == '\n'){
-      //Insert new delete here, should delete - and \n then append line below to line above before writing to file
+      delete_char(file_buff,r,length-2);
+      delete_char(file_buff,r,length-1);
+      delete_newline(file_buff,r+1);
     }
     int elements = fwrite(file_buff->buffer[r], sizeof(char), length, file);
     if (elements != length) {
