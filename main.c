@@ -392,6 +392,10 @@ int main(int argc, char *argv[]) {
 				insert_char(file_buff,y-1,x,'\t');
 				x++;
 			}
+			else{
+				has_error = 1;
+				sprintf(error_message, "Error: You may not tab past the window length.");
+			}
 		}
 		if (32 <= c && c <= 126) { // alphanumerics, punctuation, etc.
 			changed = 1;
@@ -400,17 +404,23 @@ int main(int argc, char *argv[]) {
 				sprintf(error_message, "Error: Maximum line length is 2x the window width.");
 			}
 			else if (x+taboffset>=width-7){
-				insert_char(file_buff,y-1,x,'-');
-				insert_char(file_buff,y-1,x+1,'\n');
-				insert_row(file_buff,y);
-				y++;
-				curY++;
-				yLineEnd++;
-				x = 0;
-				xLineEnd = 0;
-				longLine = 1;
-				insert_char(file_buff,y-1,x,c);
-				x++;
+				if (taboffset > 5){
+					has_error = 1;
+					sprintf(error_message, "Error: Tabs are not supported with long lines.");
+				}
+				else{
+					insert_char(file_buff,y-1,x,'-');
+					insert_char(file_buff,y-1,x+1,'\n');
+					insert_row(file_buff,y);
+					y++;
+					curY++;
+					yLineEnd++;
+					x = 0;
+					xLineEnd = 0;
+					longLine = 1;
+					insert_char(file_buff,y-1,x,c);
+					x++;
+				}
 			}
 			else{
 				insert_char(file_buff,y-1,x,c);
