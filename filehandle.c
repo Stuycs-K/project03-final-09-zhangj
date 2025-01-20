@@ -60,7 +60,7 @@ FILE* initFile(int argc, char **argv, char* filename, char* fileinfo){
 		stat_info(filename, fileinfo);
 	}
 	else {
-		printf("Incorrect number of arguments\n");
+		printf("Incorrect number of arguments. The program accepts one argument as the file name or no argument which makes a temporary file titled Untitled.txt\n");
 		exit(1);
 	}
   return file;
