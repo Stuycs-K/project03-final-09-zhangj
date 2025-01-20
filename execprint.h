@@ -2,6 +2,7 @@
 #define EXECPRINT_H
 
 #include <unistd.h>
+#include <sys/wait.h>
 #include "filebuffer.h"
 
 #define ARRAY_SIZE 16
