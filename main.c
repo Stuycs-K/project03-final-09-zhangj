@@ -119,12 +119,12 @@ int main(int argc, char *argv[]) {
 	
 	while (1) {
 		getmaxyx(win, height, width);
-		if (y >= bottom){
+		while (y >= bottom){
 			bottom += height-3;
 			top += height-3;
 			curY = 1;
 		}
-		if (y <= top && top > 0){
+		while (y <= top && top > 0){
 			bottom -= height-3;
 			top -= height-3;
 			curY = height-3;
@@ -225,15 +225,6 @@ int main(int argc, char *argv[]) {
 				changed = 0;
 
 			}
-		}
-		if (c == to_ctrl_char('C')) {
-			// copy
-		}
-		if (c == to_ctrl_char('V')) {
-			// paste
-		}
-		if (c == to_ctrl_char('X')) {
-			// cut (copy and remove)
 		}
 		if (c == to_ctrl_char('T')) {
 			clear_fgets_line(win, height, width);
