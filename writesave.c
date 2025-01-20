@@ -39,6 +39,9 @@ void save(struct file_buffer *file_buff, char *filename) {
 // Quits out of raw mode and prompts user if they want to save the changes and asks them if they want to rename the file before quitting
 void quit(struct file_buffer *file_buff, char* fname, int changed) {
   endwin();
+  struct stat *stat_buffer = malloc(sizeof(struct stat));
+  stat(fname, stat_buffer);
+  int bytes = stat_buffer->st_size;
   if (changed == 1){
     printf("Would you like to save your modified changes? y/n ");
     char response[LINE_SIZE];
@@ -70,13 +73,19 @@ void quit(struct file_buffer *file_buff, char* fname, int changed) {
       }
     }
     else if (response[0] == 'n'){
-        if (strcmp(fname,UNTITLED_FILENAME) == 0){
-          remove(UNTITLED_FILENAME);
-        }
-        printf("Quitting without saving...\n");
+      if (strcmp(fname,UNTITLED_FILENAME) == 0){
+        remove(UNTITLED_FILENAME);
+      }
+      else if (bytes == 0){
+        remove(fname);
+      }
+      printf("Quitting without saving...\n");
     }
     else{
-        printf("Invalid input. Quitting without saving...\n");
+      if (bytes == 0){
+        remove(fname);
+      }
+      printf("Invalid input. Quitting without saving...\n");
     }
   }
   else{
