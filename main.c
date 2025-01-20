@@ -158,7 +158,7 @@ int main(int argc, char *argv[]) {
 				taboffset++;
 			}
 		}
-		taboffset-=x;
+		taboffset-=x+4;
 		wmove(win, curY, x+taboffset+5);
 		wrefresh(win);
 		c = wgetch(win); // program waits on this
@@ -314,10 +314,15 @@ int main(int argc, char *argv[]) {
 			my_fgets(win, line, height, '0', '9', 12); // custom fgets for window
 			lineNum = atoi(line);
 			
-			if (!(1 <= lineNum && lineNum <= file_buff->rows)) {
+			if (strcmp(line, "") == 0) {
+				has_error = 1;
+				sprintf(error_message, "Error: cannot use empty string as line number.");
+			}
+			else if (!(1 <= lineNum && lineNum <= file_buff->rows)) {
 				has_error = 1;
 				sprintf(error_message, "Error: cannot goto line #%d", lineNum);
-			} else {
+			} 
+			else {
 				
 				if (lineNum <= file_buff->rows){
 	        while (lineNum < top){
