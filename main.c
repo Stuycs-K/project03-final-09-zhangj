@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
 		read_into_buffer(file, file_buff, width);
 	}
 	if (argc == 1){
-		insert_row(file_buff,y-1);
+		insert_row(file_buff,0);
 	}
 	y = file_buff->rows;
 	x = strlen(file_buff->buffer[y-1]);
