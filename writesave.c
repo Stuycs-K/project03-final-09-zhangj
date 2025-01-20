@@ -54,19 +54,43 @@ void quit(struct file_buffer *file_buff, char* fname, int changed) {
         fgets(newfname, LINE_SIZE, stdin);
         char* newfname1 = (char *) malloc(LINE_SIZE * sizeof(char));
         sscanf(newfname, "%[^\n]", newfname1);
+				int can_save = 1;
         if (strlen(newfname1) <= 0){
           remove(UNTITLED_FILENAME);
-          printf("Filename must be greater than length 0\n");
+					fprintf(stderr, "Error: 0-length filename. Not saving.\n");
           exit(1);
         }
-        if (strcmp(newfname1,UNTITLED_FILENAME)==0){
+				else if (strcmp(newfname1,UNTITLED_FILENAME)==0){
           remove(UNTITLED_FILENAME);
-          fprintf(stderr, "Filename cannot be %s\n", UNTITLED_FILENAME);
+					fprintf(stderr, "Filename cannot be %s. Not saving. \n", UNTITLED_FILENAME);
           exit(1);
         }
-        save(file_buff, newfname1);
-        free(newfname1);
-        remove(UNTITLED_FILENAME);
+				else if (access(newfname1, F_OK) != -1){  // check if the file exists using access()
+					char *secondline = (char*) malloc(LINE_SIZE * sizeof(char));
+					printf("The file \"%s\" already exists. Overwrite it? (y/n): ", newfname1);
+					fgets(secondline, LINE_SIZE, stdin);
+					if (secondline[0] == '\0') {
+						fprintf(stderr, "Error: 0-length filename. Not saving.\n");
+						exit(1);
+					} else if (secondline[0] == 'y') {
+						can_save = 1;
+						free(newfname1);
+						newfname1 = secondline;
+					} else if (secondline[0] == 'n') {
+						can_save = 0;
+						free(secondline);
+						free(newfname1);
+					} else {
+						fprintf(stderr, "Error: did not recognize response '%s'. Not saving.", secondline);
+						exit(1);
+					}
+				}		
+				
+				if (can_save) {
+	        save(file_buff, newfname1);
+	        free(newfname1);
+	        remove(UNTITLED_FILENAME);
+				}
       }
       else{
         save(file_buff, fname);
