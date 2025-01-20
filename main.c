@@ -318,11 +318,8 @@ int main(int argc, char *argv[]) {
 				while (y >= bottom){
 					bottom += height-3;
 					top += height-3;
+					curY -= height-3
 				}
-
-				wmove(win, curY, x+taboffset+5);
-				wrefresh(win);
-
 			}
 
 			changed = 1;
