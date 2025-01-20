@@ -127,7 +127,6 @@ int main(int argc, char *argv[]) {
 		mvwprintw(win,height-1,0, "%s", fileinfo);
 		if (saved > 0){
 			mvwprintw(win, height-2, 0, "File Saved.");
-
 			saved = 0;
 		}
 		else if (has_error > 0) {
@@ -404,7 +403,7 @@ int main(int argc, char *argv[]) {
 				sprintf(error_message, "Error: Maximum line length is 2x the window width.");
 			}
 			else if (x+taboffset>=width-7){
-				if (taboffset > 5){
+				if (taboffset > 0){
 					has_error = 1;
 					sprintf(error_message, "Error: Tabs are not supported with long lines.");
 				}
