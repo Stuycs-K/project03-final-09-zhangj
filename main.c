@@ -384,7 +384,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == KEY_STAB || c=='\t'){
 			changed = 1;
-			if (longline == 1){
+			if (longLine == 1){
 				has_error = 1;
 				sprintf(error_message, "Error: Tabs are not supported with long lines.");
 			}
