@@ -109,10 +109,10 @@ int main(int argc, char *argv[]) {
 	if (argc == 2){
 		read_into_buffer(file, file_buff, width);
 	}
-	y = file_buff->rows+1;
 	if (argc == 1){
 		insert_row(file_buff,y-1);
 	}
+	y = file_buff->rows;
 	x = strlen(file_buff->buffer[y-1]);
 	int xLineEnd = x;
 	int yLineEnd = y;
