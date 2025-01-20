@@ -54,6 +54,7 @@ void my_fgets(WINDOW *win, char *line, int height, int char_range_min, int char_
 	while (1){
 		c1 = wgetch(win);
 		if (c1 == '\n'){
+			line[ind] = '\0';
 			return;
 		}
 		if (c1 == KEY_BACKSPACE || c1 == KEY_DC || c1 == 127){
@@ -313,7 +314,6 @@ int main(int argc, char *argv[]) {
 				x = strlen(file_buff->buffer[y-1])-1;
 				curY = y;
 				yLineEnd = y;
-				xLineEnd = x;
 			}
 
 			changed = 1;
