@@ -276,13 +276,13 @@ int main(int argc, char *argv[]) {
 					
 				} else {
 					int status;
-					int ret = waitpid(forkpid2, &status, 0);
+					waitpid(forkpid2, &status, 0);
 					close(pipe_fds[WRITE_FD]);
 
-					if (ret != -1) {
-						exit(0);
-					} else {
+					if (WEXITSTATUS(status) != 0) {
 						exit(1);
+					} else {
+						exit(0);
 					}
 				}
 
@@ -295,9 +295,9 @@ int main(int argc, char *argv[]) {
 				wrefresh(win);
 				*/
 				int status;
-				int ret = waitpid(forkpid, &status, 0);
+				waitpid(forkpid, &status, 0);
 				// if child failed, do not attempt to read from the pipe
-				if (ret == -1) {
+				if (WEXITSTATUS(status) != 0) {
 					sprintf(error_message, "Error: Unable to execvp '%s' properly", arg_array[0]);
 					close(pipe_fds[READ_FD]);
 					continue;
