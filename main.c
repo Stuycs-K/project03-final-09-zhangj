@@ -242,7 +242,12 @@ int main(int argc, char *argv[]) {
 			}
 			parse_args(cmd_args, arg_array);
 
-			pipe(pipe_fds);
+			if (pipe(pipe_fds) == -1) {
+				fprintf(stderr, "Failed to pipe\n");
+				endwin();
+				exit(1);
+			}
+			
 			int forkpid = fork();
 			if (forkpid == -1) {
 				fprintf(stderr, "Failed to fork");
@@ -257,10 +262,13 @@ int main(int argc, char *argv[]) {
 					fprintf(stderr, "Failed to fork 2");
 					endwin();
 					exit(1);
-				} else if (forkpid == 0) {
-					execvp(arg_array[0], arg_array);
-					fprintf(stderr, "Failed to execvp '%s'", arg_array[0]);
-					exit(1);
+				} else if (forkpid2 == 0) {
+					if (execvp(arg_array[0], arg_array) == -1) {
+						fprintf(stderr, "Failed to execvp '%s'", arg_array[0]);
+						error_message = "Error: Bad execvp commands";
+						has_error = 1;
+					}
+					
 				} else {
 					int status;
 					waitpid(forkpid, &status, 0);
@@ -283,6 +291,7 @@ int main(int argc, char *argv[]) {
 				int bytes_read;
 				char line[LINE_SIZE];
 				while ((bytes_read = read(pipe_fds[READ_FD], line, LINE_SIZE-1))) {
+					line[bytes_read] = '\0';
 					if (bytes_read == -1) {
 						fprintf(stderr, "Failed to read from pipe\n");
 						endwin();
