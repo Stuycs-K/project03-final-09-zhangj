@@ -320,6 +320,9 @@ int main(int argc, char *argv[]) {
 					top += height-3;
 				}
 
+				wmove(win, curY, x+taboffset+5);
+				wrefresh(win);
+
 			}
 
 			changed = 1;
