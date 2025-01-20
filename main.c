@@ -29,11 +29,6 @@ static void signal_handler(int signo) {
 	}
 }
 
-// put this somewhere else later
-#define ARRAY_SIZE 16
-#define READ_FD 0
-#define WRITE_FD 1
-
 // ascii values 1-26 are ctrl + ch (ctrl A is 1)
 int to_ctrl_char(int ch) {
 	if (islower(ch)) { ch = toupper(ch); }
@@ -263,90 +258,7 @@ int main(int argc, char *argv[]) {
 			}
 			parse_args(cmd_args, arg_array);
 
-			if (pipe(pipe_fds) == -1) {
-				fprintf(stderr, "Failed to pipe\n");
-				endwin();
-				exit(1);
-			}
-			
-			int forkpid = fork();
-			if (forkpid == -1) {
-				fprintf(stderr, "Failed to fork");
-				endwin();
-				exit(1);
-			} else if (forkpid == 0) { // child process
-				close(pipe_fds[READ_FD]);
-				redirect_stdout(pipe_fds[WRITE_FD]);
-
-				int forkpid2 = fork();
-				if (forkpid2 == -1) {
-					fprintf(stderr, "Failed to fork 2");
-					endwin();
-					exit(1);
-				} else if (forkpid2 == 0) {
-					if (execvp(arg_array[0], arg_array) == -1) {
-						// fprintf(stderr, "Failed to execvp '%s'", arg_array[0]);
-						exit(1);
-					}
-					
-				} else {
-					int status;
-					waitpid(forkpid2, &status, 0);
-					close(pipe_fds[WRITE_FD]);
-
-					if (WEXITSTATUS(status) != 0) {
-						exit(1);
-					} else {
-						exit(0);
-					}
-				}
-
-			} else { // main process
-				close(pipe_fds[WRITE_FD]);
-
-				int status;
-				waitpid(forkpid, &status, 0);
-				// if child failed, do not attempt to read from the pipe
-				if (WEXITSTATUS(status) != 0) {
-					has_error = 1;
-					sprintf(error_message, "Error: Unable to execvp '%s' properly", arg_array[0]);
-					close(pipe_fds[READ_FD]);
-					continue;
-				}
-
-				// copy everything from the child's command into the file_buffer
-				int bytes_read;
-				char line[LINE_SIZE];
-				while ((bytes_read = read(pipe_fds[READ_FD], line, LINE_SIZE-1))) {
-					line[bytes_read] = '\0';
-					if (bytes_read == -1) {
-						fprintf(stderr, "Failed to read from pipe\n");
-						endwin();
-						exit(1);
-					}
-					
-					insert_at_end(file_buff, line);
-
-				}
-
-				close(pipe_fds[READ_FD]);
-				
-				file_buff->rows--;
-
-				y = file_buff->rows;
-				x = strlen(file_buff->buffer[y-1])-1;
-				curY = y;
-				yLineEnd = y;
-
-				while (y >= bottom){
-					bottom += height-3;
-					top += height-3;
-					curY -= height-3;
-				}
-			}
-
-			changed = 1;
-
+			do_stuff(file_buff, pipe_fds, arg_array, error_message, &x, &y, &height, &width, &curY, &yLineEnd, &top, &bottom, &has_error, &changed);
 		}
 		if (c == to_ctrl_char('G')){
 			clear_fgets_line(win, height, width);
