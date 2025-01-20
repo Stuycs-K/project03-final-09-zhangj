@@ -289,15 +289,11 @@ int main(int argc, char *argv[]) {
 			} else { // main process
 				close(pipe_fds[WRITE_FD]);
 
-				/*
-				wmove(win, height-3, 0);
-				wprintw(win, "main process: waiting for child now");
-				wrefresh(win);
-				*/
 				int status;
 				waitpid(forkpid, &status, 0);
 				// if child failed, do not attempt to read from the pipe
 				if (WEXITSTATUS(status) != 0) {
+					has_error = 1;
 					sprintf(error_message, "Error: Unable to execvp '%s' properly", arg_array[0]);
 					close(pipe_fds[READ_FD]);
 					continue;
@@ -364,8 +360,9 @@ int main(int argc, char *argv[]) {
 					curY = lineNum;
 					x = strlen(file_buff->buffer[lineNum-1])-1;
 				}
-				free(line);
+				
 			}
+			free(line);
 		}
 		if (c == KEY_LEFT){
 			x = keyleft(x, y);
