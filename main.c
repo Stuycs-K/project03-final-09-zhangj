@@ -208,7 +208,7 @@ int main(int argc, char *argv[]) {
 				file = open_read(filename);
 				read_into_buffer(file, file_buff, width);
 				if (file_buff->buffer[y-2][strlen(file_buff->buffer[y-2])-1]=='\n'){
-					insert_newline(file_buff, y-1, x);
+					insert_row(file_buff,y-1);
 				}
 				stat_info(filename, fileinfo);
 				saved = 1;
