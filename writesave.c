@@ -92,6 +92,9 @@ void quit(struct file_buffer *file_buff, char* fname, int changed) {
     if (strcmp(fname,UNTITLED_FILENAME)==0){
       remove(UNTITLED_FILENAME);
     }
+    else if (bytes == 0){
+      remove(fname);
+    }
     printf("Quitting... (no changes were made since last save)\n");
   }
 }
