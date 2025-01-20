@@ -210,6 +210,10 @@ int main(int argc, char *argv[]) {
 				stat_info(filename, fileinfo);
 				saved = 1;
 				changed = 0;
+				if (file_buff->buffer[file_buff->rows-1][strlen(file_buff->buffer[file_buff->rows-1])-1]=='\n'){
+					insert_newline(file_buff, y-1, x);
+					y++;
+				}
 			}
 		}
 		if (c == to_ctrl_char('C')) {
