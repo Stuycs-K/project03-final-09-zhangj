@@ -83,3 +83,6 @@ Made all newline functions work now, started to refactor the main loop to make t
 
 ### 2025-01-18 - Execvp in the text editor
 Worked on implementation of execvp. Buggy but functional
+
+### 2025-01-19 - Fixing Exec and Final Cleanup
+Fixed exec bugs and other bugs for final clean up.
