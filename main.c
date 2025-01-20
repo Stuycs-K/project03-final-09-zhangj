@@ -108,9 +108,15 @@ int main(int argc, char *argv[]) {
 
 	if (argc == 2){
 		read_into_buffer(file, file_buff, width);
+		int length = strlen(file_buff->buffer[file_buff->rows-1]);
+		if (file_buff->buffer[file_buff->rows-1][length-1]=='\n'){
+			insert_row(file_buff,file_buff->rows);
+		}
 	}
-	y = file_buff->rows+1;
-	insert_row(file_buff,y-1);
+	if (argc == 1){
+		insert_row(file_buff,0);
+	}
+	y = file_buff->rows;
 	x = strlen(file_buff->buffer[y-1]);
 	int xLineEnd = x;
 	int yLineEnd = y;
@@ -132,7 +138,7 @@ int main(int argc, char *argv[]) {
 		}
 		wclear(win);
 		wrefresh(win);
-		mvwprintw(win,0,0,"%d:%d | Ctrl+Q - Exit  Ctrl+S - Save  Ctrl+T - Execute  Ctrl+G - Go to line #\n", y, x+1);
+		mvwprintw(win,0,0,"%d:%d| Ctrl+Q - Exit  Ctrl+S - Save  Ctrl+T - Execute  Ctrl+G - Go to line #\n", y, x+1);
 		mvwprintw(win,height-1,0, "%s", fileinfo);
 		if (saved > 0){
 			mvwprintw(win, height-2, 0, "File Saved.");
@@ -227,11 +233,6 @@ int main(int argc, char *argv[]) {
 						can_save = 0;
 					}
 				}		
-				else {
-					free(filename);
-					filename = line;
-					remove(UNTITLED_FILENAME);
-				} 
 			}
 
 			if (can_save) {
@@ -248,15 +249,6 @@ int main(int argc, char *argv[]) {
 				changed = 0;
 
 			}
-		}
-		if (c == to_ctrl_char('C')) {
-			// copy
-		}
-		if (c == to_ctrl_char('V')) {
-			// paste
-		}
-		if (c == to_ctrl_char('X')) {
-			// cut (copy and remove)
 		}
 		if (c == to_ctrl_char('T')) {
 			clear_fgets_line(win, height, width);
@@ -345,7 +337,12 @@ int main(int argc, char *argv[]) {
 				x = strlen(file_buff->buffer[y-1])-1;
 				curY = y;
 				yLineEnd = y;
-				xLineEnd = x;
+
+				while (y >= bottom){
+					bottom += height-3;
+					top += height-3;
+					curY -= height-3;
+				}
 			}
 
 			changed = 1;
