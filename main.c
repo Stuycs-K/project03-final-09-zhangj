@@ -40,11 +40,17 @@ int to_ctrl_char(int ch) {
 	return ch - 'A' + 1;
 }
 
+void clear_fgets_line(WINDOW *win, int height, int width) {
+	wmove(win, height-2, 0);
+	for (int i = 0; i < width; i++)
+		wprintw(win, " ");
+}
+
 void my_fgets(WINDOW *win, char *line, int height, int char_range_min, int char_range_max, int promptLen) {
 	int ind = 0;
 	int c1;
 	char lineBuff[255];
-	
+
 	while (1){
 		c1 = wgetch(win);
 		if (c1 == '\n'){
@@ -132,9 +138,7 @@ int main(int argc, char *argv[]) {
 			saved = 0;
 		}
 		else if (has_error > 0) {
-			wmove(win, height-2, 0);
-			for (int i = 0; i < width; i++)
-				wprintw(win, " ");
+			clear_fgets_line(win, height, width);
 			mvwprintw(win, height-2, 0, "%s", error_message);
 			has_error = 0;
 		}
@@ -163,10 +167,7 @@ int main(int argc, char *argv[]) {
 		wmove(win, curY, x+taboffset+5);
 		wrefresh(win);
 		c = wgetch(win); // program waits on this
-		wmove(win, height-2, 0);
-		for (int i = 0; i < width; i++)
-			wprintw(win, " ");
-
+	
 		
 		if (y == file_buff->rows){
 			xLineEnd = strlen(file_buff->buffer[y-1]);
@@ -183,9 +184,7 @@ int main(int argc, char *argv[]) {
 			int can_save = 1;
 			if (strcmp(filename, UNTITLED_FILENAME) == 0){
 				char* line = malloc(256 * sizeof(char));
-				wmove(win, height-2, 0);
-				for (int i = 0; i < width; i++)
-					wprintw(win, " ");
+				clear_fgets_line(win, height, width);
 				wmove(win, height-2, 0);
 				wprintw(win, "(Save) Enter Filename: ");
 				wrefresh(win);
@@ -237,6 +236,7 @@ int main(int argc, char *argv[]) {
 			// cut (copy and remove)
 		}
 		if (c == to_ctrl_char('T')) {
+			clear_fgets_line(win, height, width);
 			wmove(win, height-2, 0);
 			wprintw(win, "Enter Command: ");
 			wrefresh(win);
@@ -337,9 +337,7 @@ int main(int argc, char *argv[]) {
 
 		}
 		if (c == to_ctrl_char('G')){
-			wmove(win, height-2, 0);
-			for (int i = 0; i < width; i++)
-				wprintw(win, " ");
+			clear_fgets_line(win, height, width);
 			wmove(win, height-2, 0);
 			wprintw(win, "Go to line: ");
 			wrefresh(win);
