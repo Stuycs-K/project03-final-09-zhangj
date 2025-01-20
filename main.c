@@ -21,10 +21,12 @@
 
 // Group 20
 
-void signal_handler() {
-  endwin();
-  printf("Program Segfaulted\n");
-  exit(1);
+static void signal_handler(int signo) {
+	if (signo == SIGSEGV) {
+		endwin();
+		printf("Program Segfaulted\n");
+		exit(1);
+	}
 }
 
 // put this somewhere else later
@@ -161,6 +163,11 @@ int main(int argc, char *argv[]) {
 		wmove(win, curY, x+taboffset+5);
 		wrefresh(win);
 		c = wgetch(win); // program waits on this
+		wmove(win, height-2, 0);
+		for (int i = 0; i < width; i++)
+			wprintw(win, " ");
+
+		
 		if (y == file_buff->rows){
 			xLineEnd = strlen(file_buff->buffer[y-1]);
 		}
@@ -263,16 +270,20 @@ int main(int argc, char *argv[]) {
 					exit(1);
 				} else if (forkpid2 == 0) {
 					if (execvp(arg_array[0], arg_array) == -1) {
-						fprintf(stderr, "Failed to execvp '%s'", arg_array[0]);
-						error_message = "Error: Bad execvp commands";
-						has_error = 1;
+						// fprintf(stderr, "Failed to execvp '%s'", arg_array[0]);
+						exit(1);
 					}
 					
 				} else {
 					int status;
-					waitpid(forkpid, &status, 0);
+					int ret = waitpid(forkpid2, &status, 0);
 					close(pipe_fds[WRITE_FD]);
-					exit(0);
+
+					if (ret != -1) {
+						exit(0);
+					} else {
+						exit(1);
+					}
 				}
 
 			} else { // main process
@@ -284,7 +295,13 @@ int main(int argc, char *argv[]) {
 				wrefresh(win);
 				*/
 				int status;
-				waitpid(forkpid, &status, 0);
+				int ret = waitpid(forkpid, &status, 0);
+				// if child failed, do not attempt to read from the pipe
+				if (ret == -1) {
+					error_message = "Error: Unable to execvp properly";
+					close(pipe_fds[READ_FD]);
+					continue;
+				}
 
 				// copy everything from the child's command into the file_buffer
 				int bytes_read;
@@ -297,8 +314,16 @@ int main(int argc, char *argv[]) {
 						exit(1);
 					}
 
-					insert_at_end(file_buff, line);
+					if (ret != -1) { // child execvp'd properly
+						insert_at_end(file_buff, line);
+					} else {
+						// child wrote an error message, this is it
+						
+					}
 				}
+
+				close(pipe_fds[READ_FD]);
+				
 				file_buff->rows--;
 
 				y = file_buff->rows;
