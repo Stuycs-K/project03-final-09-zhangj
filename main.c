@@ -38,7 +38,7 @@ int to_ctrl_char(int ch) {
 	return ch - 'A' + 1;
 }
 
-void my_fgets(WINDOW *win, char *line, int height, int char_range_min, int char_range_max) {
+void my_fgets(WINDOW *win, char *line, int height, int char_range_min, int char_range_max, int promptLen) {
 	int ind = 0;
 	int c1;
 	char lineBuff[255];
@@ -49,11 +49,13 @@ void my_fgets(WINDOW *win, char *line, int height, int char_range_min, int char_
 			return;
 		}
 		if (c1 == KEY_BACKSPACE || c1 == KEY_DC || c1 == 127){
-			line[ind] = '\0';
-			ind--;
-			wmove(win, height-2, getcurx(win)-1);
-			wclrtoeol(win);
-			wrefresh(win);
+			if (getcurx(win) > promptLen){
+				line[ind] = '\0';
+				ind--;
+				wmove(win, height-2, getcurx(win)-1);
+				wclrtoeol(win);
+				wrefresh(win);
+			}
 		}
 		if (char_range_min <= c1 && c1 <= char_range_max){
 			sprintf(lineBuff, "%c", c1);
@@ -179,7 +181,7 @@ int main(int argc, char *argv[]) {
 				wprintw(win, "(Save) Enter Filename: ");
 				wrefresh(win);
 				
-				my_fgets(win, line, height, 32, 126);
+				my_fgets(win, line, height, 32, 126, 23);
 				// check that:
 				// - the filename is not empty and
 				// - the filename is not "untitled.txt"
@@ -230,7 +232,7 @@ int main(int argc, char *argv[]) {
 			wprintw(win, "Enter Command: ");
 			wrefresh(win);
 			
-			my_fgets(win, cmd_args, height, 32, 126);
+			my_fgets(win, cmd_args, height, 32, 126, 15);
 			int cmd_args_length = strlen(cmd_args);
 			if (cmd_args[cmd_args_length-1] == '\n') { // strip newline
 				cmd_args[cmd_args_length-1] = '\0';
@@ -306,7 +308,7 @@ int main(int argc, char *argv[]) {
 			wprintw(win, "Go to line: ");
 			wrefresh(win);
 			char* line = malloc(256 * sizeof(char));
-			my_fgets(win, line, height, '0', '9'); // custom fgets for window
+			my_fgets(win, line, height, '0', '9', 12); // custom fgets for window
 			lineNum = atoi(line);
 			
 			if (!(1 <= lineNum && lineNum <= file_buff->rows)) {
