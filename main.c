@@ -380,10 +380,15 @@ int main(int argc, char *argv[]) {
 			yLineEnd++;
 			x = 0;
 			xLineEnd = 0;
+			longLine = 0;
 		}
 		if (c == KEY_STAB || c=='\t'){
 			changed = 1;
-			if (x+taboffset+8-(taboffset%8)<width-7){
+			if (longline == 1){
+				has_error = 1;
+				sprintf(error_message, "Error: Tabs are not supported with long lines.");
+			}
+			else if (x+taboffset+8-(taboffset%8)<width-7){
 				insert_char(file_buff,y-1,x,'\t');
 				x++;
 			}
