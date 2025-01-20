@@ -2,7 +2,7 @@
 #define FILEHANDLE_H
 #include <stdio.h>
 
-#define UNTITLED_FILENAME "untitled.txt"
+#define UNTITLED_FILENAME "Untitled.txt"
 
 FILE* open_read(char *filename);
 void close_file(FILE *file);
