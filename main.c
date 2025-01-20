@@ -74,7 +74,7 @@ void my_fgets(WINDOW *win, char *line, int height, int char_range_min, int char_
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
 	signal(SIGSEGV, signal_handler);
-	int c, x = 0, y = 0, height, width, taboffset = 5, saved = 0, changed = 0, top = 0, lineNum, has_error=0;
+	int c, x = 0, y = 0, height, width, taboffset = 5, saved = 0, changed = 0, top = 0, lineNum, has_error=0, longLine = 0;
 	char *fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
 
 	FILE *file;
@@ -361,6 +361,10 @@ int main(int argc, char *argv[]) {
 				x = newX;
 				curY--;
 				yLineEnd--;
+				if (longLine == 1){
+					delete_char(file_buff,y-1,x-1);
+					x--;
+				}
 			}
 			else if (x > 0){
 				delete_char(file_buff,y-1,x-1);
@@ -378,7 +382,7 @@ int main(int argc, char *argv[]) {
 		}
 		if (c == KEY_STAB || c=='\t'){
 			changed = 1;
-			if (x+taboffset+8-(taboffset%8)<width-1){
+			if (x+taboffset+8-(taboffset%8)<width-7){
 				insert_char(file_buff,y-1,x,'\t');
 				x++;
 			}
@@ -394,6 +398,7 @@ int main(int argc, char *argv[]) {
 				yLineEnd++;
 				x = 0;
 				xLineEnd = 0;
+				longLine = 1;
 			}
 			insert_char(file_buff,y-1,x,c);
 			x++;
