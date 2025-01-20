@@ -38,7 +38,10 @@ Added line numbers to the window. Added display for cursor location in the top l
 Fixed a few bugs with moving the cursor with arrow keys when you typed past the window length and went back up. Fully implemented go to line (Ctrl+G) (40 min CW). Implemented inputting the file name on first save if the file is untitled (make run with no args) and writing the buffer to that new file. Started framework on execute (Ctrl+T) (45 min HW time).
 
 ### 2025-01-18 - Fixed error handling, created new file filehandle.c, worked on fixing bugs involving saving/typing past window length, changed cursor position setup
-Fixed error handling so that all errors exit the ncurses window when on it, moved file functions to new file filehandle.c and moved file initilization in main.c to filehandle.c, fixed bugs involving saving and typing past window length (while discovering more), changed cursor position setup to not use a unncessary loop
+Fixed error handling so that all errors exit the ncurses window when on it, moved file functions to new file filehandle.c and moved file initilization in main.c to filehandle.c, fixed bugs involving saving and typing past window length (while discovering more), changed cursor position setup to not use a unncessary loop (3h HW time).
+
+### 2025-01-19 - Fixed a multitude of bugs and added small qol/aesthetic features
+Fixed bugs involving typing past window length (still slightly buggy), added error messages for a lot of program limitations, fixed bugs involving saving files, fixed tabs, fixed deleting past the input prompt, add cleanup of files that are empty and you choose not to save them (3h HW time).
 
 
 
