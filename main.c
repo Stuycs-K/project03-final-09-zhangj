@@ -261,7 +261,7 @@ int main(int argc, char *argv[]) {
 			}
 			parse_args(cmd_args, arg_array);
 
-			do_stuff(file_buff, pipe_fds, arg_array, error_message, &x, &y, &height, &width, &curY, &yLineEnd, &top, &bottom, &has_error, &changed);
+			do_exec(file_buff, pipe_fds, arg_array, error_message, &x, &y, &height, &width, &curY, &yLineEnd, &top, &bottom, &has_error, &changed);
 		}
 		if (c == to_ctrl_char('G')){
 			clear_fgets_line(win, height, width);
@@ -299,6 +299,7 @@ int main(int argc, char *argv[]) {
 			}
 			free(line);
 		}
+
 		if (c == KEY_LEFT){
 			x = keyleft(x, y);
 		}

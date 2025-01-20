@@ -30,7 +30,7 @@ void redirect_stdout(int fd) {
 	dup2(fd, STDOUT_FILENO);
 }
 
-void do_stuff(struct file_buffer *file_buff, int *pipe_fds, char **arg_array, char *error_message, int *x, int *y, int *height, int *width, int *curY, int *yLineEnd, int *top, int *bottom, int *has_error, int *changed) {
+void do_exec(struct file_buffer *file_buff, int *pipe_fds, char **arg_array, char *error_message, int *x, int *y, int *height, int *width, int *curY, int *yLineEnd, int *top, int *bottom, int *has_error, int *changed) {
 	if (pipe(pipe_fds) == -1) {
 		fprintf(stderr, "Failed to pipe\n");
 		endwin();
