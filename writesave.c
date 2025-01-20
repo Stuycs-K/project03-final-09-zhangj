@@ -82,7 +82,10 @@ void quit(struct file_buffer *file_buff, char* fname, int changed) {
       printf("Quitting without saving...\n");
     }
     else{
-      if (bytes == 0){
+      if (strcmp(fname,UNTITLED_FILENAME) == 0){
+        remove(UNTITLED_FILENAME);
+      }
+      else if (bytes == 0){
         remove(fname);
       }
       printf("Invalid input. Quitting without saving...\n");
