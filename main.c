@@ -203,11 +203,11 @@ int main(int argc, char *argv[]) {
 					has_error = 1;
 					sprintf(error_message, "Error: cannot use %s as filename.", UNTITLED_FILENAME);
 					can_save = 0;
-				} else if (access(line, F_OK) == -1) // check if the file exists using access()
-					char *secondline = malloc(LINE_SIZE * sizeof(char));
+				} else if (access(line, F_OK) != -1){  // check if the file exists using access()
+					char *secondline = (char*) malloc(LINE_SIZE * sizeof(char));
 					clear_fgets_line(win, height, width);
 					wmove(win, height-2, 0);
-					wprintw(win, "The file \"%s\" already exists. Overwrite it? (y/n): ");
+					wprintw(win, "The file \"%s\" already exists. Overwrite it? (y/n): ", line);
 					wrefresh(win);
 					my_fgets(win, secondline, height, 32, 126, 23);
 					if (secondline[0] == '\0') {
@@ -216,6 +216,9 @@ int main(int argc, char *argv[]) {
 						can_save = 0;
 					} else if (secondline[0] == 'y') {
 						can_save = 1;
+						free(filename);
+						filename = line;
+						remove(UNTITLED_FILENAME);
 					} else if (secondline[0] == 'n') {
 						can_save = 0;
 					} else {
