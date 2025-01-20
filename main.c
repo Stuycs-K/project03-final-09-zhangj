@@ -54,6 +54,7 @@ void my_fgets(WINDOW *win, char *line, int height, int char_range_min, int char_
 	while (1){
 		c1 = wgetch(win);
 		if (c1 == '\n'){
+			line[ind] = '\0';
 			return;
 		}
 		if (c1 == KEY_BACKSPACE || c1 == KEY_DC || c1 == 127){
@@ -202,13 +203,32 @@ int main(int argc, char *argv[]) {
 					has_error = 1;
 					sprintf(error_message, "Error: cannot use %s as filename.", UNTITLED_FILENAME);
 					can_save = 0;
-		        } 
-
-		        else {
+				} else if (access(line, F_OK) == -1) // check if the file exists using access()
+					char *secondline = malloc(LINE_SIZE * sizeof(char));
+					clear_fgets_line(win, height, width);
+					wmove(win, height-2, 0);
+					wprintw(win, "The file \"%s\" already exists. Overwrite it? (y/n): ");
+					wrefresh(win);
+					my_fgets(win, secondline, height, 32, 126, 23);
+					if (secondline[0] == '\0') {
+						sprintf(error_message, "Error: no response to y/n.");
+						has_error = 1;
+						can_save = 0;
+					} else if (secondline[0] == 'y') {
+						can_save = 1;
+					} else if (secondline[0] == 'n') {
+						can_save = 0;
+					} else {
+						sprintf(error_message, "Error: did not recognize response '%s'. Not saving.", secondline);
+						has_error = 1;
+						can_save = 0;
+					}
+				}		
+				else {
 					free(filename);
 					filename = line;
 					remove(UNTITLED_FILENAME);
-				}
+				} 
 			}
 
 			if (can_save) {
