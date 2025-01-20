@@ -179,6 +179,7 @@ int main(int argc, char *argv[]) {
 			xLineEnd = strlen(file_buff->buffer[y-1])-1;
 		}
 		if (c == to_ctrl_char('Q')) {
+			insert_row(file_buff,y-1);
 			quit(file_buff, filename, changed);
 			free(filename);
 			break;
@@ -205,9 +206,8 @@ int main(int argc, char *argv[]) {
 					has_error = 1;
 					sprintf(error_message, "Error: cannot use %s as filename.", UNTITLED_FILENAME);
 					can_save = 0;
-		        } 
-
-		        else {
+		    } 
+				else {
 					free(filename);
 					filename = line;
 					remove(UNTITLED_FILENAME);
