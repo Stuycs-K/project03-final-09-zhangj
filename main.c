@@ -74,7 +74,7 @@ void my_fgets(WINDOW *win, char *line, int height, int char_range_min, int char_
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
 	signal(SIGSEGV, signal_handler);
-	int c, x = 0, y = 0, height, width, taboffset = 3, saved = 0, changed = 0, top = 0, lineNum, has_error=0;
+	int c, x = 0, y = 0, height, width, taboffset = 5, saved = 0, changed = 0, top = 0, lineNum, has_error=0;
 	char *fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
 
 	FILE *file;
@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) {
 			}
 			mvwprintw(win,r-top+1,5,"%s",file_buff->buffer[r]);
 		}
-		taboffset = 3;
+		taboffset = 5;
 		for (int i = 0; i<x; i++){
 			if ((file_buff->buffer[y-1])[i] == '\t'){
 				taboffset += 8-(taboffset%8);
@@ -158,7 +158,7 @@ int main(int argc, char *argv[]) {
 				taboffset++;
 			}
 		}
-		taboffset-=x+3;
+		taboffset-=x+5;
 		wmove(win, curY, x+taboffset+5);
 		wrefresh(win);
 		c = wgetch(win); // program waits on this
