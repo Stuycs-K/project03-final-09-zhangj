@@ -364,6 +364,7 @@ int main(int argc, char *argv[]) {
 				if (longLine == 1){
 					delete_char(file_buff,y-1,x-1);
 					x--;
+					longLine = 0;
 				}
 			}
 			else if (x > 0){
@@ -389,7 +390,11 @@ int main(int argc, char *argv[]) {
 		}
 		if (32 <= c && c <= 126) { // alphanumerics, punctuation, etc.
 			changed = 1;
-			if (x+taboffset>=width-7){
+			if (longLine == 1 && x+taboffset>=width-7){
+				has_error = 1;
+				sprintf(error_message, "Error: Maximum line length is 2x the window width.");
+			}
+			else if (x+taboffset>=width-7){
 				insert_char(file_buff,y-1,x,'-');
 				insert_char(file_buff,y-1,x+1,'\n');
 				insert_row(file_buff,y);
@@ -399,9 +404,13 @@ int main(int argc, char *argv[]) {
 				x = 0;
 				xLineEnd = 0;
 				longLine = 1;
+				insert_char(file_buff,y-1,x,c);
+				x++;
 			}
-			insert_char(file_buff,y-1,x,c);
-			x++;
+			else{
+				insert_char(file_buff,y-1,x,c);
+				x++;
+			}
 		}
 	}
   return 0;
