@@ -227,6 +227,9 @@ int main(int argc, char *argv[]) {
 						has_error = 1;
 						can_save = 0;
 					}
+				} else {
+					free(filename);
+					filename = line;
 				}		
 			}
 
