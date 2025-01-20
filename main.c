@@ -298,7 +298,7 @@ int main(int argc, char *argv[]) {
 				int ret = waitpid(forkpid, &status, 0);
 				// if child failed, do not attempt to read from the pipe
 				if (ret == -1) {
-					error_message = "Error: Unable to execvp properly";
+					sprintf(error_message, "Error: Unable to execvp '%s' properly", arg_array[0]);
 					close(pipe_fds[READ_FD]);
 					continue;
 				}
@@ -313,13 +313,9 @@ int main(int argc, char *argv[]) {
 						endwin();
 						exit(1);
 					}
+					
+					insert_at_end(file_buff, line);
 
-					if (ret != -1) { // child execvp'd properly
-						insert_at_end(file_buff, line);
-					} else {
-						// child wrote an error message, this is it
-						
-					}
 				}
 
 				close(pipe_fds[READ_FD]);
