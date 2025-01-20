@@ -74,18 +74,18 @@ void quit(struct file_buffer *file_buff, char* fname, int changed) {
 						exit(1);
 					} else if (secondline[0] == 'y') {
 						can_save = 1;
-						free(newfname1);
-						newfname1 = secondline;
 					} else if (secondline[0] == 'n') {
 						can_save = 0;
 						free(secondline);
 						free(newfname1);
+						remove(UNTITLED_FILENAME);
 					} else {
 						fprintf(stderr, "Error: did not recognize response '%s'. Not saving.", secondline);
 						exit(1);
 					}
 				}		
-				
+
+
 				if (can_save) {
 	        save(file_buff, newfname1);
 	        free(newfname1);
