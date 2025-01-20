@@ -207,7 +207,7 @@ int main(int argc, char *argv[]) {
 				file_buff = create_file_buffer(10);
 				file = open_read(filename);
 				read_into_buffer(file, file_buff, width);
-				if (file_buff->buffer[y-2][strlen(file_buff->buffer[y-2])-1]=='\n'){
+				if (file_buff->rows > 1 && file_buff->buffer[y-2][strlen(file_buff->buffer[y-2])-1]=='\n' && file_buff->buffer[y-2][strlen(file_buff->buffer[y-2])]=='\0'){
 					insert_row(file_buff,y-1);
 				}
 				stat_info(filename, fileinfo);
