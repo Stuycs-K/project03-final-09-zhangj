@@ -19,8 +19,6 @@ void save(struct file_buffer *file_buff, char *filename) {
   // w+ truncates
   FILE *file = fopen(filename, "w+");
 
-  char newline[] = "\n";
-
   for (int r = 0; r < file_buff->rows; r++) {
     int length = strlen(file_buff->buffer[r]);
     while (file_buff->buffer[r][length-2] == '-' && file_buff->buffer[r][length-1] == '\n'){

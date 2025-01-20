@@ -78,6 +78,7 @@ void read_into_buffer(FILE *file, struct file_buffer *file_buff, int winLen) {
 			insert_char(file_buff,file_buff->rows-2,length+1,'\0');
 		}
 	}
+	file_buff->rows--;
 }
 
 // note: all these insert / delete functions use a O(n) shift for EVERY character which is really bad even for relatively short strings, but maybe it's fine
