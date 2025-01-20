@@ -120,12 +120,12 @@ int main(int argc, char *argv[]) {
 	
 	while (1) {
 		getmaxyx(win, height, width);
-		while (y >= bottom){
+		if (y >= bottom){
 			bottom += height-3;
 			top += height-3;
 			curY = 1;
 		}
-		while (y <= top && top > 0){
+		if (y <= top && top > 0){
 			bottom -= height-3;
 			top -= height-3;
 			curY = height-3;
@@ -314,6 +314,12 @@ int main(int argc, char *argv[]) {
 				x = strlen(file_buff->buffer[y-1])-1;
 				curY = y;
 				yLineEnd = y;
+
+				while (y >= bottom){
+					bottom += height-3;
+					top += height-3;
+				}
+
 			}
 
 			changed = 1;
