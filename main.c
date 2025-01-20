@@ -56,6 +56,9 @@ void my_fgets(WINDOW *win, char *line, int height, int char_range_min, int char_
 				wclrtoeol(win);
 				wrefresh(win);
 			}
+			else{
+				line[0] = '\0';
+			}
 		}
 		if (char_range_min <= c1 && c1 <= char_range_max){
 			sprintf(lineBuff, "%c", c1);
