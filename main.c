@@ -285,6 +285,8 @@ int main(int argc, char *argv[]) {
 			else {
 				
 				if (lineNum <= file_buff->rows){
+					y = lineNum;
+					curY = lineNum;
 	        while (lineNum < top){
 	          top -= height-3;
 	          bottom -= height-3;
@@ -295,8 +297,6 @@ int main(int argc, char *argv[]) {
 	          bottom += height-3;
 						curY += height-3;
 	        }
-					y = lineNum;
-					curY+=y;
 					x = strlen(file_buff->buffer[lineNum-1])-1;
 				}
 				
