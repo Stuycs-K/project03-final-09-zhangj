@@ -178,7 +178,10 @@ void delete_row(struct file_buffer *file_buff, int r) {
 	}
 }
 
-// need special case for newline char
+// inserts a newline at r, c
+// if c is 0, simply shifts down
+// if c is length of line, simply shifts down
+// otherwise, breaks up the middle of that line, and shifts down as neccessary
 void insert_newline(struct file_buffer *file_buff, int r, int c) {
 	if (!(0 <= r && r < file_buff->rows)) {
 		endwin();
@@ -219,7 +222,8 @@ void insert_newline(struct file_buffer *file_buff, int r, int c) {
 	file_buff->buffer[file_buff->rows-1] = new_line;
 }
 
-// does stuff
+// only called if c=0 
+// appends the line where this was called (r) to the line below it (r-1), and removes the newline at the end of that old line
 void delete_newline(struct file_buffer *file_buff, int r) {
 	if (!(0 < r && r < file_buff->rows)) {
 		endwin();
@@ -228,17 +232,12 @@ void delete_newline(struct file_buffer *file_buff, int r) {
 	}
 
 	int length = strlen(file_buff->buffer[r-1]) - 1; // -1 to overwrite newline
-	//printf("length is :%d\n", length);
 	int i;
 	for (i = 0; i+length < LINE_SIZE && file_buff->buffer[r][i] != '\0'; i++) {
-		//printf("i=%d: ascii %d\n", i, file_buff->buffer[r-1][i+length]);
 		file_buff->buffer[r-1][i+length] = file_buff->buffer[r][i];
-		//printf("i=%d: ascii %d\n", i, file_buff->buffer[r-1][i+length]);
 	}
 
 	
-	//printf("length+i+1: %d\n", file_buff->buffer[r-1][length+i+1]);
-	//printf("length+i-1: %d\n", file_buff->buffer[r-1][length+i-1]);
 	file_buff->buffer[r-1][length+i] = '\0';
 
 	free(file_buff->buffer[r]);
@@ -246,14 +245,12 @@ void delete_newline(struct file_buffer *file_buff, int r) {
 	file_buff->rows--;
 	for (i = r; i < file_buff->rows; i++) {
 		file_buff->buffer[i] = file_buff->buffer[i+1];
-		//printf("i=%d: %s\n", i, file_buff->buffer[i]);
 	}
 
 	file_buff->buffer[file_buff->rows] = (char*) malloc(LINE_SIZE * sizeof(char));
 }
 
-
-// does stuff
+// inserts a string "line" at the end of the file_buff
 void insert_at_end(struct file_buffer *file_buff, char *line) {
 	int r = file_buff->rows-1;
 	int c = strlen(file_buff->buffer[r]);
@@ -289,6 +286,7 @@ void insert_at_end(struct file_buffer *file_buff, char *line) {
 	file_buff->buffer[r][c] = '\0';
 }
 
+// deletes a character at (x, y), calling other delete functions
 void do_delete(struct file_buffer *file_buff, int *x, int *y, int *curY, int *yLineEnd, int *longLine) {
 	if ((*x) == 0 && (*y) > 1){
 		int newX = strlen(file_buff->buffer[(*y)-2])-1;
@@ -309,6 +307,7 @@ void do_delete(struct file_buffer *file_buff, int *x, int *y, int *curY, int *yL
 	}
 }
 
+// inserts a tab or newline at (x, y), calling other insert functions
 void do_insert_special(int c, struct file_buffer *file_buff, int *x, int *y, int *curY, int *xLineEnd, int *yLineEnd, int *longLine, int *show_message, char *message, int offset, int width) {
 	if (c == '\n'){
 		insert_newline(file_buff, (*y)-1, (*x));
@@ -336,6 +335,7 @@ void do_insert_special(int c, struct file_buffer *file_buff, int *x, int *y, int
 	}
 }
 
+// inserts a regular ascii character at (x, y), calling other insert functions
 void do_insert_regular(int c, struct file_buffer *file_buff, int *x, int *y, int *curY, int *xLineEnd, int *yLineEnd, int *longLine, int *show_message, char *message, int offset, int width) {
 	if (*longLine == 1 && (*x)+offset>=width-7){
 		*show_message = 1;
