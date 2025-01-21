@@ -93,7 +93,11 @@ void do_exec(struct file_buffer *file_buff, int *pipe_fds, char **arg_array, cha
 			}
 			
 			insert_at_end(file_buff, line);
+			
+		}
 
+		if (bytes_read >= 1 && line[bytes_read-1] == '\n') {
+			insert_row(file_buff, file_buff->rows);
 		}
 
 		close(pipe_fds[READ_FD]);
