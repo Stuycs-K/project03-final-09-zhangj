@@ -335,3 +335,33 @@ void do_insert_special(int c, struct file_buffer *file_buff, int *x, int *y, int
 		}
 	}
 }
+
+void do_insert_regular(int c, struct file_buffer *file_buff, int *x, int *y, int *curY, int *xLineEnd, int *yLineEnd, int *longLine, int *show_message, char *message, int offset, int width) {
+	if (*longLine == 1 && (*x)+offset>=width-7){
+		*show_message = 1;
+		sprintf(message, "Error: Maximum line length is 2x the window width.");
+	}
+	else if ((*x)+offset>=width-7){
+		if (offset > 0){
+			*show_message = 1;
+			sprintf(message, "Error: Tabs are not supported with long lines.");
+		}
+		else{
+			insert_char(file_buff,(*y)-1,*x,'-');
+			insert_char(file_buff,(*y)-1,(*x)+1,'\n');
+			insert_row(file_buff,*y);
+			(*y)++;
+			(*curY)++;
+			(*yLineEnd)++;
+			*x = 0;
+			*xLineEnd = 0;
+			*longLine = 1;
+			insert_char(file_buff,(*y)-1,*x,c);
+			(*x)++;
+		}
+	}
+	else{
+		insert_char(file_buff,(*y)-1,*x,c);
+		(*x)++;
+	}
+}

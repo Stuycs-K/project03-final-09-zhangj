@@ -224,33 +224,7 @@ int main(int argc, char *argv[]) {
 		// REGULAR CHARACTERS
 		if (32 <= c && c <= 126) { // alphanumerics, punctuation, etc.
 			changed = 1;
-			if (longLine == 1 && x+offset>=width-7){
-				show_message = 1;
-				sprintf(message, "Error: Maximum line length is 2x the window width.");
-			}
-			else if (x+offset>=width-7){
-				if (offset > 0){
-					show_message = 1;
-					sprintf(message, "Error: Tabs are not supported with long lines.");
-				}
-				else{
-					insert_char(file_buff,y-1,x,'-');
-					insert_char(file_buff,y-1,x+1,'\n');
-					insert_row(file_buff,y);
-					y++;
-					curY++;
-					yLineEnd++;
-					x = 0;
-					xLineEnd = 0;
-					longLine = 1;
-					insert_char(file_buff,y-1,x,c);
-					x++;
-				}
-			}
-			else{
-				insert_char(file_buff,y-1,x,c);
-				x++;
-			}
+			do_insert_special(c, file_buff, &x, &y, &curY, &xLineEnd, &yLineEnd, &longLine, &show_message, message, offset, width);
 		}
 	}
   return 0;
