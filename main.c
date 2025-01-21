@@ -20,6 +20,7 @@
 #include "filehandle.h"
 #include "utils.h"
 
+// allows the program to exist gracefully on the occasional segfault
 static void signal_handler(int signo) {
 	if (signo == SIGSEGV) {
 		endwin();
@@ -31,7 +32,27 @@ static void signal_handler(int signo) {
 // Main function for the text editor, parses arg for file name, runs text editor accordingly
 int main(int argc, char *argv[]) {
 	signal(SIGSEGV, signal_handler);
-	int c, x = 0, y = 0, height, width, taboffset = 5, saved = 0, changed = 0, top = 0, lineNum, has_error=0, longLine = 0;
+	
+	// char, allows for more than just ascii input (e.g. arrows keys)
+	int c;
+	
+	// the position of the file buffer's cursor, not the actual cursor
+	int x, y;
+	
+	// the position of the on-screen cursor (note that the cursor's x-position always exactly equals its position in the buffer)
+	int curY;
+	
+	// offset, initially 5, the length of the display for line numbers
+	// able to be modified for tab display
+	int offset = 5;
+	
+	// boolean variables, described in their own sections
+	int saved = 0, changed = 0, has_error = 0, longLine = 0;
+	
+	int top = 0;
+	
+	int lineNum = 0;
+	
 	char *fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
 
 	FILE *file;
@@ -49,6 +70,9 @@ int main(int argc, char *argv[]) {
 	initscr();
 	raw();
 	noecho();
+	
+	// height and width of the terminal screen
+	int height, width;
 	getmaxyx(stdscr, height, width);
 	int bottom = height-2;
 	WINDOW *win = newwin(height, width, 0, 0);
@@ -70,7 +94,7 @@ int main(int argc, char *argv[]) {
 	x = strlen(file_buff->buffer[y-1]);
 	int xLineEnd = x;
 	int yLineEnd = y;
-	int curY = y;
+	curY = y;
 
 	char *error_message = malloc(LINE_SIZE * sizeof(char));
 	
@@ -107,17 +131,17 @@ int main(int argc, char *argv[]) {
 			mvwprintw(win, r-top+1, 0, "%03d| ", r+1);
 			wprintw(win,"%s",file_buff->buffer[r]);
 		}
-		taboffset = 5;
+		offset = 5;
 		for (int i = 0; i<x; i++){
 			if ((file_buff->buffer[y-1])[i] == '\t'){
-				taboffset += 8-(taboffset%8);
+				offset += 8-(offset%8);
 			}
 			else{
-				taboffset++;
+				offset++;
 			}
 		}
-		taboffset-=x+5;
-		wmove(win, curY, x+taboffset+5);
+		offset-=x+5;
+		wmove(win, curY, x+offset+5);
 		wrefresh(win);
 		c = wgetch(win); // program waits on this
 	
@@ -303,7 +327,7 @@ int main(int argc, char *argv[]) {
 				has_error = 1;
 				sprintf(error_message, "Error: Tabs are not supported with long lines.");
 			}
-			else if (x+taboffset+8-(taboffset%8)<width-7){
+			else if (x+offset+8-(offset%8)<width-7){
 				insert_char(file_buff,y-1,x,'\t');
 				x++;
 			}
@@ -314,12 +338,12 @@ int main(int argc, char *argv[]) {
 		}
 		if (32 <= c && c <= 126) { // alphanumerics, punctuation, etc.
 			changed = 1;
-			if (longLine == 1 && x+taboffset>=width-7){
+			if (longLine == 1 && x+offset>=width-7){
 				has_error = 1;
 				sprintf(error_message, "Error: Maximum line length is 2x the window width.");
 			}
-			else if (x+taboffset>=width-7){
-				if (taboffset > 0){
+			else if (x+offset>=width-7){
+				if (offset > 0){
 					has_error = 1;
 					sprintf(error_message, "Error: Tabs are not supported with long lines.");
 				}
