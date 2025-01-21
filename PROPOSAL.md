@@ -37,7 +37,8 @@ If the program is run with more than one argument it'll error out and display a 
 - **David:** All things not Ncurses: opening/creating/saving/stating files, creating a file buffer struct (2d char array) to store text data, forking, execvp, and piping associated with Ctrl+T (execute)
   
 ### Data structures/algorithms we will be using:
-- **File buffer struct**: 2d char array that stores the number of rows, the length of each row, and each individual char array
+- **File Buffer Struct**: Self-made struct that stores a 2D char array, the length of the array, and the amount of rows with actual data in them
+- **Stat Buffer Struct**: Struct to find the information of a file
 - **Strings**: Store text data such as user input from keyboard shortcuts such as Ctrl+G (go to line)
     
 ## Intended pacing:
