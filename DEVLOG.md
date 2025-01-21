@@ -43,6 +43,9 @@ Fixed error handling so that all errors exit the ncurses window when on it, move
 ### 2025-01-19 - Fixed a multitude of bugs and added small qol/aesthetic features
 Fixed bugs involving typing past window length (still slightly buggy), added error messages for a lot of program limitations, fixed bugs involving saving files, fixed tabs, fixed deleting past the input prompt, add cleanup of files that are empty and you choose not to save them (3h HW time).
 
+### 2025-01-20 - Fixing bug after bug and adding comments
+Fixed too many bugs to even mention. Notable examples include execute not putting the cursor in the right place, window length not working properly still (decided to just limit it), and quitting and saving if the file ends on a new line. Added comments to many files such as cursor.c, writesave.c, and filehandle.c.
+
 
 
 

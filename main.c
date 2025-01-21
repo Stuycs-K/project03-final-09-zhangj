@@ -317,7 +317,7 @@ int main(int argc, char *argv[]) {
 		
 		// ARROW KEYS
 		if (c == KEY_LEFT){
-			x = keyleft(x, y);
+			x = keyleft(x);
 		}
 		if (c == KEY_RIGHT){
 			x = keyright(x, xLineEnd);

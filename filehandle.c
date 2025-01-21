@@ -13,7 +13,7 @@
 #include "filehandle.h"
 #include "statdisplay.h"
 
-// returns a file pointer to the file, opened only in read mode
+// returns a file pointer to the file with file name, opened in only read mode
 FILE* open_read(char *filename) {
 	FILE *file;
 
@@ -26,6 +26,7 @@ FILE* open_read(char *filename) {
 	}
 	close_file(file);
 
+	// Open the file in read mode
 	file = fopen(filename, "r");
 	if (file == NULL) {
 		endwin();
@@ -36,7 +37,7 @@ FILE* open_read(char *filename) {
 	return file;
 }
 
-// closes a file pointer
+// Closes a file pointer
 void close_file(FILE *file) {
 	if (fclose(file) == EOF) {
 		endwin();
@@ -45,21 +46,21 @@ void close_file(FILE *file) {
 	}
 }
 
-// Initialize file
+// Initializes file from the file name specified by the make argument if it exists, sets the file name for file info to stat
 FILE* init_file(int argc, char **argv, char* filename, char* fileinfo){
   FILE *file;
-  if (argc == 1){
-		sprintf(filename, UNTITLED_FILENAME);
+  if (argc == 1){ // If make is run with no argument
+		sprintf(filename, UNTITLED_FILENAME); // File name is "Untitled.txt"
 		file = fopen(filename, "w+");
 		close_file(file);
 		stat_info(filename, fileinfo);
 	}
-	else if (argc == 2){
+	else if (argc == 2){ // If make is run with a file name as its only argument
 		sprintf(filename,"%s",argv[1]);
 		file = open_read(filename);
 		stat_info(filename, fileinfo);
 	}
-	else {
+	else { // If make is run with more than one argument
 		printf("Incorrect number of arguments. The program accepts one argument as the file name or no argument which makes a temporary file titled Untitled.txt\n");
 		exit(1);
 	}
