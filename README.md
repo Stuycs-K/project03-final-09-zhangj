@@ -85,4 +85,5 @@ If you type past the length of the terminal window the terminal window will scro
 - Long lines
 - Window Scrolling
 - Tabs
+- Make run with very large/long files
 
