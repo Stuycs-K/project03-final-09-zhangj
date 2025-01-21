@@ -114,6 +114,8 @@ void do_exec(struct file_buffer *file_buff, int *pipe_fds, char **arg_array, cha
 			*top += *height-3;
 			*curY -= *height-3;
 		}
+
+		(*curY) = (*y) % ((*height)-3);
 	}
 
 	*changed = 1;
