@@ -290,12 +290,12 @@ int main(int argc, char *argv[]) {
 	        while (lineNum < top){
 	          top -= height-3;
 	          bottom -= height-3;
-						curY -= height-3;
+						curY += height-3;
 	        }
 	        while (lineNum > bottom){
 	          top += height-3;
 	          bottom += height-3;
-						curY += height-3;
+						curY -= height-3;
 	        }
 					x = strlen(file_buff->buffer[lineNum-1])-1;
 				}
