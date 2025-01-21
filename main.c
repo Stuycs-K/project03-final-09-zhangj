@@ -47,6 +47,7 @@ int main(int argc, char *argv[]) {
 	int c;
 	
 	// the position of the file buffer's cursor, not the actual cursor
+	// note: x is 0-indexed and y is 1-indexed
 	int x, y;
 	
 	// the position of the on-screen cursor (note that the cursor's x-position always exactly equals its position in the buffer)
@@ -169,13 +170,15 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		offset -= x + OFFSET_INIT;
+		
+		// move the cursor for actual input from user
 		wmove(win, curY, x+offset+OFFSET_INIT);
 		wrefresh(win);
 		
 		// the program blocks on this, which reads one character from stdin at a time
 		c = wgetch(win);
 		
-		// set xLineEnd
+		// set xLineEnd to be the length of the current line, -1 if not on last line
 		xLineEnd = strlen(file_buff->buffer[y-1]);
 		if (y != file_buff->rows) {
 			xLineEnd--;
@@ -194,8 +197,7 @@ int main(int argc, char *argv[]) {
 			if (strcmp(filename, UNTITLED_FILENAME) == 0){
 				char* line = malloc(256 * sizeof(char));
 				clear_fgets_line(win, height, width);
-				wmove(win, height-2, 0);
-				wprintw(win, "(Save) Enter Filename: ");
+				mvwprintw(win, height-2, 0, "(Save) Enter Filename: ");
 				wrefresh(win);
 				
 				my_fgets(win, line, height, 32, 126, 23);
@@ -214,8 +216,7 @@ int main(int argc, char *argv[]) {
 				} else if (access(line, F_OK) != -1){  // check if the file exists using access()
 					char *secondline = (char*) malloc(LINE_SIZE * sizeof(char));
 					clear_fgets_line(win, height, width);
-					wmove(win, height-2, 0);
-					wprintw(win, "The file \"%s\" already exists. Overwrite it? (y/n): ", line);
+					mvwprintw(win, height-2, 0, "The file \"%s\" already exists. Overwrite it? (y/n): ", line);
 					wrefresh(win);
 					my_fgets(win, secondline, height, 32, 126, 23);
 					if (secondline[0] == '\0') {
@@ -260,8 +261,7 @@ int main(int argc, char *argv[]) {
 		// EXECUTE
 		if (c == to_ctrl_char('T')) {
 			clear_fgets_line(win, height, width);
-			wmove(win, height-2, 0);
-			wprintw(win, "Enter Command: ");
+			mvwprintw(win, height-2, 0, "Enter Command: ");
 			wrefresh(win);
 			
 			my_fgets(win, command_line, height, 32, 126, 15);
@@ -277,8 +277,7 @@ int main(int argc, char *argv[]) {
 		// GOTO LINE
 		if (c == to_ctrl_char('G')){
 			clear_fgets_line(win, height, width);
-			wmove(win, height-2, 0);
-			wprintw(win, "Go to line: ");
+			mvwprintw(win, height-2, 0, "Go to line: ");
 			wrefresh(win);
 			char* line = malloc(256 * sizeof(char));
 			my_fgets(win, line, height, '0', '9', 12); // custom fgets for window
