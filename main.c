@@ -224,7 +224,7 @@ int main(int argc, char *argv[]) {
 		// REGULAR CHARACTERS
 		if (32 <= c && c <= 126) { // alphanumerics, punctuation, etc.
 			changed = 1;
-			do_insert_special(c, file_buff, &x, &y, &curY, &xLineEnd, &yLineEnd, &longLine, &show_message, message, offset, width);
+			do_insert_regular(c, file_buff, &x, &y, &curY, &xLineEnd, &yLineEnd, &longLine, &show_message, message, offset, width);
 		}
 	}
   return 0;
