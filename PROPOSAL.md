@@ -38,6 +38,7 @@ If the program is run with more than one argument it'll error out and display a 
   
 ### Data structures/algorithms we will be using:
 - **File buffer struct**: 2d char array that stores the number of rows, the length of each row, and each individual char array
+- **Strings**: Store text data such as user input from keyboard shortcuts such as Ctrl+G (go to line)
     
 ## Intended pacing:
 - **1/6:** Finish proposal and readme, create skeleton files
