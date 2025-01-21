@@ -6,7 +6,7 @@
        
 ## Intentions:
 
-Creating a text editor that is similar to nano and can be run through the terminal. Will include basic features of nano such as creating and saving files, editing files, and simple qol features such as redo/undo, cut/paste. May also include other features such as search, go to line, replace, etc.
+Creating a text editor that is similar to Nano and can be run through the terminal. Will include basic features of Nano such as creating files, saving files, and editing files. May include simple QOL features such as search, go to line, replace, copy/paste, redo/undo, etc. if time permits.
     
 ## Intended usage:
 
