@@ -292,7 +292,7 @@ int main(int argc, char *argv[]) {
 	          bottom += height-3;
 	        }
 					y = lineNum;
-					curY = lineNum;
+					curY = (y-1) % height + 4;
 					x = strlen(file_buff->buffer[lineNum-1])-1;
 				}
 				
