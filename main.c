@@ -133,7 +133,7 @@ int main(int argc, char *argv[]) {
 		}
 		wclear(win);
 		wrefresh(win);
-		mvwprintw(win,0,0,"%d:%d| Ctrl+Q - Exit  Ctrl+S - Save  Ctrl+T - Execute  Ctrl+G - Go to line #\n", y, x+1);
+		mvwprintw(win,0,0,"%d:%d| %d Ctrl+Q - Exit  Ctrl+S - Save  Ctrl+T - Execute  Ctrl+G - Go to line #\n", y, x+1, curY);
 		mvwprintw(win,height-1,0, "%s", fileinfo);
 		if (saved > 0){
 			mvwprintw(win, height-2, 0, "File Saved.");
@@ -292,7 +292,7 @@ int main(int argc, char *argv[]) {
 	          bottom += height-3;
 	        }
 					y = lineNum;
-					curY = (y-1) % height + 4;
+					curY = y % (height + 3);
 					x = strlen(file_buff->buffer[lineNum-1])-1;
 				}
 				
