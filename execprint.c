@@ -91,13 +91,15 @@ void do_exec(struct file_buffer *file_buff, int *pipe_fds, char **arg_array, cha
 				endwin();
 				exit(1);
 			}
-			
+
+			fprintf(stderr, "line read: '%s'", line);
 			insert_at_end(file_buff, line);
 			
 		}
 
+		insert_row(file_buff, file_buff->rows);
 		if (bytes_read >= 1 && line[bytes_read-1] == '\n') {
-			insert_row(file_buff, file_buff->rows);
+			//insert_row(file_buff, file_buff->rows);
 		} else {
 			(file_buff->rows)--;
 		}
@@ -105,7 +107,7 @@ void do_exec(struct file_buffer *file_buff, int *pipe_fds, char **arg_array, cha
 		close(pipe_fds[READ_FD]);
 
 		*y = file_buff->rows;
-		*x = strlen(file_buff->buffer[*y-1])-1;
+		*x = strlen(file_buff->buffer[*y-1]);
 		*curY = *y;
 		*yLineEnd = *y;
 
