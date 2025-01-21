@@ -98,11 +98,11 @@ void do_exec(struct file_buffer *file_buff, int *pipe_fds, char **arg_array, cha
 
 		if (bytes_read >= 1 && line[bytes_read-1] == '\n') {
 			insert_row(file_buff, file_buff->rows);
+		} else {
+			(file_buff->rows)--;
 		}
 
 		close(pipe_fds[READ_FD]);
-		
-		(file_buff->rows)--;
 
 		*y = file_buff->rows;
 		*x = strlen(file_buff->buffer[*y-1])-1;
