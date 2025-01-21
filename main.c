@@ -131,11 +131,7 @@ int main(int argc, char *argv[]) {
 			bottom -= height-3;
 			top -= height-3;
 		}
-<<<<<<< HEAD
-		curY = y % (height - 3);
-=======
 		curY = y % (height-3);
->>>>>>> main
 		wclear(win);
 		wrefresh(win);
 		mvwprintw(win,0,0,"%d:%d| Ctrl+Q - Quit  Ctrl+S - Save  Ctrl+T - Execute  Ctrl+G - Go to line #\n", y, x+1);
@@ -306,7 +302,7 @@ int main(int argc, char *argv[]) {
 		}
 
 		if (c == KEY_LEFT){
-			x = keyleft(x, y);
+			x = keyleft(x);
 		}
 		if (c == KEY_RIGHT){
 			x = keyright(x, xLineEnd);
