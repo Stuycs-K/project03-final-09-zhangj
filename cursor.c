@@ -62,6 +62,8 @@ int keydown(int* x, int y, int yLineEnd, int numrows, int linelen, int* curY){
     return y;
 }
 
+// depending on keyboard input (left, right, up, down), moves the cursor 
+// uses the other key(direction) functions defined above
 void move_cursor(int c, int *x, int *y, int *curY, int xLineEnd, int yLineEnd, struct file_buffer *file_buff) {
 	if (c == KEY_LEFT){
 		*x = keyleft(*x);
@@ -77,6 +79,8 @@ void move_cursor(int c, int *x, int *y, int *curY, int xLineEnd, int yLineEnd, s
 	}
 }
 
+// gets input from user and moves the cursor there if possible
+// sets show_message and message if input was bad
 void do_goto(WINDOW *win, int height, int width, int *x, int *y, int *show_message, struct file_buffer *file_buff, char *message) {
 	clear_fgets_line(win, height, width);
 	mvwprintw(win, height-BOTTOM_OFFSET, 0, "Go to line: ");
