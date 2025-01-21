@@ -151,7 +151,7 @@ int main(int argc, char *argv[]) {
 			if (r+1 >= bottom){
 				break;
 			}
-			mvwprintw(win, r-top+1, 0, "%03d| ", r);
+			mvwprintw(win, r-top+1, 0, "%03d| ", r+1);
 			wprintw(win,"%s",file_buff->buffer[r]);
 		}
 		taboffset = 5;
