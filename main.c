@@ -49,18 +49,20 @@ int main(int argc, char *argv[]) {
 	// boolean variables, described in their own sections
 	int saved = 0, changed = 0, has_error = 0, longLine = 0;
 	
+	// stat info string, e.g. "test.txt: 10 bytes; last modified ..."
 	char *fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
+	
+	// the name of the file. this may be initialized to UNTITLED_FILENAME, which indicates 
+	// that the program has not been saved yet (and was ran with no args)
+	char *filename = malloc(256 * sizeof(char));
 
-	FILE *file;
-	char* filename = malloc(256 * sizeof(char));
-
-	char* cmd_args = malloc(LINE_SIZE * sizeof(char));
+	// used for ctrl+t (execute)
+	char *command_line = (char*) malloc(LINE_SIZE * sizeof(char));
 	char **arg_array = (char**) malloc(ARRAY_SIZE * sizeof(char*));
 
-	fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
-	
+	// creates a "struct file_buffer", described in filebuffer.h
 	struct file_buffer *file_buff = create_file_buffer(10);
-	file = initFile(argc,argv,filename,fileinfo);
+	FILE *file = init_file(argc,argv,filename,fileinfo);
 
 	initscr();
 	raw();
@@ -223,12 +225,12 @@ int main(int argc, char *argv[]) {
 			wprintw(win, "Enter Command: ");
 			wrefresh(win);
 			
-			my_fgets(win, cmd_args, height, 32, 126, 15);
-			int cmd_args_length = strlen(cmd_args);
-			if (cmd_args[cmd_args_length-1] == '\n') { // strip newline
-				cmd_args[cmd_args_length-1] = '\0';
+			my_fgets(win, command_line, height, 32, 126, 15);
+			int command_line_length = strlen(command_line);
+			if (command_line[command_line_length-1] == '\n') { // strip newline
+				command_line[command_line_length-1] = '\0';
 			}
-			parse_args(cmd_args, arg_array);
+			parse_args(command_line, arg_array);
 
 			do_exec(file_buff, arg_array, error_message, &x, &y, &height, &width, &curY, &yLineEnd, &top, &bottom, &has_error, &changed);
 		}

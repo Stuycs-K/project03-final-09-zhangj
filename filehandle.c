@@ -46,7 +46,7 @@ void close_file(FILE *file) {
 }
 
 // Initialize file
-FILE* initFile(int argc, char **argv, char* filename, char* fileinfo){
+FILE* init_file(int argc, char **argv, char* filename, char* fileinfo){
   FILE *file;
   if (argc == 1){
 		sprintf(filename, UNTITLED_FILENAME);
