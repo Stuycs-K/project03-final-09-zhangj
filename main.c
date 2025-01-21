@@ -25,6 +25,8 @@
 // to display the file information and asking for prompts / showing error messages
 #define BOTTOM_OFFSET 2
 
+#define TOTAL_OFFSET (TOP_OFFSET + BOTTOM_OFFSET)
+
 #define TOP_DISPLAY_MESSAGE "%d:%d| Ctrl+Q - Quit  Ctrl+S - Save  Ctrl+T - Execute  Ctrl+G - Go to line #\n"
 
 // allows the program to exist gracefully on the occasional segfault
@@ -132,7 +134,8 @@ int main(int argc, char *argv[]) {
 			top -= height-3;
 		}
 		// put the cursor in the right spot
-		curY = y % (height-3);
+		curY = (y-1) % (height-TOTAL_OFFSET) + 1;
+		fprintf(stderr, "height: %d; y: %d; curY: %d\n", height, y, curY);
 		
 		// display everything to the window
 		wclear(win);
@@ -150,10 +153,7 @@ int main(int argc, char *argv[]) {
 		}
 		
 		// display the actual contents of the buffer
-		for (int r = top; r < file_buff->rows; r++) {
-			if (r+1 >= bottom){
-				break;
-			}
+		for (int r = top; r < file_buff->rows && r+1 < bottom; r++) {
 			mvwprintw(win, r-top+1, 0, "%03d| ", r+1);
 			wprintw(win,"%s",file_buff->buffer[r]);
 		}
