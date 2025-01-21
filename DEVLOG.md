@@ -89,3 +89,6 @@ Worked on implementation of execvp. Buggy but functional
 
 ### 2025-01-19 - Fixing Exec and Final Cleanup
 Fixed exec bugs and other bugs for final clean up.
+
+### 2025-01-20 - The Final Day
+Also fixed a LOT of bugs. Refactored main a lot by moving specific functionalities like ctrl + char into their own files and functions. Added a lot of documentation as comments in each file.
