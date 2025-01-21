@@ -18,8 +18,8 @@ Our project is a simple text editor that runs in the terminal, inspired by the N
 ## Instructions
 ### How to Run the Program
 To run the program, either: `make run`, or first `make compile` and then `./femto`. There is one optional command line argument. It is utilized as follows: <br>
-- `make run ARGS="<file name>"` or <br>
-- `./femto "<file name>"`
+- `make run ARGS="<filename>"` or <br>
+- `./femto "<filename>"`
 
 If the program is run with no args (`./femto` or `make run`), the program will create a temporary file titled "Untitled.txt" that the user can write in to and only prompt for the filename upon the first save or quit. <br>
 
@@ -33,10 +33,10 @@ If the program is run with more than one argument it'll error out and display a 
 (These are also displayed on the top of the screen at all times while running the program)
 
 - Ctrl+Q: Exit <br>
-Exits the program. If the user has not saved since their last change, they will be prompted to save before exiting. If the file name is "Untitled.txt", they will be asked to input a file name. If you are overwriting a file you will be asked to confirm the overwrite.
+Exits the program. If the user has not saved since their last change, they will be prompted to save before exiting. If the filename is "Untitled.txt", they will be asked to input a filename. If you are overwriting a file you will be asked to confirm the overwrite.
 
 - Ctrl+S: Save <br>
-Saves the current buffer to a file. If the file name is "Untitled.txt", they will be asked to input a file name.  If you are overwriting a file you will be asked to confirm the overwrite. On future saves, the program will automatically save to that file name.
+Saves the current buffer to a file. If the filename is "Untitled.txt", they will be asked to input a filename.  If you are overwriting a file you will be asked to confirm the overwrite. On future saves, the program will automatically save to that filename.
 
 - Ctrl+T: Execute <br>
 Allows to user to enter a single terminal command and appends the output to the end of the current file buffer. Only supports VERY basic commands with VERY basic text outputs (no piping, redirecton, animated output like `sl`, etc.). Otherwise, prints an error and does nothing.
@@ -68,22 +68,25 @@ If you type past the width of the terminal window any overflow text will be disp
 - Scrolling: <br>
 If you type past the length of the terminal window the terminal window will scroll to the next section of the file buffer. Only sections of the file buffer relative to the size of the terminal window are displayed on screen at one time. You may use the mouse scroll wheel, the up and down arrow keys, or the "Go to line" keyboard shortcut to move between sections of the file buffer.
 
-## Other Known Limitations
-- You can’t resize the terminal window while the program is running
-- File name must contain only alphanumeric characters and/or periods (.)
-- File must be in the same directory as the program
-- Maximum number of lines is 999
-- Line size must not go over 1000 (technically should not be possible due to line length limitation of 2x the window length)
-- Only named keyboard shortcuts are supported (no copy, cut, paste, etc.)
-- File contents must be ASCII text (no raw byte data)
-- Filename cannot be “Untitled.txt”
-- Keyboard shortcuts (such as Ctrl+Q) are not supported while you are in the input prompt of another keyboard shortcut (such as Ctrl+G)
-- You can’t move the cursor position in the input prompt of a keyboard shortcut
+## Known Limitations
+- The terminal window cannot be resized while the program is running
+- Filenames must contain only alphanumeric characters and/or periods (.)
+- Opened files must be in the same directory as the program
+- The maximum number of lines is 999
+- The line size must not go over 1000, which is already limited by the program's check for long lines (2x window width)
+- The file contents must be ASCII text (no raw byte data)
+- The filename cannot be “Untitled.txt”
+- Keyboard shortcuts (such as Ctrl+Q) are not supported while you are in the input prompt of another keyboard shortcut (e.g. Ctrl+G)
+- You can’t move the cursor position in the input prompt of a keyboard shortcut (e.g. Ctrl+G)
 
-## "Almost Working"/Likely Slightly Buggy Features
+## Specific Bugs
+- Deleting characters right after the filebuffer creates a "long line" (with a '-' in it)
+- Running the program with an existing large file (either longer than the line size or longer than 999 lines)
+- Running execute (Ctrl+T) multiple times in a row often creates "ghost" newlines, especially with functions like printf without newlines in the output
+  
+## Slightly Buggy Features
 - Execute (Ctrl+T)
 - Long lines
 - Window Scrolling
 - Tabs
-- Make run with very large/long files
 
