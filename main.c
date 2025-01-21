@@ -193,54 +193,7 @@ int main(int argc, char *argv[]) {
 		
 		// SAVE
 		else if (c == to_ctrl_char('S')) {
-			int can_save = 1;
-			if (strcmp(filename, UNTITLED_FILENAME) == 0){
-				char* line = malloc(256 * sizeof(char));
-				clear_fgets_line(win, height, width);
-				mvwprintw(win, height-2, 0, "(Save) Enter Filename: ");
-				wrefresh(win);
-				
-				my_fgets(win, line, height, 32, 126, 23);
-				// check that:
-				// - the filename is not empty and
-				// - the filename is not "untitled.txt"
-				if (strcmp(line, "") == 0) {
-					show_message = 1;
-					sprintf(message, "Error: cannot use empty string as filename.");
-					can_save = 0;
-				}
-				else if (strcmp(line, UNTITLED_FILENAME) == 0) {
-					show_message = 1;
-					sprintf(message, "Error: cannot use %s as filename.", UNTITLED_FILENAME);
-					can_save = 0;
-				} else if (access(line, F_OK) != -1){  // check if the file exists using access()
-					char *secondline = (char*) malloc(LINE_SIZE * sizeof(char));
-					clear_fgets_line(win, height, width);
-					mvwprintw(win, height-2, 0, "The file \"%s\" already exists. Overwrite it? (y/n): ", line);
-					wrefresh(win);
-					my_fgets(win, secondline, height, 32, 126, 23);
-					if (secondline[0] == '\0') {
-						sprintf(message, "Error: no response to y/n.");
-						show_message = 1;
-						can_save = 0;
-					} else if (secondline[0] == 'y') {
-						can_save = 1;
-						free(filename);
-						filename = line;
-						remove(UNTITLED_FILENAME);
-					} else if (secondline[0] == 'n') {
-						can_save = 0;
-					} else {
-						sprintf(message, "Error: did not recognize response '%s'. Not saving.", secondline);
-						show_message = 1;
-						can_save = 0;
-					}
-				} else {
-					free(filename);
-					filename = line;
-				}		
-			}
-
+			int can_save = check_can_save(win, file_buff, &filename, &show_message, message, height, width);
 			if (can_save) {
 				save(file_buff, filename);
 				free(file_buff);
