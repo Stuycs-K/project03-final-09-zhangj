@@ -103,12 +103,14 @@ int main(int argc, char *argv[]) {
 
 	if (argc == 2){
 		read_into_buffer(file, file_buff, width);
-		int length = strlen(file_buff->buffer[file_buff->rows-1]);
-		if (file_buff->buffer[file_buff->rows-1][length-1]=='\n'){
-			insert_row(file_buff,file_buff->rows);
+		if (file_buff->rows > 1){
+			int length = strlen(file_buff->buffer[file_buff->rows-1]);
+			if (file_buff->buffer[file_buff->rows-1][length-1]=='\n'){
+				insert_row(file_buff,file_buff->rows);
+			}
 		}
 	}
-	if (argc == 1){
+	if (argc == 1 || file_buff->rows == 0){
 		insert_row(file_buff,0);
 	}
 	y = file_buff->rows;
@@ -129,10 +131,14 @@ int main(int argc, char *argv[]) {
 			bottom -= height-3;
 			top -= height-3;
 		}
+<<<<<<< HEAD
 		curY = y % (height - 3);
+=======
+		curY = y % (height-3);
+>>>>>>> main
 		wclear(win);
 		wrefresh(win);
-		mvwprintw(win,0,0,"%d:%d| Ctrl+Q - Exit  Ctrl+S - Save  Ctrl+T - Execute  Ctrl+G - Go to line #\n", y, x+1);
+		mvwprintw(win,0,0,"%d:%d| Ctrl+Q - Quit  Ctrl+S - Save  Ctrl+T - Execute  Ctrl+G - Go to line #\n", y, x+1);
 		mvwprintw(win,height-1,0, "%s", fileinfo);
 		if (saved > 0){
 			mvwprintw(win, height-2, 0, "File Saved.");
@@ -143,17 +149,13 @@ int main(int argc, char *argv[]) {
 			mvwprintw(win, height-2, 0, "%s", error_message);
 			has_error = 0;
 		}
-		for (int r = top+1; r < file_buff->rows+1; r++){
-			if (r >= bottom){
-				break;
-			}
-			mvwprintw(win, r-top, 0, "%03d| ", r);
-		}
+
 		for (int r = top; r < file_buff->rows; r++) {
-			if (r > bottom-2){
+			if (r+1 >= bottom){
 				break;
 			}
-			mvwprintw(win,r-top+1,5,"%s",file_buff->buffer[r]);
+			mvwprintw(win, r-top+1, 0, "%03d| ", r+1);
+			wprintw(win,"%s",file_buff->buffer[r]);
 		}
 		taboffset = 5;
 		for (int i = 0; i<x; i++){
@@ -282,13 +284,17 @@ int main(int argc, char *argv[]) {
 			else {
 				
 				if (lineNum <= file_buff->rows){
+					y = lineNum;
+					curY = lineNum;
 	        while (lineNum < top){
 	          top -= height-3;
 	          bottom -= height-3;
+						curY -= height-3;
 	        }
 	        while (lineNum > bottom){
 	          top += height-3;
 	          bottom += height-3;
+						curY -= height-3;
 	        }
 					y = lineNum;
 					curY = y % (height - 3);
