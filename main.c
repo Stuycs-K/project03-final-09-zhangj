@@ -123,16 +123,15 @@ int main(int argc, char *argv[]) {
 	
 	while (1) {
 		getmaxyx(win, height, width);
-		if (y >= bottom){
+		while (y >= bottom){
 			bottom += height-3;
 			top += height-3;
-			curY = 1;
 		}
-		if (y <= top && top > 0){
+		while (y <= top && top > 0){
 			bottom -= height-3;
 			top -= height-3;
-			curY = height-3;
 		}
+		curY = y % (height-3);
 		wclear(win);
 		wrefresh(win);
 		mvwprintw(win,0,0,"%d:%d| Ctrl+Q - Quit  Ctrl+S - Save  Ctrl+T - Execute  Ctrl+G - Go to line #\n", y, x+1);
