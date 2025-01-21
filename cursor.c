@@ -86,11 +86,11 @@ void do_goto(WINDOW *win, int height, int width, int *x, int *y, int *show_messa
 	int lineNum = atoi(line);
 	
 	if (strcmp(line, "") == 0) {
-		show_message = 1;
+		*show_message = 1;
 		sprintf(message, "Error: cannot use empty string as line number.");
 	}
 	else if (!(1 <= lineNum && lineNum <= file_buff->rows)) {
-		show_message = 1;
+		*show_message = 1;
 		sprintf(message, "Error: cannot goto line #%d", lineNum);
 	} 
 	else {
