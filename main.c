@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
 	
 	// the bounds of which the filebuffer is shown to
 	// changes when scrolling
-	int top = 0, bottom = height - BOTTOM_OFFSET;
+	int top = 0, bottom = height - 2;
 	
 	// if the user gave a filename as an arg, read from that file into the buffer
 	if (argc == 2){
@@ -140,7 +140,7 @@ int main(int argc, char *argv[]) {
 		
 		// display messages for cursor, controls, and file information
 		mvwprintw(win, 0, 0, TOP_DISPLAY_MESSAGE, y, x+1);
-		mvwprintw(win, height-BOTTOM_OFFSET, 0, "%s", fileinfo);
+		mvwprintw(win, height-1, 0, "%s", fileinfo);
 		
 		// display save message / error message if user hasn't inputted anything since the message has popped up
 		if (has_error > 0) {
