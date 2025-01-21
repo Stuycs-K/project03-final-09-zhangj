@@ -195,19 +195,9 @@ int main(int argc, char *argv[]) {
 		else if (c == to_ctrl_char('S')) {
 			int can_save = check_can_save(win, file_buff, &filename, &show_message, message, height, width);
 			if (can_save) {
-				save(file_buff, filename);
-				free(file_buff);
-				file_buff = create_file_buffer(10);
-				file = open_read(filename);
-				read_into_buffer(file, file_buff, width);
-				if (y > file_buff->rows){
-					insert_row(file_buff,y-1);
-				}
-				stat_info(filename, fileinfo);
-				sprintf(message, "File saved.");
+				do_save(&file_buff, filename, &file, width, y, fileinfo, message);
 				show_message = 1;
 				changed = 0;
-
 			}
 		}
 		

@@ -181,3 +181,16 @@ int check_can_save(WINDOW *win, struct file_buffer *file_buff, char **filename, 
 
 	return can_save;
 }
+
+void do_save(struct file_buffer **file_buff, char *filename, FILE **file, int width, int y, char *fileinfo, char *message) {
+	save(*file_buff, filename);
+	free(*file_buff);
+	*file_buff = create_file_buffer(10);
+	*file = open_read(filename);
+	read_into_buffer(*file, *file_buff, width);
+	if (y > (*file_buff)->rows){
+		insert_row(*file_buff, y-1);
+	}
+	stat_info(filename, fileinfo);
+	sprintf(message, "File saved.");
+}
