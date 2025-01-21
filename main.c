@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
 	if (argc == 2){
 		read_into_buffer(file, file_buff, width);
 		int length = strlen(file_buff->buffer[file_buff->rows-1]);
-		if (file_buff->buffer[file_buff->rows-1][length-1]=='\n'){
+		if (file_buff->rows > 1 && file_buff->buffer[file_buff->rows-1][length-1]=='\n'){
 			insert_row(file_buff,file_buff->rows);
 		}
 	}
