@@ -15,7 +15,8 @@
 #include "filebuffer.h"
 #include "utils.h"
 
-void parse_args( char * line, char ** arg_ary ){
+// parses the arguments in line, split over spaces
+void parse_args(char *line, char **arg_ary){
 	int i = 0;
 	while (line) {
 		char *token = strsep(&line, " ");
@@ -25,11 +26,17 @@ void parse_args( char * line, char ** arg_ary ){
 	arg_ary[i] = NULL;
 }
 
+// redirects stdout, only to be used by children of the main program
 void redirect_stdout(int fd) {
 	fflush(stdout);
 	dup2(fd, STDOUT_FILENO);
 }
 
+// called by the main program itself
+// first call prep_exec (below)
+// appends output of the execvp'd program to the file buffer
+// sets all cursor variables as needed
+// sets show_message and message if input was bad
 void do_exec(struct file_buffer *file_buff, char **arg_array, char *error_message, int *x, int *y, int *height, int *width, int *curY, int *yLineEnd, int *top, int *bottom, int *has_error, int *changed) {
 	int pipe_fds[2];
 	if (pipe(pipe_fds) == -1) {
@@ -125,6 +132,7 @@ void do_exec(struct file_buffer *file_buff, char **arg_array, char *error_messag
 
 }
 
+// gets input from my_fgets, parses those args into the arg_array
 void prep_exec(WINDOW *win, int height, int width, char *command_line, char **arg_array) {
 	clear_fgets_line(win, height, width);
 	mvwprintw(win, height-2, 0, "Enter Command: ");
