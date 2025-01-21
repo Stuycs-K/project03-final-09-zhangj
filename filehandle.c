@@ -56,12 +56,16 @@ FILE* init_file(int argc, char **argv, char* filename, char* fileinfo){
 		stat_info(filename, fileinfo);
 	}
 	else if (argc == 2){ // If make is run with a file name as its only argument
+		if (strcmp(argv[1], UNTITLED_FILENAME) == 0) {
+			fprintf(stderr, "Error: cannot open file as '%s'\n", UNTITLED_FILENAME);
+			exit(1);
+		}
 		sprintf(filename,"%s",argv[1]);
 		file = open_read(filename);
 		stat_info(filename, fileinfo);
 	}
 	else { // If make is run with more than one argument
-		printf("Incorrect number of arguments. The program accepts one argument as the file name or no argument which makes a temporary file titled Untitled.txt\n");
+		fprintf(stderr, "Incorrect number of arguments. The program either accepts one argument as the file name or no arguments.\n");
 		exit(1);
 	}
   return file;
