@@ -49,10 +49,6 @@ int main(int argc, char *argv[]) {
 	// boolean variables, described in their own sections
 	int saved = 0, changed = 0, has_error = 0, longLine = 0;
 	
-	int top = 0;
-	
-	int lineNum = 0;
-	
 	char *fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
 
 	FILE *file;
@@ -74,7 +70,7 @@ int main(int argc, char *argv[]) {
 	// height and width of the terminal screen
 	int height, width;
 	getmaxyx(stdscr, height, width);
-	int bottom = height-2;
+	int top = 0, bottom = height-2;
 	WINDOW *win = newwin(height, width, 0, 0);
 	keypad(win, TRUE);
 
@@ -245,7 +241,7 @@ int main(int argc, char *argv[]) {
 			wrefresh(win);
 			char* line = malloc(256 * sizeof(char));
 			my_fgets(win, line, height, '0', '9', 12); // custom fgets for window
-			lineNum = atoi(line);
+			int lineNum = atoi(line);
 			
 			if (strcmp(line, "") == 0) {
 				has_error = 1;
