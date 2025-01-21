@@ -66,7 +66,7 @@ If you type past the width of the terminal window any overflow text will be disp
 - Scrolling: <br>
 If you type past the length of the terminal window the terminal window will scroll to the next section of the file buffer. Only sections of the file buffer relative to the size of the terminal window are displayed on screen at one time. You may use the mouse scroll wheel, the up and down arrow keys, or the "Go to line" keyboard shortcut to move between sections of the file buffer.
 
-### Other Known Limitations
+## Other Known Limitations
 - You can’t resize the terminal window while the program is running
 - File name must contain only alphanumeric characters and/or periods (.)
 - File must be in the same directory as the program
@@ -78,7 +78,7 @@ If you type past the length of the terminal window the terminal window will scro
 - Keyboard shortcuts (such as Ctrl+Q) are not supported while you are in the input prompt of another keyboard shortcut (such as Ctrl+G)
 - You can’t move the cursor position in the input prompt of a keyboard shortcut
 
-### "Almost Working"/Likely Slightly Buggy Features
+## "Almost Working"/Likely Slightly Buggy Features
 - Execute (Ctrl+T)
 - Long lines
 - Window Scrolling
