@@ -82,7 +82,7 @@ void quit(struct file_buffer *file_buff, char* fname, int changed) {
 						remove(UNTITLED_FILENAME);
             printf("Quitting without saving...\n");
 					} else { // Catch invalid input
-						fprintf(stderr, "Error: Invalid input '%s'. Not saving.", secondline);
+						fprintf(stderr, "Error: Invalid input '%s'. Not saving.\n", secondline);
 						exit(1);
 					}
 				}		
@@ -90,14 +90,14 @@ void quit(struct file_buffer *file_buff, char* fname, int changed) {
 
 				if (can_save) { // Save file to file name specified from earlier user input
 	        save(file_buff, newfname1);
-          printf("Saving file to %s...", newfname1);
+          printf("Saving file to %s...\n", newfname1);
 	        free(newfname1);
 	        remove(UNTITLED_FILENAME);
 				}
       }
       else{ // Save file to file name specified from make argument
         save(file_buff, fname);
-        printf("Saving file to %s...", fname);
+        printf("Saving file to %s...\n", fname);
       }
     }
     else if (response[0] == 'n'){ // Don't save file if no
