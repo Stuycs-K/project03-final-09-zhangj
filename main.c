@@ -212,23 +212,7 @@ int main(int argc, char *argv[]) {
 		// DELETION
 		if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
 			changed = 1;
-			if (x == 0 && y > 1){
-				int newX = strlen(file_buff->buffer[y-2])-1;
-				delete_newline(file_buff, y-1);
-				y--;
-				x = newX;
-				curY--;
-				yLineEnd--;
-				if (longLine == 1){
-					delete_char(file_buff,y-1,x-1);
-					x--;
-					longLine = 0;
-				}
-			}
-			else if (x > 0){
-				delete_char(file_buff,y-1,x-1);
-				x--;
-			}
+			do_delete(file_buff, &x, &y, &curY, &yLineEnd, &longLine);
 		}
 		
 		// NEWLINE
