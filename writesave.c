@@ -130,6 +130,9 @@ void quit(struct file_buffer *file_buff, char* fname, int changed) {
   }
 }
 
+// asks the user for filename if not given yet
+// ensures that that filename is not Untitled.txt and not empty
+// if that filename exists, reprompts the user to ask if they want to overwrite that file
 int check_can_save(WINDOW *win, struct file_buffer *file_buff, char **filename, int *show_message, char *message, int height, int width) {
 	int can_save = 1;
 	if (strcmp(*filename, UNTITLED_FILENAME) == 0){
@@ -182,6 +185,7 @@ int check_can_save(WINDOW *win, struct file_buffer *file_buff, char **filename, 
 	return can_save;
 }
 
+// saves on the file, reinits file_buff
 void do_save(struct file_buffer **file_buff, char *filename, FILE **file, int width, int y, char *fileinfo, char *message) {
 	save(*file_buff, filename);
 	free(*file_buff);
