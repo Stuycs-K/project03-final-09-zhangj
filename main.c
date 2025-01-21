@@ -207,7 +207,7 @@ int main(int argc, char *argv[]) {
 			move_cursor(c, &x, &y, &curY, xLineEnd, yLineEnd, file_buff);
 		} 
 		
-		// OTHER SPECIAL CHARACTERS
+		// ALL OTHER CHARACTERS
 		
 		// DELETION
 		if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
@@ -215,33 +215,10 @@ int main(int argc, char *argv[]) {
 			do_delete(file_buff, &x, &y, &curY, &yLineEnd, &longLine);
 		}
 		
-		// NEWLINE
-		if (c == '\n'){
+		// NEWLINE AND TABS
+		if (c == '\n' || c == KEY_STAB || c == '\t') {
 			changed = 1;
-			insert_newline(file_buff, y-1, x);
-			y++;
-			curY++;
-			yLineEnd++;
-			x = 0;
-			xLineEnd = 0;
-			longLine = 0;
-		}
-		
-		// TABS
-		if (c == KEY_STAB || c=='\t'){
-			changed = 1;
-			if (longLine == 1){
-				show_message = 1;
-				sprintf(message, "Error: Tabs are not supported with long lines.");
-			}
-			else if (x+offset+8-(offset%8)<width-7){
-				insert_char(file_buff,y-1,x,'\t');
-				x++;
-			}
-			else{
-				show_message = 1;
-				sprintf(message, "Error: You may not tab past the window length.");
-			}
+			do_insert_special(c, file_buff, &x, &y, &curY, &xLineEnd, &yLineEnd, &longLine, &show_message, message, offset, width);
 		}
 		
 		// REGULAR CHARACTERS

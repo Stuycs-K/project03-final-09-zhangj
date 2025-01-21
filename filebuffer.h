@@ -26,5 +26,6 @@ void delete_newline(struct file_buffer *file_buff, int r);
 void insert_at_end(struct file_buffer *file_buff, char *line);
 
 void do_delete(struct file_buffer *file_buff, int *x, int *y, int *curY, int *yLineEnd, int *longLine);
+void do_insert_special(int c, struct file_buffer *file_buff, int *x, int *y, int *curY, int *xLineEnd, int *yLineEnd, int *longLine, int *show_message, char *message, int offset, int width);
 
 #endif

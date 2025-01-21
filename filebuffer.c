@@ -308,3 +308,30 @@ void do_delete(struct file_buffer *file_buff, int *x, int *y, int *curY, int *yL
 		(*x)--;
 	}
 }
+
+void do_insert_special(int c, struct file_buffer *file_buff, int *x, int *y, int *curY, int *xLineEnd, int *yLineEnd, int *longLine, int *show_message, char *message, int offset, int width) {
+	if (c == '\n'){
+		insert_newline(file_buff, (*y)-1, (*x));
+		(*y)++;
+		(*curY)++;
+		(*yLineEnd)++;
+		*x = 0;
+		*xLineEnd = 0;
+		*longLine = 0;
+	}
+	
+	else if (c == KEY_STAB || c=='\t'){
+		if (*longLine == 1){
+			*show_message = 1;
+			sprintf(message, "Error: Tabs are not supported with long lines.");
+		}
+		else if ((*x)+offset+8-(offset%8)<width-7){
+			insert_char(file_buff,(*y)-1,*x,'\t');
+			(*x)++;
+		}
+		else{
+			*show_message = 1;
+			sprintf(message, "Error: You may not tab past the window length.");
+		}
+	}
+}
