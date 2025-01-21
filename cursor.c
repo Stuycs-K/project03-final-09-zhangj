@@ -11,6 +11,7 @@
 #include <dirent.h>
 #include <ncurses.h>
 #include "cursor.h"
+#include "filebuffer.h"
 
 // Takes in the current x and decreases it by one, shifting the cursor to the left by one
 int keyleft(int x){
@@ -58,4 +59,19 @@ int keydown(int* x, int y, int yLineEnd, int numrows, int linelen, int* curY){
         }
     }
     return y;
+}
+
+void move_cursor(int c, int *x, int *y, int *curY, int xLineEnd, int yLineEnd, struct file_buffer *file_buff) {
+	if (c == KEY_LEFT){
+		*x = keyleft(*x);
+	}
+	if (c == KEY_RIGHT){
+		*x = keyright(*x, xLineEnd);
+	}
+	if (c == KEY_UP && (*y) > 1){
+		*y = keyup(x, *y, strlen(file_buff->buffer[(*y)-2])-1, curY);
+	}
+	if (c == KEY_DOWN){
+		*y = keydown(x, *y, yLineEnd, file_buff->rows, strlen(file_buff->buffer[*y]), curY);
+	}
 }

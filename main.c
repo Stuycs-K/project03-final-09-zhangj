@@ -249,18 +249,9 @@ int main(int argc, char *argv[]) {
 		}
 		
 		// ARROW KEYS
-		if (c == KEY_LEFT){
-			x = keyleft(x);
-		}
-		if (c == KEY_RIGHT){
-			x = keyright(x, xLineEnd);
-		}
-		if (c == KEY_UP && y > 1){
-			y = keyup(&x, y, strlen(file_buff->buffer[y-2])-1, &curY);
-		}
-		if (c == KEY_DOWN){
-			y = keydown(&x, y, yLineEnd, file_buff->rows, strlen(file_buff->buffer[y]), &curY);
-		}
+		if (c == KEY_LEFT || c == KEY_RIGHT || c == KEY_UP || c == KEY_DOWN) {
+			move_cursor(c, &x, &y, &curY, xLineEnd, yLineEnd, file_buff);
+		} 
 		
 		// OTHER SPECIAL CHARACTERS
 		
