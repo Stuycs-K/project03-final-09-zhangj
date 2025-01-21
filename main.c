@@ -20,16 +20,6 @@
 #include "filehandle.h"
 #include "utils.h"
 
-// to display the cursor position and controls
-#define TOP_OFFSET 1
-// to display the file information and asking for prompts / showing error messages
-#define BOTTOM_OFFSET 2
-#define TOTAL_OFFSET (TOP_OFFSET + BOTTOM_OFFSET)
-
-#define TOP_DISPLAY_MESSAGE "%d:%d| Ctrl+Q - Quit  Ctrl+S - Save  Ctrl+T - Execute  Ctrl+G - Go to line #\n"
-
-#define OFFSET_INIT 5 // the length of the line number string e.g. "001| "
-
 // allows the program to exist gracefully on the occasional segfault
 static void signal_handler(int signo) {
 	if (signo == SIGSEGV) {
@@ -209,43 +199,7 @@ int main(int argc, char *argv[]) {
 		
 		// GOTO LINE
 		if (c == to_ctrl_char('G')){
-			clear_fgets_line(win, height, width);
-			mvwprintw(win, height-2, 0, "Go to line: ");
-			wrefresh(win);
-			char* line = malloc(256 * sizeof(char));
-			my_fgets(win, line, height, '0', '9', 12); // custom fgets for window
-			int lineNum = atoi(line);
-			
-			if (strcmp(line, "") == 0) {
-				show_message = 1;
-				sprintf(message, "Error: cannot use empty string as line number.");
-			}
-			else if (!(1 <= lineNum && lineNum <= file_buff->rows)) {
-				show_message = 1;
-				sprintf(message, "Error: cannot goto line #%d", lineNum);
-			} 
-			else {
-				
-				if (lineNum <= file_buff->rows){
-					y = lineNum;
-					curY = lineNum;
-	        while (lineNum < top){
-	          top -= height-3;
-	          bottom -= height-3;
-						curY -= height-3;
-	        }
-	        while (lineNum > bottom){
-	          top += height-3;
-	          bottom += height-3;
-						curY -= height-3;
-	        }
-					y = lineNum;
-					curY = y % (height - 3);
-					x = strlen(file_buff->buffer[lineNum-1])-1;
-				}
-				
-			}
-			free(line);
+			do_goto(win, height, width, &x, &y, &show_message, file_buff, message);
 		}
 		
 		// ARROW KEYS

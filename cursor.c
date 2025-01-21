@@ -12,6 +12,7 @@
 #include <ncurses.h>
 #include "cursor.h"
 #include "filebuffer.h"
+#include "utils.h"
 
 // Takes in the current x and decreases it by one, shifting the cursor to the left by one
 int keyleft(int x){
@@ -74,4 +75,27 @@ void move_cursor(int c, int *x, int *y, int *curY, int xLineEnd, int yLineEnd, s
 	if (c == KEY_DOWN){
 		*y = keydown(x, *y, yLineEnd, file_buff->rows, strlen(file_buff->buffer[*y]), curY);
 	}
+}
+
+void do_goto(WINDOW *win, int height, int width, int *x, int *y, int *show_message, struct file_buffer *file_buff, char *message) {
+	clear_fgets_line(win, height, width);
+	mvwprintw(win, height-BOTTOM_OFFSET, 0, "Go to line: ");
+	wrefresh(win);
+	char* line = malloc(256 * sizeof(char));
+	my_fgets(win, line, height, '0', '9', 12); // custom fgets for window
+	int lineNum = atoi(line);
+	
+	if (strcmp(line, "") == 0) {
+		show_message = 1;
+		sprintf(message, "Error: cannot use empty string as line number.");
+	}
+	else if (!(1 <= lineNum && lineNum <= file_buff->rows)) {
+		show_message = 1;
+		sprintf(message, "Error: cannot goto line #%d", lineNum);
+	} 
+	else {
+		(*y) = lineNum;
+		*x = strlen(file_buff->buffer[lineNum-1])-1;
+	}
+	free(line);
 }
