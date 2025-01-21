@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
 	int offset = 5;
 	
 	// boolean variables, described in their own sections
-	int changed = 0, has_error = 0, longLine = 0;
+	int changed = 0, show_message = 0, longLine = 0;
 	
 	// stat info string, e.g. "test.txt: 10 bytes; last modified ..."
 	char *fileinfo = (char*) calloc(LINE_SIZE, sizeof(char));
@@ -140,13 +140,13 @@ int main(int argc, char *argv[]) {
 		
 		// display messages for cursor, controls, and file information
 		mvwprintw(win, 0, 0, TOP_DISPLAY_MESSAGE, y, x+1);
-		mvwprintw(win, height-1, 0, "%s", fileinfo);
+		mvwprintw(win, height-BOTTOM_OFFSET+1, 0, "%s", fileinfo);
 		
 		// display save message / error message if user hasn't inputted anything since the message has popped up
-		if (has_error > 0) {
+		if (show_message > 0) {
 			clear_fgets_line(win, height, width);
-			mvwprintw(win, height-2, 0, "%s", message);
-			has_error = 0;
+			mvwprintw(win, height-BOTTOM_OFFSET, 0, "%s", message);
+			show_message = 0;
 		}
 		
 		// display the actual contents of the buffer
@@ -197,12 +197,12 @@ int main(int argc, char *argv[]) {
 				// - the filename is not empty and
 				// - the filename is not "untitled.txt"
 				if (strcmp(line, "") == 0) {
-					has_error = 1;
+					show_message = 1;
 					sprintf(message, "Error: cannot use empty string as filename.");
 					can_save = 0;
 				}
 				else if (strcmp(line, UNTITLED_FILENAME) == 0) {
-					has_error = 1;
+					show_message = 1;
 					sprintf(message, "Error: cannot use %s as filename.", UNTITLED_FILENAME);
 					can_save = 0;
 				} else if (access(line, F_OK) != -1){  // check if the file exists using access()
@@ -214,7 +214,7 @@ int main(int argc, char *argv[]) {
 					my_fgets(win, secondline, height, 32, 126, 23);
 					if (secondline[0] == '\0') {
 						sprintf(message, "Error: no response to y/n.");
-						has_error = 1;
+						show_message = 1;
 						can_save = 0;
 					} else if (secondline[0] == 'y') {
 						can_save = 1;
@@ -225,7 +225,7 @@ int main(int argc, char *argv[]) {
 						can_save = 0;
 					} else {
 						sprintf(message, "Error: did not recognize response '%s'. Not saving.", secondline);
-						has_error = 1;
+						show_message = 1;
 						can_save = 0;
 					}
 				} else {
@@ -245,7 +245,7 @@ int main(int argc, char *argv[]) {
 				}
 				stat_info(filename, fileinfo);
 				sprintf(message, "File saved.");
-				has_error = 1;
+				show_message = 1;
 				changed = 0;
 
 			}
@@ -263,7 +263,7 @@ int main(int argc, char *argv[]) {
 			}
 			parse_args(command_line, arg_array);
 
-			do_exec(file_buff, arg_array, message, &x, &y, &height, &width, &curY, &yLineEnd, &top, &bottom, &has_error, &changed);
+			do_exec(file_buff, arg_array, message, &x, &y, &height, &width, &curY, &yLineEnd, &top, &bottom, &show_message, &changed);
 		}
 		if (c == to_ctrl_char('G')){
 			clear_fgets_line(win, height, width);
@@ -275,11 +275,11 @@ int main(int argc, char *argv[]) {
 			int lineNum = atoi(line);
 			
 			if (strcmp(line, "") == 0) {
-				has_error = 1;
+				show_message = 1;
 				sprintf(message, "Error: cannot use empty string as line number.");
 			}
 			else if (!(1 <= lineNum && lineNum <= file_buff->rows)) {
-				has_error = 1;
+				show_message = 1;
 				sprintf(message, "Error: cannot goto line #%d", lineNum);
 			} 
 			else {
@@ -351,7 +351,7 @@ int main(int argc, char *argv[]) {
 		if (c == KEY_STAB || c=='\t'){
 			changed = 1;
 			if (longLine == 1){
-				has_error = 1;
+				show_message = 1;
 				sprintf(message, "Error: Tabs are not supported with long lines.");
 			}
 			else if (x+offset+8-(offset%8)<width-7){
@@ -359,19 +359,19 @@ int main(int argc, char *argv[]) {
 				x++;
 			}
 			else{
-				has_error = 1;
+				show_message = 1;
 				sprintf(message, "Error: You may not tab past the window length.");
 			}
 		}
 		if (32 <= c && c <= 126) { // alphanumerics, punctuation, etc.
 			changed = 1;
 			if (longLine == 1 && x+offset>=width-7){
-				has_error = 1;
+				show_message = 1;
 				sprintf(message, "Error: Maximum line length is 2x the window width.");
 			}
 			else if (x+offset>=width-7){
 				if (offset > 0){
-					has_error = 1;
+					show_message = 1;
 					sprintf(message, "Error: Tabs are not supported with long lines.");
 				}
 				else{
