@@ -24,6 +24,7 @@
     #define PLATFORM UNKNOWN
 #endif
 
+// this function mostly mimics the behavior of ls's "-h" flag 
 // returns a string ending one of the below prefixes
 // e.g. 0B, 999B, 1.0K, 35K, 100M
 char suffixes[] = {'B', 'K', 'M', 'G', 'T', 'E', 'Z'};
