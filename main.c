@@ -24,10 +24,11 @@
 #define TOP_OFFSET 1
 // to display the file information and asking for prompts / showing error messages
 #define BOTTOM_OFFSET 2
-
 #define TOTAL_OFFSET (TOP_OFFSET + BOTTOM_OFFSET)
 
 #define TOP_DISPLAY_MESSAGE "%d:%d| Ctrl+Q - Quit  Ctrl+S - Save  Ctrl+T - Execute  Ctrl+G - Go to line #\n"
+
+#define OFFSET_INIT 5 // the length of the line number string e.g. "001| "
 
 // allows the program to exist gracefully on the occasional segfault
 static void signal_handler(int signo) {
@@ -51,9 +52,9 @@ int main(int argc, char *argv[]) {
 	// the position of the on-screen cursor (note that the cursor's x-position always exactly equals its position in the buffer)
 	int curY;
 	
-	// offset, initially 5, the length of the display for line numbers
+	// the length of the display for line numbers
 	// able to be modified for tab display
-	int offset = 5;
+	int offset;
 	
 	// boolean variables, described in their own sections
 	int changed = 0, show_message = 0, longLine = 0;
@@ -114,7 +115,7 @@ int main(int argc, char *argv[]) {
 	x = strlen(file_buff->buffer[y-1]);
 	curY = y;
 	
-	// ??? clamps for x and y
+	// these clamp x and y depending the strlen of the line and the size of the buffer
 	int xLineEnd = x;
 	int yLineEnd = y;
 
@@ -137,7 +138,7 @@ int main(int argc, char *argv[]) {
 		curY = (y-1) % (height-TOTAL_OFFSET) + 1;
 		fprintf(stderr, "height: %d; y: %d; curY: %d\n", height, y, curY);
 		
-		// display everything to the window
+		// get ready to display everything to the window
 		wclear(win);
 		wrefresh(win);
 		
@@ -157,33 +158,38 @@ int main(int argc, char *argv[]) {
 			mvwprintw(win, r-top+1, 0, "%03d| ", r+1);
 			wprintw(win,"%s",file_buff->buffer[r]);
 		}
-		offset = 5;
-		for (int i = 0; i<x; i++){
-			if ((file_buff->buffer[y-1])[i] == '\t'){
+		
+		// calcuate the x offset based on tabs
+		offset = OFFSET_INIT;
+		for (int i = 0; i < x; i++){
+			if (file_buff->buffer[y-1][i] == '\t') {
 				offset += 8-(offset%8);
-			}
-			else{
+			} else {
 				offset++;
 			}
 		}
-		offset-=x+5;
-		wmove(win, curY, x+offset+5);
+		offset -= x + OFFSET_INIT;
+		wmove(win, curY, x+offset+OFFSET_INIT);
 		wrefresh(win);
-		c = wgetch(win); // program waits on this
-	
 		
-		if (y == file_buff->rows){
-			xLineEnd = strlen(file_buff->buffer[y-1]);
+		// the program blocks on this, which reads one character from stdin at a time
+		c = wgetch(win);
+		
+		// set xLineEnd
+		xLineEnd = strlen(file_buff->buffer[y-1]);
+		if (y != file_buff->rows) {
+			xLineEnd--;
 		}
-		else{
-			xLineEnd = strlen(file_buff->buffer[y-1])-1;
-		}
+		
+		// QUIT
 		if (c == to_ctrl_char('Q')) {
 			quit(file_buff, filename, changed);
 			free(filename);
 			break;
 		}
-		if (c == to_ctrl_char('S')) {
+		
+		// SAVE
+		else if (c == to_ctrl_char('S')) {
 			int can_save = 1;
 			if (strcmp(filename, UNTITLED_FILENAME) == 0){
 				char* line = malloc(256 * sizeof(char));
@@ -250,6 +256,8 @@ int main(int argc, char *argv[]) {
 
 			}
 		}
+		
+		// EXECUTE
 		if (c == to_ctrl_char('T')) {
 			clear_fgets_line(win, height, width);
 			wmove(win, height-2, 0);
@@ -265,6 +273,8 @@ int main(int argc, char *argv[]) {
 
 			do_exec(file_buff, arg_array, message, &x, &y, &height, &width, &curY, &yLineEnd, &top, &bottom, &show_message, &changed);
 		}
+		
+		// GOTO LINE
 		if (c == to_ctrl_char('G')){
 			clear_fgets_line(win, height, width);
 			wmove(win, height-2, 0);
@@ -305,7 +315,8 @@ int main(int argc, char *argv[]) {
 			}
 			free(line);
 		}
-
+		
+		// ARROW KEYS
 		if (c == KEY_LEFT){
 			x = keyleft(x, y);
 		}
@@ -318,6 +329,10 @@ int main(int argc, char *argv[]) {
 		if (c == KEY_DOWN){
 			y = keydown(&x, y, yLineEnd, file_buff->rows, strlen(file_buff->buffer[y]), &curY);
 		}
+		
+		// OTHER SPECIAL CHARACTERS
+		
+		// DELETION
 		if (c == KEY_BACKSPACE || c == KEY_DC || c == 127){
 			changed = 1;
 			if (x == 0 && y > 1){
@@ -338,6 +353,8 @@ int main(int argc, char *argv[]) {
 				x--;
 			}
 		}
+		
+		// NEWLINE
 		if (c == '\n'){
 			changed = 1;
 			insert_newline(file_buff, y-1, x);
@@ -348,6 +365,8 @@ int main(int argc, char *argv[]) {
 			xLineEnd = 0;
 			longLine = 0;
 		}
+		
+		// TABS
 		if (c == KEY_STAB || c=='\t'){
 			changed = 1;
 			if (longLine == 1){
@@ -363,6 +382,8 @@ int main(int argc, char *argv[]) {
 				sprintf(message, "Error: You may not tab past the window length.");
 			}
 		}
+		
+		// REGULAR CHARACTERS
 		if (32 <= c && c <= 126) { // alphanumerics, punctuation, etc.
 			changed = 1;
 			if (longLine == 1 && x+offset>=width-7){
