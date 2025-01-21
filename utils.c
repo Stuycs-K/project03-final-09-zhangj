@@ -8,12 +8,14 @@ int to_ctrl_char(int ch) {
 	return ch - 'A' + 1;
 }
 
+// writes spaces on a predetermined line, which is used for my_fgets and error display
 void clear_fgets_line(WINDOW *win, int height, int width) {
 	wmove(win, height-2, 0);
 	for (int i = 0; i < width; i++)
 		wprintw(win, " ");
 }
 
+// custom fgets function because ncurses disables buffered input on newline from stdin
 void my_fgets(WINDOW *win, char *line, int height, int char_range_min, int char_range_max, int promptLen) {
 	int ind = 0;
 	int c1;
