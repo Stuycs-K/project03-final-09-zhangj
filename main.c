@@ -146,17 +146,13 @@ int main(int argc, char *argv[]) {
 			mvwprintw(win, height-2, 0, "%s", error_message);
 			has_error = 0;
 		}
-		for (int r = top+1; r < file_buff->rows+1; r++){
-			if (r >= bottom){
-				break;
-			}
-			mvwprintw(win, r-top, 0, "%03d| ", r);
-		}
+
 		for (int r = top; r < file_buff->rows; r++) {
-			if (r > bottom-2){
+			if (r+1 >= bottom){
 				break;
 			}
-			mvwprintw(win,r-top+1,5,"%s",file_buff->buffer[r]);
+			mvwprintw(win, r-top+1, 0, "%03d| ", r);
+			wprintw(win,"%s",file_buff->buffer[r]);
 		}
 		taboffset = 5;
 		for (int i = 0; i<x; i++){
