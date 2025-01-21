@@ -53,7 +53,6 @@ int main(int argc, char *argv[]) {
 
 	FILE *file;
 	char* filename = malloc(256 * sizeof(char));
-	int pipe_fds[2];
 
 	char* cmd_args = malloc(LINE_SIZE * sizeof(char));
 	char **arg_array = (char**) malloc(ARRAY_SIZE * sizeof(char*));
@@ -232,7 +231,7 @@ int main(int argc, char *argv[]) {
 			}
 			parse_args(cmd_args, arg_array);
 
-			do_exec(file_buff, pipe_fds, arg_array, error_message, &x, &y, &height, &width, &curY, &yLineEnd, &top, &bottom, &has_error, &changed);
+			do_exec(file_buff, arg_array, error_message, &x, &y, &height, &width, &curY, &yLineEnd, &top, &bottom, &has_error, &changed);
 		}
 		if (c == to_ctrl_char('G')){
 			clear_fgets_line(win, height, width);
