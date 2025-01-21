@@ -25,6 +25,8 @@
 // to display the file information and asking for prompts / showing error messages
 #define BOTTOM_OFFSET 2
 
+#define TOP_DISPLAY_MESSAGE "%d:%d| Ctrl+Q - Quit  Ctrl+S - Save  Ctrl+T - Execute  Ctrl+G - Go to line #\n"
+
 // allows the program to exist gracefully on the occasional segfault
 static void signal_handler(int signo) {
 	if (signo == SIGSEGV) {
@@ -114,8 +116,13 @@ int main(int argc, char *argv[]) {
 	int xLineEnd = x;
 	int yLineEnd = y;
 
+	// main loop of the program
 	while (1) {
+		// check if the termianl was resized
+		// doesn't always help but sometimes works to resize things
 		getmaxyx(win, height, width);
+		
+		// change top and bottom if the cursor was moved to switch windows
 		while (y >= bottom){
 			bottom += height-3;
 			top += height-3;
@@ -124,17 +131,25 @@ int main(int argc, char *argv[]) {
 			bottom -= height-3;
 			top -= height-3;
 		}
+		// put the cursor in the right spot
 		curY = y % (height-3);
+		
+		// display everything to the window
 		wclear(win);
 		wrefresh(win);
-		mvwprintw(win,0,0,"%d:%d| Ctrl+Q - Quit  Ctrl+S - Save  Ctrl+T - Execute  Ctrl+G - Go to line #\n", y, x+1);
-		mvwprintw(win,height-1,0, "%s", fileinfo);
+		
+		// display messages for cursor, controls, and file information
+		mvwprintw(win, 0, 0, TOP_DISPLAY_MESSAGE, y, x+1);
+		mvwprintw(win, height-BOTTOM_OFFSET, 0, "%s", fileinfo);
+		
+		// display save message / error message if user hasn't inputted anything since the message has popped up
 		if (has_error > 0) {
 			clear_fgets_line(win, height, width);
 			mvwprintw(win, height-2, 0, "%s", message);
 			has_error = 0;
 		}
-
+		
+		// display the actual contents of the buffer
 		for (int r = top; r < file_buff->rows; r++) {
 			if (r+1 >= bottom){
 				break;
