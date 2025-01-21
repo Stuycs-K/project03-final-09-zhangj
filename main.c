@@ -203,17 +203,7 @@ int main(int argc, char *argv[]) {
 		
 		// EXECUTE
 		if (c == to_ctrl_char('T')) {
-			clear_fgets_line(win, height, width);
-			mvwprintw(win, height-2, 0, "Enter Command: ");
-			wrefresh(win);
-			
-			my_fgets(win, command_line, height, 32, 126, 15);
-			int command_line_length = strlen(command_line);
-			if (command_line[command_line_length-1] == '\n') { // strip newline
-				command_line[command_line_length-1] = '\0';
-			}
-			parse_args(command_line, arg_array);
-
+			prep_exec(win, height, width, command_line, arg_array);
 			do_exec(file_buff, arg_array, message, &x, &y, &height, &width, &curY, &yLineEnd, &top, &bottom, &show_message, &changed);
 		}
 		

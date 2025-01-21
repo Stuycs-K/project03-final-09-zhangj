@@ -13,6 +13,7 @@
 #include <string.h>
 #include "execprint.h"
 #include "filebuffer.h"
+#include "utils.h"
 
 void parse_args( char * line, char ** arg_ary ){
 	int i = 0;
@@ -25,8 +26,7 @@ void parse_args( char * line, char ** arg_ary ){
 }
 
 void redirect_stdout(int fd) {
-	fflush(stdout); // unsure if needed
-	
+	fflush(stdout);
 	dup2(fd, STDOUT_FILENO);
 }
 
@@ -123,4 +123,17 @@ void do_exec(struct file_buffer *file_buff, char **arg_array, char *error_messag
 
 	*changed = 1;
 
+}
+
+void prep_exec(WINDOW *win, int height, int width, char *command_line, char **arg_array) {
+	clear_fgets_line(win, height, width);
+	mvwprintw(win, height-2, 0, "Enter Command: ");
+	wrefresh(win);
+	
+	my_fgets(win, command_line, height, 32, 126, 15);
+	int command_line_length = strlen(command_line);
+	if (command_line[command_line_length-1] == '\n') { // strip newline
+		command_line[command_line_length-1] = '\0';
+	}
+	parse_args(command_line, arg_array);
 }
