@@ -20,6 +20,11 @@
 #include "filehandle.h"
 #include "utils.h"
 
+// to display the cursor position and controls
+#define TOP_OFFSET 1
+// to display the file information and asking for prompts / showing error messages
+#define BOTTOM_OFFSET 2
+
 // allows the program to exist gracefully on the occasional segfault
 static void signal_handler(int signo) {
 	if (signo == SIGSEGV) {
@@ -63,7 +68,8 @@ int main(int argc, char *argv[]) {
 	// creates a "struct file_buffer", described in filebuffer.h
 	struct file_buffer *file_buff = create_file_buffer(10);
 	FILE *file = init_file(argc,argv,filename,fileinfo);
-
+	
+	// initilization of an ncurses window
 	initscr();
 	raw();
 	noecho();
@@ -71,10 +77,16 @@ int main(int argc, char *argv[]) {
 	// height and width of the terminal screen
 	int height, width;
 	getmaxyx(stdscr, height, width);
-	int top = 0, bottom = height-2;
+	
+	// initializes a WINDOW* pointer, which is used for all display and cursor movement
 	WINDOW *win = newwin(height, width, 0, 0);
+	// allows for extra input, like ctrl+char
 	keypad(win, TRUE);
-
+	
+	// the bounds of which the filebuffer is shown to
+	// changes when scrolling
+	int top = 0, bottom = height - BOTTOM_OFFSET;
+	
 	if (argc == 2){
 		read_into_buffer(file, file_buff, width);
 		if (file_buff->rows > 1){
