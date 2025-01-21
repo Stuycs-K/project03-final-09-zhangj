@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	}
-	if (argc == 1){
+	if (argc == 1 || file_buff->rows == 0){
 		insert_row(file_buff,0);
 	}
 	y = file_buff->rows;
