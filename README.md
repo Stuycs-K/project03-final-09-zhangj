@@ -13,6 +13,8 @@ Our project is a simple text editor that runs in the terminal, inspired by the N
 ## Requirements:
 - Ncurses library (Installation tutorial: https://www.cyberciti.biz/faq/linux-install-ncurses-library-headers-on-debian-ubuntu-centos-fedora/)
 
+## Video Link: https://drive.google.com/file/d/17yKLH9yjN57_Ud1H3o0JkDfSO8UjjuG7/view?usp=drive_link
+
 ## Instructions
 ### How to Run the Program
 To run the program, either: `make run`, or first `make compile` and then `./femto`. There is one optional command line argument. It is utilized as follows: <br>
@@ -83,4 +85,5 @@ If you type past the length of the terminal window the terminal window will scro
 - Long lines
 - Window Scrolling
 - Tabs
+- Make run with very large/long files
 
